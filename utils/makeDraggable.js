@@ -13,7 +13,6 @@ export function makeDraggable(element, customStyles = {}, preventDrag = null) {
 	element.style.height = "fit-content";
 	
 	for(const key in customStyles) {
-		console.log(`key: ${key} | value: ${customStyles[key]}`);
 		element.style[key] = customStyles[key];
 	}
 
