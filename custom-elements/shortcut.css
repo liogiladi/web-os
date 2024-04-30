@@ -1,0 +1,51 @@
+.shortcut {
+	display: flex !important;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 5px;
+	width: 80px !important;
+	padding-block: 5px;
+	font-size: 1.2rem;
+	border-radius: 5px;
+}
+
+.shortcut:not(:has(input:focus)):focus {
+	background-color: rgba(0, 0, 0, 0.137);
+}
+
+.shortcut:not(:has(input:hover)):hover {
+	background-color: rgba(0, 0, 0, 0.098);
+}
+
+.shortcut img {
+	width: 45px;
+	height: 45px;
+	user-select: none;
+	pointer-events: none;
+}
+
+.shortcut span {
+	font-size: 1rem;
+	width: 100%;
+	text-align: center;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	user-select: none;
+}
+
+.shortcut input {
+	display: none;
+	border: 0;
+	outline: 1px solid black;
+	padding: 0;
+	width: 80px;
+	text-align: center;
+	font-size: 1rem;
+	font-family: "JetBrains";
+}
+
+.shortcut input:focus {
+	outline-width: 3px;
+
+}

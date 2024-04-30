@@ -1,0 +1,112 @@
+/* ------------------ Window ------------------- */
+
+.window {
+	gap: 5px;
+	font-size: 1rem;
+	z-index: 101;
+	cursor: default;
+	min-width: 500px;
+	min-height: 200px;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	color: white;
+	background-color: #252525a6;
+    backdrop-filter: blur(7px);
+}
+
+/* ------------------ Header ------------------- */
+
+.window header {
+	display: flex;
+	justify-content: space-between;
+	font-size: 14px;
+	user-select: none;
+}
+
+.window header span {
+	padding: 10px;
+}
+
+.window header .buttons {
+	display: flex;
+	width: 117px;
+}
+
+.window header .buttons button {
+	color: white;
+	background-color: transparent;
+	border: 0;
+	font-size: 1rem;
+	aspect-ratio: 1/1;
+	padding: 10px 11px;
+}
+
+.window header .buttons button:hover {
+	background-color: rgba(0, 0, 0, 0.487);
+}
+
+.window header .buttons button:first-of-type:hover {
+	background-color: rgb(255, 42, 42);
+}
+
+/* ------------------ Content ------------------- */
+
+.content {
+	padding: 10px;
+	height: 100%;
+	flex-grow: 1;
+	overflow-y: auto;
+}
+
+.content::-webkit-scrollbar {
+	width: 5px;
+}
+
+.content::-webkit-scrollbar-track {
+	background-color: transparent;
+}
+
+.content::-webkit-scrollbar-thumb {
+	background-color: white;
+}
+
+.content::-webkit-scrollbar-thumb:active {
+	background-color: #bfbfbf;
+}
+
+.window .dragger {
+	position: absolute;
+	width: 15px;
+	height: 15px;
+	-webkit-user-drag: none;
+	user-select: none;
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+}
+
+.window .top-left {
+	top: -5px;
+	left: -5px;
+	cursor: nw-resize;
+}
+
+.window .top-right {
+	top: -5px;
+	right: -5px;
+	cursor: ne-resize;
+}
+
+.window .bottom-right {
+	bottom: -5px;
+	right: -5px;
+	cursor: se-resize;
+}
+
+.window .bottom-left {
+	bottom: -5px;
+	left: -5px;
+	cursor: sw-resize;
+}
+

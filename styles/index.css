@@ -1,0 +1,23 @@
+@font-face {
+	font-family: "JetBrains";
+	src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
+}
+
+*, input {
+	font-family: "JetBrains";
+}
+
+body {
+	margin: 0 auto;
+
+}
+
+main {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	padding: 10px;
+	box-sizing: border-box;
+	overflow: hidden;
+}
+
