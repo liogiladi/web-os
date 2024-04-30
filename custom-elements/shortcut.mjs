@@ -12,16 +12,14 @@ export default class Shortcut extends HTMLElement {
 	constructor() {
 		super();
 	}
-
+	
 	async connectedCallback() {
-		if (!this.id) {
-			this.id = makeId(10);
-		}
-
-		Shortcut.orderedFolderIds.enqueue(this.id);
-
-		if (!this.name) throw "<desktop-shortcut> is missing 'name' attribute";
+		if (!this.name) throw new Error("<desktop-shortcut> is missing 'name' attribute");
 		if (this.textContent) throw new Error("<desktop-shortcut> cannot have innerHTML");
+
+		if (!this.id) this.id = makeId(10);
+		
+		Shortcut.orderedFolderIds.enqueue(this.id);
 
 		const shadowRoot = this.attachShadow({ mode: "open" });
 
@@ -62,7 +60,7 @@ export default class Shortcut extends HTMLElement {
 	selectInput({ target }) {
 		if (document.activeElement === target) return;
 		target.style.display = "none";
-		
+
 		const input = this.parentElement.querySelector("input");
 		input.value = target.innerHTML;
 		input.style.display = "unset";
@@ -81,7 +79,7 @@ export default class Shortcut extends HTMLElement {
 	focus() {
 		this.span.style.pointerEvents = "all";
 
-		if(Shortcut.orderedFolderIds.length == 1) return;
+		if (Shortcut.orderedFolderIds.length == 1) return;
 
 		Shortcut.orderedFolderIds.removeFirstFromEnd(this.id);
 		Shortcut.orderedFolderIds.enqueue(this.id);
@@ -94,5 +92,13 @@ export default class Shortcut extends HTMLElement {
 
 	blur() {
 		this.span.style.pointerEvents = "none";
+	}
+
+	get iconSrc() {
+		return this.getAttribute("icon-src");
+	}
+
+	set iconSrc(value) {
+		this.setAttribute("icon-src", value)
 	}
 }

@@ -30,7 +30,7 @@
 
 .window header .buttons {
 	display: flex;
-	width: 117px;
+	
 }
 
 .window header .buttons button {
@@ -39,6 +39,7 @@
 	border: 0;
 	font-size: 1rem;
 	aspect-ratio: 1/1;
+	width: 40px;
 	padding: 10px 11px;
 }
 

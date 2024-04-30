@@ -9,18 +9,21 @@ export default class Window extends HTMLElement {
 
 	constructor() {
 		super();
-		
+	}
+	
+	async connectedCallback() {
+		if (!this.headerTitle) {
+			throw new Error("<dessktop-window> is missing 'title' attribute");
+		}
+
+		if (!this.id) this.id = makeId(10);
+
 		this.fullscreen = false;
 		this.windowedStyles = { width: "500px", height: "200px", transform: "translate(0,0)", left: 0, top: 0 };
 		
 		this.style.zIndex = 1000;
 		this.style.borderRadius = "4px";
 		this.style.overflow = "auto";
-	}
-
-	async connectedCallback() {
-		if (!this.id) this.id = makeId(10);
-		if (!this.title) throw "<dessktop-window> is missing 'title' attribute";
 
 		/* ------------ buttons ------------- */
 		const buttons = document.createElement("div");
@@ -41,7 +44,7 @@ export default class Window extends HTMLElement {
 
 		/* ------------ title ------------- */
 		const span = document.createElement("span");
-		span.textContent = this.title;
+		span.textContent = this.headerTitle;
 
 		/* ------------ header ------------- */
 		const header = document.createElement("header");
@@ -78,6 +81,10 @@ export default class Window extends HTMLElement {
 
 		
 		makeDraggable(this, { position: "absolute", ...this.windowedStyles }, () => this.fullscreen);
+		this.onfocus = (event) => {
+			// Reorder windows
+			this.parentNode.insertBefore(this, this.parentNode.lastChild)
+		};
 	}
 
 	toggleFullscreen(windowElement) {
@@ -100,5 +107,13 @@ export default class Window extends HTMLElement {
 		windowElement.style.height = windowElement.fullscreen ? "100vh" : windowElement.windowedStyles.height;
 		windowElement.style.transform = windowElement.fullscreen ? "translate(0,0)" : windowElement.windowedStyles.transform;
 		windowElement.style.borderRadius = windowElement.fullscreen ? "0px" : "4px";
+	}
+
+	get headerTitle() {
+		return this.getAttribute("header-title");
+	}
+
+	set headerTitle(value) {
+		this.setAttribute("header-title", value);
 	}
 }
