@@ -1,11 +1,14 @@
-import readFileContents from "../utils/readFileContents.js";
-import { makeDraggable } from "/utils/makeDraggable.js";
+import Queue from "/utils/queue.js"
 import makeId from "/utils/makeId.js";
+import makeDraggable from "/utils/makeDraggable.js";
+import readFileContents from "/utils/readFileContents.js";
+import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
 
 const sizeTransition = "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
 export default class Window extends HTMLElement {
-	static observedAttributes = ["title"];
+	static observedAttributes = ["header-title"];
+	static orderedWindowIds = new Queue();
 
 	constructor() {
 		super();
@@ -18,8 +21,10 @@ export default class Window extends HTMLElement {
 
 		if (!this.id) this.id = makeId(10);
 
+		Window.orderedWindowIds.enqueue(this.id);
+
 		this.fullscreen = false;
-		this.windowedStyles = { width: "500px", height: "200px", transform: "translate(0,0)", left: 0, top: 0 };
+		this.windowedStyles = { width: "min(500px, 100vw)", height: "min(200px, 100vh)", transform: "translate(0,0)", left: 0, top: 0 };
 		
 		this.style.zIndex = 1000;
 		this.style.borderRadius = "4px";
@@ -76,15 +81,12 @@ export default class Window extends HTMLElement {
 		template.append(style, header, content);
 
 		/* ------------ attach elements ------------- */
-		const shadowRoot = this.attachShadow({ mode: "open" });
+		const shadowRoot = this.shadowRoot || this.attachShadow({ mode: "open" });
 		shadowRoot.append(template);
-
+		
 		
 		makeDraggable(this, { position: "absolute", ...this.windowedStyles }, () => this.fullscreen);
-		this.onfocus = (event) => {
-			// Reorder windows
-			this.parentNode.insertBefore(this, this.parentNode.lastChild)
-		};
+		this.onfocus = () => reorderdDraggableElements(Window.orderedWindowIds, this.id, 1000);
 	}
 
 	toggleFullscreen(windowElement) {

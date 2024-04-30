@@ -1,7 +1,8 @@
 import Queue from "/utils/queue.js";
 import makeId from "/utils/makeId.js";
-import { makeDraggable } from "/utils/makeDraggable.js";
+import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
+import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
 
 export default class Shortcut extends HTMLElement {
 	static observedAttributes = ["name", "iconSrc"];
@@ -78,16 +79,7 @@ export default class Shortcut extends HTMLElement {
 
 	focus() {
 		this.span.style.pointerEvents = "all";
-
-		if (Shortcut.orderedFolderIds.length == 1) return;
-
-		Shortcut.orderedFolderIds.removeFirstFromEnd(this.id);
-		Shortcut.orderedFolderIds.enqueue(this.id);
-
-		let pointer = Shortcut.orderedFolderIds.start;
-		for (let i = 0; pointer !== null; pointer = pointer.prev, i++) {
-			document.getElementById(pointer.value).style.zIndex = 100 + i;
-		}
+		reorderdDraggableElements(Shortcut.orderedFolderIds, this.id, 100);
 	}
 
 	blur() {

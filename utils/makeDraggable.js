@@ -5,7 +5,7 @@ var _previousMouseEvent = null;
  * @param {object} customStyles
  * @param {(event: MouseEvent) => boolean} preventDrag 
  */
-export function makeDraggable(element, customStyles = {}, preventDrag = null) {
+export default function makeDraggable(element, customStyles = {}, preventDrag = null) {
 	element.style.transform = "translate(0,0)"
 	element.style.display = "block";
 	element.style.userSelect = "none";
