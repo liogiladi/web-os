@@ -3,13 +3,13 @@
 	src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
 }
 
-*, input {
+* {
 	font-family: "JetBrains";
 }
 
 body {
 	margin: 0 auto;
-
+	background-color: var(--body-color);
 }
 
 main {
@@ -21,3 +21,21 @@ main {
 	overflow: hidden;
 }
 
+#theme-button {
+	position: absolute;
+	left: 20px;
+	bottom: 20px;
+	border: 0;
+	border-radius: 5px;
+	padding: 10px 30px;
+	font-size: 13px;
+	background-color: var(--primary-color);
+	transition: background-color 0.1s;
+	cursor: pointer;
+}
+
+#theme-button:hover {
+}
+
+#theme-button:active {
+}

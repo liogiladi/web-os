@@ -9,11 +9,9 @@ export default class Queue {
 		const newNode = new Node(value);
 
 		if(this.end === null) {
-			newNode.index = 0;
 			this.end = newNode;
 			this.start = newNode;
 		} else {
-			newNode.index = this.end.index + 1;
 			newNode.next = this.end;
 			newNode.next.prev = newNode;
 			this.end = newNode;
@@ -69,6 +67,5 @@ class Node {
 		this.value = value;
 		this.next = null;
 		this.prev = null;
-		this.index = null;
 	}
 }
