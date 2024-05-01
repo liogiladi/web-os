@@ -12,11 +12,12 @@ export default class Window extends HTMLElement {
 
 	constructor() {
 		super();
+		this.observer = null;
 	}
 	
 	async connectedCallback() {
 		if (!this.headerTitle) {
-			throw new Error("<dessktop-window> is missing 'title' attribute");
+			throw new Error("<dessktop-window> is missing 'header-title' attribute");
 		}
 
 		if (!this.id) this.id = makeId(10);
@@ -68,7 +69,18 @@ export default class Window extends HTMLElement {
 			content.appendChild(this.childNodes[0]);
 		}
 
-		// TODO: Add MutationObserver such that every child that is appended to <desktop-window> goes to .contnet
+		// Observe childList such that every child that is appended to <desktop-window> goes to .content
+		this.observer = new MutationObserver((mutationList, observer) => {
+			for (const mutation of mutationList) {
+				if(mutation.type == "childList" && this.childNodes.length > 0) {
+					while(this.childNodes.length > 0) {
+						content.appendChild(this.childNodes[0]);
+					}
+				}
+			}
+		});
+
+		this.observer.observe(this, { childList: true });
 
 		/* ------------ template ------------- */
 		const template = document.createElement("template");
@@ -87,6 +99,10 @@ export default class Window extends HTMLElement {
 		
 		makeDraggable(this, { position: "absolute", ...this.windowedStyles }, () => this.fullscreen);
 		this.onfocus = () => reorderdDraggableElements(Window.orderedWindowIds, this.id, 1000);
+	}
+
+	disconnectedCallback() {
+		this.observer.disconnect();
 	}
 
 	toggleFullscreen(windowElement) {
