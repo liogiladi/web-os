@@ -13,13 +13,13 @@ export default class Shortcut extends HTMLElement {
 	constructor() {
 		super();
 	}
-	
+
 	async connectedCallback() {
 		if (!this.name) throw new Error("<desktop-shortcut> is missing 'name' attribute");
 		if (this.textContent) throw new Error("<desktop-shortcut> cannot have innerHTML");
 
 		if (!this.id) this.id = makeId(10);
-		
+
 		Shortcut.orderedFolderIds.enqueue(this.id);
 
 		const shadowRoot = this.attachShadow({ mode: "open" });
@@ -48,7 +48,12 @@ export default class Shortcut extends HTMLElement {
 		template.append(style, img, this.span, this.input);
 		shadowRoot.append(template);
 
-		makeDraggable(this, { position: "relative" }, (event) => event.target === this.input);
+		makeDraggable(this, template, {
+			customStyles: { position: "relative" },
+			bubbleThroughController: true,
+			preventDrag: event => event.target === this.input,
+		});
+
 		this.onfocus = this.focus;
 		this.onblur = this.blur;
 	}
@@ -91,6 +96,6 @@ export default class Shortcut extends HTMLElement {
 	}
 
 	set iconSrc(value) {
-		this.setAttribute("icon-src", value)
+		this.setAttribute("icon-src", value);
 	}
 }
