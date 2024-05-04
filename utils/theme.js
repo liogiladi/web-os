@@ -1,7 +1,7 @@
 const LIGHT = 0, DARK = 1;
 const COLORS = Object.freeze({
     body: ["black", "white"],
-    primary: ["#252525a6", "#dddddda6"]
+    primary: ["rgba(255, 255, 255, 0.9)", "#dddddda6"]
 });
 
 /**

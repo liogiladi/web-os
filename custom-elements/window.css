@@ -10,9 +10,21 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	color: white;
-	background-color: var(--primary-color);
-    backdrop-filter: blur(7px);
+	
+}
+
+.window::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	border-radius: 4px;
+	background: linear-gradient(0deg, rgba(209, 90, 207, 0.8) 0%, rgba(250, 167, 249, 0.8) 100%);
+    box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
+	backdrop-filter: blur(30px);
+	z-index: -1;
 }
 
 /* ------------------ Header ------------------- */
@@ -26,6 +38,7 @@
 
 .window header span {
 	padding: 10px;
+	pointer-events: none;
 }
 
 .window header .buttons {
@@ -33,17 +46,17 @@
 }
 
 .window header .buttons button {
-	color: white;
 	background-color: transparent;
 	border: 0;
 	font-size: 1rem;
 	aspect-ratio: 1/1;
 	width: 40px;
 	padding: 10px 11px;
+	transition: background-color 0.1s;
 }
 
 .window header .buttons button:hover {
-	background-color: rgba(0, 0, 0, 0.487);
+	background-color: rgba(0, 0, 0, 0.102);
 }
 
 .window header .buttons button:first-of-type:hover {

@@ -1,31 +1,56 @@
 <html lang="en">
 
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>desktop</title>
-	<link rel="stylesheet" href="/styles/index.css">
-</head>
-<script type="module" src="../custom-elements/define.mjs"></script>
-<script type="module">
-	import { initTheme } from "/utils/theme.js";
-	initTheme();
-</script>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>desktop</title>
+		<link rel="stylesheet" href="/styles/index.css">
+	</head>
+	<script type="module" src="../custom-elements/define.mjs"></script>
+	<script type="module">
+		import { initTheme } from "/utils/theme.js";
+		initTheme();
+	</script>
 
-<body>
-	<main>
-		<section id="shortcuts">
-			<desktop-shortcut name="test"></desktop-shortcut>
-			<desktop-shortcut name="test2"></desktop-shortcut>
-			<desktop-shortcut name="test3"></desktop-shortcut>
-		</section>
-		<section is="windows">
-			<desktop-window header-title="test.txt">asdasd</desktop-window>
-			<desktop-window header-title="test2.txt">hi :)</desktop-window>
-			<desktop-window header-title="test2.txt">no hi :(</desktop-window>
-		</section>
-		<button id="theme-button">dark mode</button>
-	</main>
-</body>
+
+	<body>
+		<main>
+			<section id="shortcuts">
+				<desktop-shortcut name="test"></desktop-shortcut>
+				<desktop-shortcut name="test2"></desktop-shortcut>
+				<desktop-shortcut name="test3"></desktop-shortcut>
+			</section>
+			<section is="windows">
+				<desktop-window header-title="test.txt">asdasd</desktop-window>
+				<desktop-window header-title="test2.txt">hi :)</desktop-window>
+				<desktop-window header-title="test2.txt">no hi :(</desktop-window>
+			</section>
+			<button id="theme-button">dark mode</button>
+
+			<ul id="context-menu" tabindex="0" onblur="(event) => console.log(event)">
+				<li><button>Edit mode</button></li>
+			</ul>
+		</main>
+	</body>
+
+	<script>
+		var main = document.querySelector("main");
+		var menu = document.querySelector("#context-menu");
+		menu.style.display = "none";
+
+		window.addEventListener("contextmenu", (event) => {
+			if (event.target !== main) return;
+			event.preventDefault();
+
+			menu.focus();
+			menu.style.display = "unset";
+			menu.style.left = event.x;
+			menu.style.top = event.y;
+		});
+
+		menu.onblur = (event) => {
+			menu.style.display = "none"
+		};
+	</script>
 
 </html>

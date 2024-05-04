@@ -8,7 +8,7 @@ export default class Queue {
 	enqueue(value) {
 		const newNode = new Node(value);
 
-		if(this.end === null) {
+		if (this.end === null) {
 			this.end = newNode;
 			this.start = newNode;
 		} else {
@@ -27,16 +27,27 @@ export default class Queue {
 	}
 
 	removeFirstFromEnd(value) {
-		if(this.end.value == value) {
+		if (!this.end) throw new Error("cannot remove from empty queue");
+
+		if(this.length == 1) {
+			if(this.start === value) {
+				this.start = null;
+				this.end = null;
+				this.length--;
+			} else return;
+		}
+
+		if (this.end.value == value) {
 			this.end = this.end.next;
 			this.end.prev = null;
+			this.length--;
 			return;
 		}
 
 		let pointer = this.end;
-		for(; pointer.value !== value ; pointer = pointer.next);
+		for (; pointer.value !== value; pointer = pointer.next);
 
-		if(this.start.value == value) {
+		if (this.start.value == value) {
 			this.dequeue();
 			return;
 		}
@@ -53,9 +64,9 @@ export default class Queue {
 		const arr = [];
 		let pointer = this.start;
 
-		while(pointer !== null) {
+		while (pointer !== null) {
 			arr.push(pointer.value);
-			pointer = pointer.prev
+			pointer = pointer.prev;
 		}
 
 		return arr;

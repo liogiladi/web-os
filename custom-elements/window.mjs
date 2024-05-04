@@ -1,4 +1,4 @@
-import Queue from "/utils/queue.js"
+import Queue from "/utils/queue.js";
 import makeId from "/utils/makeId.js";
 import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
@@ -14,7 +14,7 @@ export default class Window extends HTMLElement {
 		super();
 		this.observer = null;
 	}
-	
+
 	async connectedCallback() {
 		if (!this.headerTitle) {
 			throw new Error("<dessktop-window> is missing 'header-title' attribute");
@@ -25,11 +25,16 @@ export default class Window extends HTMLElement {
 		Window.orderedWindowIds.enqueue(this.id);
 
 		this.fullscreen = false;
-		this.windowedStyles = { width: "min(500px, 100vw)", height: "min(200px, 100vh)", transform: "translate(0,0)", left: 0, top: 0 };
-		
+		this.windowedStyles = {
+			width: "min(500px, 100vw)",
+			height: "min(200px, 100vh)",
+			transform: "translate(0,0)",
+			left: 0,
+			top: 0,
+		};
+
 		this.style.zIndex = 1000;
 		this.style.borderRadius = "4px";
-		this.style.overflow = "auto";
 
 		/* ------------ buttons ------------- */
 		const buttons = document.createElement("div");
@@ -37,7 +42,7 @@ export default class Window extends HTMLElement {
 
 		const closeButton = document.createElement("button");
 		closeButton.textContent = "x";
-		closeButton.onclick = () => this.remove();
+		closeButton.onclick = this.close.bind(this);
 
 		const sizeButton = document.createElement("button");
 		sizeButton.textContent = "o";
@@ -56,24 +61,24 @@ export default class Window extends HTMLElement {
 		const header = document.createElement("header");
 		header.append(span, buttons);
 		header.ondblclick = (event) => {
-			if(event.target !== header) return;
-			this.toggleFullscreen(this);
-		}
+			if (event.target !== header) return;
+			this.toggleFullscreen.bind(this)();
+		};
 
 		/* ------------ content ------------- */
 		const content = document.createElement("div");
 		content.className = "content";
-		
+
 		// Move all child elements to .content
-		while(this.childNodes.length > 0) {
+		while (this.childNodes.length > 0) {
 			content.appendChild(this.childNodes[0]);
 		}
 
 		// Observe childList such that every child that is appended to <desktop-window> goes to .content
 		this.observer = new MutationObserver((mutationList, observer) => {
 			for (const mutation of mutationList) {
-				if(mutation.type == "childList" && this.childNodes.length > 0) {
-					while(this.childNodes.length > 0) {
+				if (mutation.type == "childList" && this.childNodes.length > 0) {
+					while (this.childNodes.length > 0) {
 						content.appendChild(this.childNodes[0]);
 					}
 				}
@@ -95,9 +100,11 @@ export default class Window extends HTMLElement {
 		/* ------------ attach elements ------------- */
 		const shadowRoot = this.shadowRoot || this.attachShadow({ mode: "open" });
 		shadowRoot.append(template);
-		
-		
-		makeDraggable(this, { position: "absolute", ...this.windowedStyles }, () => this.fullscreen);
+
+		makeDraggable(this, header, {
+			customStyles: { position: "absolute", ...this.windowedStyles },
+		});
+
 		this.onfocus = () => reorderdDraggableElements(Window.orderedWindowIds, this.id, 1000);
 	}
 
@@ -105,26 +112,33 @@ export default class Window extends HTMLElement {
 		this.observer.disconnect();
 	}
 
-	toggleFullscreen(windowElement) {
-		windowElement.fullscreen = !windowElement.fullscreen;
+	toggleFullscreen() {
+		this.fullscreen = !this.fullscreen;
 
-		if (windowElement.fullscreen) {
-			windowElement.windowedStyles = {
-				width: windowElement.style.width,
-				height: windowElement.style.height,
-				transform: windowElement.style.transform
+		if (this.fullscreen) {
+			this.windowedStyles = {
+				width: this.style.width,
+				height: this.style.height,
+				transform: this.style.transform,
 			};
-			windowElement.style.transition = sizeTransition;
+			this.style.transition = sizeTransition;
 		} else {
 			setTimeout(() => {
-				windowElement.style.transition = null;
+				this.style.transition = null;
 			}, 300);
 		}
 
-		windowElement.style.width = windowElement.fullscreen ? "100vw" : windowElement.windowedStyles.width;
-		windowElement.style.height = windowElement.fullscreen ? "100vh" : windowElement.windowedStyles.height;
-		windowElement.style.transform = windowElement.fullscreen ? "translate(0,0)" : windowElement.windowedStyles.transform;
-		windowElement.style.borderRadius = windowElement.fullscreen ? "0px" : "4px";
+		this.style.width = this.fullscreen ? "100vw" : this.windowedStyles.width;
+		this.style.height = this.fullscreen ? "100vh" : this.windowedStyles.height;
+		this.style.transform = this.fullscreen
+			? "translate(0,0)"
+			: this.windowedStyles.transform;
+		this.style.borderRadius = this.fullscreen ? "0px" : "4px";
+	}
+
+	close() {
+		Window.orderedWindowIds.removeFirstFromEnd(this.id);
+		this.remove();
 	}
 
 	get headerTitle() {
