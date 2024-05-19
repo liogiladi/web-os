@@ -7,7 +7,7 @@ import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
 const sizeTransition = "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
 export default class Window extends HTMLElement {
-	static observedAttributes = ["header-title"];
+	static observedAttributes = ["header-title", "icon-src"];
 	static orderedWindowIds = new Queue();
 
 	constructor() {
@@ -17,7 +17,7 @@ export default class Window extends HTMLElement {
 
 	async connectedCallback() {
 		if (!this.headerTitle) {
-			throw new Error("<dessktop-window> is missing 'header-title' attribute");
+			throw new Error("<desktop-window> is missing 'header-title' attribute");
 		}
 
 		if (!this.id) this.id = makeId(10);
@@ -57,9 +57,16 @@ export default class Window extends HTMLElement {
 		const span = document.createElement("span");
 		span.textContent = this.headerTitle;
 
+		const icon = document.createElement("img");
+		icon.src = this.iconSrc;
+
+		const title = document.createElement("div");
+		title.className = "title";
+		title.append(icon, span);
+
 		/* ------------ header ------------- */
 		const header = document.createElement("header");
-		header.append(span, buttons);
+		header.append(title, buttons);
 		header.ondblclick = (event) => {
 			if (event.target !== header) return;
 			this.toggleFullscreen.bind(this)();
@@ -75,7 +82,7 @@ export default class Window extends HTMLElement {
 		}
 
 		// Observe childList such that every child that is appended to <desktop-window> goes to .content
-		this.observer = new MutationObserver((mutationList, observer) => {
+		this.observer = new MutationObserver((mutationList, _observer) => {
 			for (const mutation of mutationList) {
 				if (mutation.type == "childList" && this.childNodes.length > 0) {
 					while (this.childNodes.length > 0) {
@@ -106,6 +113,7 @@ export default class Window extends HTMLElement {
 		});
 
 		this.onfocus = () => reorderdDraggableElements(Window.orderedWindowIds, this.id, 1000);
+		this.ondragstart = () => false;
 	}
 
 	disconnectedCallback() {
@@ -147,5 +155,13 @@ export default class Window extends HTMLElement {
 
 	set headerTitle(value) {
 		this.setAttribute("header-title", value);
+	}
+
+	get iconSrc() {
+		return this.getAttribute("icon-src");
+	}
+
+	set iconSrc(value) {
+		this.setAttribute("icon-src", value);
 	}
 }

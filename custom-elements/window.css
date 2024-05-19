@@ -36,9 +36,20 @@
 	user-select: none;
 }
 
-.window header span {
+.window header .title {
+	display: flex;
+	align-items: center;
+	gap: 7px;
 	padding: 10px;
+}
+
+.window header .title * {
 	pointer-events: none;
+}
+
+.window header .title img {
+	width: 20px;
+	height: 20px;
 }
 
 .window header .buttons {
