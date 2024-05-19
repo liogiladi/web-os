@@ -4,8 +4,9 @@ import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
 import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
 
+const requiredAttributes = ["name"];
 export default class Shortcut extends HTMLElement {
-	static observedAttributes = ["name", "iconSrc"];
+	static observedAttributes = ["iconSrc", ...requiredAttributes];
 	static orderedFolderIds = new Queue();
 	span;
 	input;
@@ -15,7 +16,9 @@ export default class Shortcut extends HTMLElement {
 	}
 
 	async connectedCallback() {
-		if (!this.name) throw new Error("<desktop-shortcut> is missing 'name' attribute");
+		for (const attribute of requiredAttributes) {
+			if (!this[attribute]) throw new Error(`<desktop-shortcut> is missing '${attribute.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}' attribute`);
+		}
 		if (this.textContent) throw new Error("<desktop-shortcut> cannot have innerHTML");
 
 		if (!this.id) this.id = makeId(10);
@@ -32,20 +35,27 @@ export default class Shortcut extends HTMLElement {
 		img.src = this.iconSrc || "/media/folder.svg";
 		img.alt = "shortcut icon";
 		img.draggable = false;
-
+		
 		this.span = document.createElement("span");
 		this.span.innerText = this.name;
 		this.span.style.pointerEvents = "none";
 		this.span.onclick = this.selectInput;
-
+		
 		this.input = document.createElement("input");
 		this.input.type = "text";
 		this.input.onblur = this.deselectInput;
 
 		const style = document.createElement("style");
 		style.innerHTML = await readFileContents("/custom-elements/shortcut.css");
-
+		
 		template.append(style, img, this.span, this.input);
+		for (const attribute of Shortcut.observedAttributes) {
+			template.setAttribute(attribute, this[attribute]);
+		}
+		
+		this.ondblclick = window[this.getAttribute("ondblclick")];
+		this.ondragstart = () => false;
+
 		shadowRoot.append(template);
 
 		makeDraggable(this, template, {
