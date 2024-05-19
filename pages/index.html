@@ -1,5 +1,4 @@
 <html lang="en">
-
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,18 +11,13 @@
 		initTheme();
 	</script>
 
-
 	<body>
 		<main>
 			<section id="shortcuts">
-				<desktop-shortcut name="test"></desktop-shortcut>
-				<desktop-shortcut name="test2"></desktop-shortcut>
-				<desktop-shortcut name="test3"></desktop-shortcut>
+				<desktop-shortcut name="JSCoder" icon-src="../media/editor-icon.svg" ondblclick="openJSCoder"></desktop-shortcut>
+				
 			</section>
-			<section is="windows">
-				<desktop-window header-title="test.txt">asdasd</desktop-window>
-				<desktop-window header-title="test2.txt">hi :)</desktop-window>
-				<desktop-window header-title="test2.txt">no hi :(</desktop-window>
+			<section id="windows">
 			</section>
 			<button id="theme-button">dark mode</button>
 
@@ -31,6 +25,9 @@
 				<li><button>Edit mode</button></li>
 			</ul>
 		</main>
+		<aside>
+			
+		</aside>
 	</body>
 
 	<script>
@@ -51,6 +48,11 @@
 		menu.onblur = (event) => {
 			menu.style.display = "none"
 		};
-	</script>
 
+		var windowsContainer = document.querySelector("#windows");
+		function openJSCoder() {
+			const jscoder = document.createElement("js-coder");
+			windowsContainer.appendChild(jscoder);
+		}
+	</script>
 </html>
