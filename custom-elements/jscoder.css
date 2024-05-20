@@ -12,7 +12,7 @@
 	caret-color: white;
 }
 
-.editor::selection {
+.editor::selection, br::selection {
     background: rgba(58, 186, 218, 0.37);
     color: transparent;
 }
