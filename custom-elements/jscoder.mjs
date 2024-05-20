@@ -3,13 +3,13 @@ import readFileContents from "/utils/readFileContents.js";
 
 const purpleKeywords = ["export", "import", "from"];
 
-String.prototype.replaceAt = function(startIndex, endIndex, replacement) {
-    return this.substring(0, startIndex) + replacement + this.substring(endIndex + 1);
-}
+String.prototype.replaceAt = function (startIndex, endIndex, replacement) {
+	return this.substring(0, startIndex) + replacement + this.substring(endIndex + 1);
+};
 
-String.prototype.insertAt = function(index, str) {
-    return this.substring(0, index) + str + this.substring(index);
-}
+String.prototype.insertAt = function (index, str) {
+	return this.substring(0, index) + str + this.substring(index);
+};
 
 export default class JSCoder extends Window {
 	constructor() {
@@ -18,7 +18,6 @@ export default class JSCoder extends Window {
 	}
 
 	async connectedCallback() {
-		
 		this.setAttribute("header-title", "JSCoder");
 		this.setAttribute("icon-src", "/media/editor-icon.svg");
 		await super.connectedCallback();
@@ -37,40 +36,64 @@ export default class JSCoder extends Window {
 		editorView.className = "editorView";
 		this.appendChild(editorView);
 
-		editor.oninput = (event) => {
+		editor.oninput = () => {
 			let words = [];
-			
+			let innerHTML = editor.innerHTML;
+
 			let currentWord = "";
-			let i = 0;
-			for(const char of editor.textContent) {
-				
-				if(char === " ") {
-					if(currentWord) {
+			let currentStringOpener = null;
+			for (let i = 0; i < innerHTML.length; i++) {
+				const char = innerHTML.charAt(i);
+
+
+				if (/"|'|`/.test(char)) {
+					if(i == innerHTML.length - 1) {
+						words.push(currentWord + char);
+						continue;
+					}
+					
+					if (currentStringOpener == null) {
+						currentStringOpener = char;
+						if (currentWord) words.push(currentWord);
+					} else if (currentStringOpener == char) {
 						words.push(currentWord);
 						currentWord = "";
+						currentStringOpener = null;
 					}
-					else words.push(" ");
-					continue;
 				}
-				
-				currentWord += char;
-				i++;
-				
-				if(i >= editor.textContent.length) {
+
+				const space =
+					char == " "
+						? " "
+						: char == "&" && innerHTML.substring(i, i + 7) == "&nbsp;"
+						? "&nbsp;"
+						: null;
+
+				if (space && !currentStringOpener) {
+					if (currentWord) {
+						words.push(currentWord, space);
+						currentWord = "";
+					} else words.push(space);
+					if (space == "&nbsp;") i += 6;
+				} else if (char == "<" && innerHTML.substring(i, i + 4) == "<br>") {
+					words.push(currentWord, "<br>");
+					currentWord = "";
+					i += 3;
+				} else if (i == innerHTML.length - 1) {
+					currentWord += char;
 					words.push(currentWord);
-					break;
-				}
+				} else currentWord += char;
 			}
 
-			console.log(words);
-
-			/* words = words.map((word) => {
+			words = words.map((word) => {
 				if (purpleKeywords.includes(word)) {
-					return `<span class="hg-p">${word}</span>`;		
+					return `<span class="hg-p">${word}</span>`;
 				}
 
 				return word;
-			}); */
+			});
+
+			editorView.innerHTML = words.join("");
 
 			/* for (let i = 0; i < output.length; i++) {
 				const char = output.charAt(i);
@@ -106,11 +129,7 @@ export default class JSCoder extends Window {
 				}
 			} */
 
-
-			//editorView.innerHTML = words.join(" ");
+			//editorView.editor.innerHTML = words.join(" ");
 		};
-		
-		
-
 	}
 }
