@@ -1,7 +1,9 @@
 import Window from "./window.mjs";
 import readFileContents from "/utils/readFileContents.js";
 
-const purpleKeywords = ["export", "import", "from"];
+const purpleKeywords = ["export", "import", "from", "for", "while", "do", "default", "await", "function"];
+
+const blueKeywords = ["class", "async", "constructor", "const", "let", "var", "this", "null", ""]
 
 String.prototype.replaceAt = function (startIndex, endIndex, replacement) {
 	return this.substring(0, startIndex) + replacement + this.substring(endIndex + 1);
@@ -36,100 +38,112 @@ export default class JSCoder extends Window {
 		editorView.className = "editorView";
 		this.appendChild(editorView);
 
-		editor.oninput = () => {
-			let words = [];
-			let innerHTML = editor.innerHTML;
+		editor.oninput = () =>
+			editorView.innerHTML = highlightText(editor.innerHTML);
+	}
+}
 
-			let currentWord = "";
-			let currentStringOpener = null;
-			for (let i = 0; i < innerHTML.length; i++) {
-				const char = innerHTML.charAt(i);
+/**
+ * @param {string} text from innerHTML 
+ * @returns {string} highlited innerHtml
+ */
+function highlightText(text) {
+	let words = [];
 
+	let currentWord = "";
+	let currentStringOpener = null;
+	for (let i = 0; i < text.length; i++) {
+		const char = text[i];
 
-				if (/"|'|`/.test(char)) {
-					if(i == innerHTML.length - 1) {
-						words.push(currentWord + char);
-						continue;
-					}
-					
-					if (currentStringOpener == null) {
-						currentStringOpener = char;
-						if (currentWord) words.push(currentWord);
-					} else if (currentStringOpener == char) {
-						words.push(currentWord);
-						currentWord = "";
-						currentStringOpener = null;
-					}
-				}
-
-				const space =
-					char == " "
-						? " "
-						: char == "&" && innerHTML.substring(i, i + 7) == "&nbsp;"
-						? "&nbsp;"
-						: null;
-
-				if (space && !currentStringOpener) {
-					if (currentWord) {
-						words.push(currentWord, space);
-						currentWord = "";
-					} else words.push(space);
-					if (space == "&nbsp;") i += 6;
-				} else if (char == "<" && innerHTML.substring(i, i + 4) == "<br>") {
-					words.push(currentWord, "<br>");
-					currentWord = "";
-					i += 3;
-				} else if (i == innerHTML.length - 1) {
-					currentWord += char;
-					words.push(currentWord);
-				} else currentWord += char;
+		if (/"|'|`/.test(char)) {
+			if (i == text.length - 1) {
+				words.push(currentWord + char);
+				continue;
 			}
 
-			words = words.map((word) => {
-				if (purpleKeywords.includes(word)) {
-					return `<span class="hg-p">${word}</span>`;
+			if (currentStringOpener == null) {
+				currentStringOpener = char;
+				if (currentWord) {
+					words.push(currentWord);
+					currentWord = "";
 				}
+			} else if (currentStringOpener == char) {
+				words.push(currentWord + char);
+				currentWord = "";
+				currentStringOpener = null;
+				continue;
+			}
+		}
 
-				return word;
-			});
+		// Numbers
+		if (!isNaN(parseFloat(char))) {
+			if (i == text.length - 1 || isNaN(parseInt(text[i + 1]))) {
+				words.push(currentWord + char);
+				currentWord = "";
+				continue;
+			}
 
-			editorView.innerHTML = words.join("");
+			if (currentWord) {
+				words.push(currentWord);
+				currentWord = "";
+			}
+		}
 
-			/* for (let i = 0; i < output.length; i++) {
-				const char = output.charAt(i);
+		// Parantheses
+		if (/\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|%|>|>=|=|<|<=/.test(char)) {
+			if (currentWord) {
+				words.push(currentWord);
+				currentWord = "";
+			}
+			words.push(char);
+			continue
+		}
 
-				/* if(char == '"') {
-					console.log({
-						char,
-					});
-					console.log("is this if evil?");
-					if(!isString) {
-						isString = true;
-						output = output.insertAt(i, ` <span class="hg-str">`);
-					} else {
-						isString = false;
-						output = output.insertAt(i + 1, `</span> `);
-					}
-					continue;
-				} 
+		const space =
+			char == " "
+				? " "
+				: char == "&" && text.substring(i, i + 6) == "&nbsp;"
+					? "&nbsp;"
+					: null;
 
-				if (char == " ") {
-					word = "";
-					continue;
-				} else word += char;
-
-				console.log("word",word);
-
-				if (purpleKeywords.includes(word)) {
-					const replacement = `<span class="hg-p">${word}</span>`;
-					console.log(i, replacement);
-					output = output.replaceAt(i - word.length + 1, i, replacement);
-					word = "";
-					i += replacement.length;
-				}
-			} */
-
-			//editorView.editor.innerHTML = words.join(" ");
-		};
+		if (space && !currentStringOpener) {
+			if (currentWord) {
+				words.push(currentWord, space);
+			} else words.push(space);
+			if (space == "&nbsp;") {
+				i += 5;
+			}
+			currentWord = "";
+			continue;
+		} else if (char == "<" && text.substring(i, i + 4) == "<br>") {
+			words.push(currentWord, "<br>");
+			currentWord = "";
+			i += 3;
+		} else if (i == text.length - 1) {
+			currentWord += char;
+			words.push(currentWord);
+		} else currentWord += char;
 	}
+
+	let purpleOpeningBlock = false;
+
+	words = words.map((word, i) => {
+		let className = null;
+
+		if (["for", "switch", "while", "if"].includes(word)) purpleOpeningBlock = true;
+
+		if (purpleKeywords.includes(word)) className = "p";
+		else if (purpleOpeningBlock && ["(", ")"].includes(word)) {
+			className = "p";
+			if (word == ")") purpleOpeningBlock = false;
+		}
+		else if (blueKeywords.includes(word)) className = "b";
+		else if (['\"', '\'', '`'].some(stringOpener => word.startsWith(stringOpener) && word.endsWith(stringOpener))) className = "str";
+		else if (['\"', '\'', '`'].some(stringOpener => word.search(stringOpener) == 0)) className = "error";
+		else if (!/\s|;|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|%|>|>=|=|<|<=/.test(word)) className = "lb";
+
+		return className ? `<span class="hg-${className}">${word}</span>` : word;
+	});
+
+	return words.join("");
 }

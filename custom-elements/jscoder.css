@@ -34,6 +34,18 @@
 	color: #d253f8;
 }
 
+.hg-b {
+	color: #467dff;
+}
+
 .hg-str {
 	color: rgb(255, 145, 0);
+}
+
+.hg-lb {
+	color: #79caff;
+}
+
+.hg-error {
+	color: red;
 }
