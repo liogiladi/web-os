@@ -1,20 +1,25 @@
-.editor, .editorView {
+.editor,
+.editorView {
 	box-sizing: border-box;
 	display: block;
 	width: 100%;
 	height: 100%;
-	padding: 5px;
+	overflow-y: auto;
+	word-break: break-all;
 }
 
 .editor {
+	padding-inline: 10px;
+	border-block: 10px solid black;
 	background-color: black;
 	color: transparent;
 	caret-color: white;
 }
 
-.editor::selection, br::selection {
-    background: rgba(58, 186, 218, 0.37);
-    color: transparent;
+.editor::selection,
+br::selection {
+	background: rgba(58, 186, 218, 0.37);
+	color: transparent;
 }
 
 .editor:focus {
@@ -23,11 +28,14 @@
 
 .editorView {
 	position: absolute;
-	inset: 0;
-	color: white;
+	left: 10px;
+	top: 10px;
+	width: calc(100% - 20px);
+	height: calc(100% - 20px);
+	color: #79caff;
+	overflow: hidden;
 	user-select: none;
 	pointer-events: none;
-	padding: 16px;
 }
 
 .hg-p {
@@ -38,14 +46,34 @@
 	color: #467dff;
 }
 
+.hg-w {
+	color: white;
+}
+
 .hg-str {
 	color: rgb(255, 145, 0);
 }
 
-.hg-lb {
-	color: #79caff;
-}
-
 .hg-error {
 	color: red;
+}
+
+.run-button {
+	position: absolute;
+	bottom: 5px;
+	right: 5px;
+	width: 30px;
+	height: 30px;
+	border: 0;
+	border-radius: 50%;
+	background: linear-gradient(0deg, rgb(209, 90, 207) 0%, rgb(250, 167, 249) 100%);
+	box-shadow: 0px 5px 34px 0px rgba(0, 0, 0, 0.371);
+	font-weight: bold;
+	user-select: none;
+	cursor: pointer;
+	transition: filter 0.3s, transform 0.1s;
+}
+
+.run-button:active {
+	transform: scale(0.9);
 }

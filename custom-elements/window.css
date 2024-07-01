@@ -1,7 +1,6 @@
 /* ------------------ Window ------------------- */
 
 .window {
-	gap: 5px;
 	font-size: 1rem;
 	z-index: 101;
 	cursor: default;
@@ -10,7 +9,6 @@
 	height: 100%;
 	display: flex;
 	flex-direction: column;
-	
 }
 
 .window::before {
@@ -22,7 +20,7 @@
 	height: 100%;
 	border-radius: 4px;
 	background: linear-gradient(0deg, rgba(209, 90, 207, 0.8) 0%, rgba(250, 167, 249, 0.8) 100%);
-    box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
+	box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
 	backdrop-filter: blur(30px);
 	z-index: -1;
 }
@@ -54,6 +52,7 @@
 
 .window header .buttons {
 	display: flex;
+	flex-direction: row-reverse;
 }
 
 .window header .buttons button {
@@ -78,25 +77,24 @@
 
 .content {
 	position: relative;
-	padding: 10px;
 	height: 100%;
 	flex-grow: 1;
 	overflow-y: auto;
 }
 
-.content::-webkit-scrollbar {
+::-webkit-scrollbar {
 	width: 5px;
 }
 
-.content::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
 	background-color: transparent;
 }
 
-.content::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
 	background-color: white;
 }
 
-.content::-webkit-scrollbar-thumb:active {
+::-webkit-scrollbar-thumb:active {
 	background-color: #bfbfbf;
 }
 
@@ -134,4 +132,3 @@
 	left: -5px;
 	cursor: sw-resize;
 }
-

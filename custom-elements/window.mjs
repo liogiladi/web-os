@@ -138,9 +138,7 @@ export default class Window extends HTMLElement {
 
 		this.style.width = this.fullscreen ? "100vw" : this.windowedStyles.width;
 		this.style.height = this.fullscreen ? "100vh" : this.windowedStyles.height;
-		this.style.transform = this.fullscreen
-			? "translate(0,0)"
-			: this.windowedStyles.transform;
+		this.style.transform = this.fullscreen ? "translate(0,0)" : this.windowedStyles.transform;
 		this.style.borderRadius = this.fullscreen ? "0px" : "4px";
 	}
 

@@ -1,9 +1,38 @@
 import Window from "./window.mjs";
 import readFileContents from "/utils/readFileContents.js";
 
-const purpleKeywords = ["export", "import", "from", "for", "while", "do", "default", "await", "function"];
+const purpleKeywords = [
+	"export",
+	"import",
+	"from",
+	"for",
+	"while",
+	"do",
+	"default",
+	"await",
+	"function",
+	"if",
+	"switch",
+	"else",
+	"static",
+];
 
-const blueKeywords = ["class", "async", "constructor", "const", "let", "var", "this", "null", ""]
+const blueKeywords = [
+	"class",
+	"async",
+	"constructor",
+	"const",
+	"let",
+	"var",
+	"this",
+	"void",
+	"true",
+	"false",
+	"super",
+	"NaN",
+	"null",
+	"undefined",
+];
 
 String.prototype.replaceAt = function (startIndex, endIndex, replacement) {
 	return this.substring(0, startIndex) + replacement + this.substring(endIndex + 1);
@@ -29,7 +58,6 @@ export default class JSCoder extends Window {
 		this.appendChild(style);
 
 		const editor = document.createElement("code");
-		editor.id = "edit-or";
 		editor.className = "editor";
 		editor.contentEditable = "true";
 		this.appendChild(editor);
@@ -38,13 +66,22 @@ export default class JSCoder extends Window {
 		editorView.className = "editorView";
 		this.appendChild(editorView);
 
-		editor.oninput = () =>
-			editorView.innerHTML = highlightText(editor.innerHTML);
+		const runButton = document.createElement("button");
+		runButton.className = "run-button";
+		runButton.textContent = ">";
+		this.appendChild(runButton);
+
+		//editor.oninput = () => (editorView.innerHTML = highlightText(editor.innerHTML));
+		editor.onscroll = () => (editorView.scrollTop = editor.scrollTop);
+		runButton.onclick = () => {
+			const result = new Function(editor.textContent)();
+			console.log(result);
+		};
 	}
 }
 
 /**
- * @param {string} text from innerHTML 
+ * @param {string} text from innerHTML
  * @returns {string} highlited innerHtml
  */
 function highlightText(text) {
@@ -73,6 +110,24 @@ function highlightText(text) {
 				currentStringOpener = null;
 				continue;
 			}
+		} else if (currentStringOpener != null && i != text.length - 1) {
+			currentWord += char;
+			continue;
+		}
+
+		if (char == ";") {
+			if (/&lt|&gt/.test(text.substring(i - 3, i + 1))) {
+				words.push(currentWord + char);
+				currentWord = "";
+				continue;
+			} else {
+				if (currentWord) {
+					words.push(currentWord);
+					currentWord = "";
+				}
+				words.push(";");
+				continue;
+			}
 		}
 
 		// Numbers
@@ -89,24 +144,10 @@ function highlightText(text) {
 			}
 		}
 
-		// Parantheses
-		if (/\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|%|>|>=|=|<|<=/.test(char)) {
-			if (currentWord) {
-				words.push(currentWord);
-				currentWord = "";
-			}
-			words.push(char);
-			continue
-		}
-
 		const space =
-			char == " "
-				? " "
-				: char == "&" && text.substring(i, i + 6) == "&nbsp;"
-					? "&nbsp;"
-					: null;
+			char == " " ? " " : char == "&" && text.substring(i, i + 6) == "&nbsp;" ? "&nbsp;" : null;
 
-		if (space && !currentStringOpener) {
+		if (space) {
 			if (currentWord) {
 				words.push(currentWord, space);
 			} else words.push(space);
@@ -114,11 +155,17 @@ function highlightText(text) {
 				i += 5;
 			}
 			currentWord = "";
-			continue;
 		} else if (char == "<" && text.substring(i, i + 4) == "<br>") {
 			words.push(currentWord, "<br>");
 			currentWord = "";
 			i += 3;
+		} else if (/\(|\)|\[|\]|\{|\}|\*|\+|-|\!|\.|\/|%|>|>=|=|<|<=/.test(char)) {
+			if (currentWord) {
+				words.push(currentWord);
+				currentWord = "";
+			}
+			words.push(char);
+			continue;
 		} else if (i == text.length - 1) {
 			currentWord += char;
 			words.push(currentWord);
@@ -126,24 +173,110 @@ function highlightText(text) {
 	}
 
 	let purpleOpeningBlock = false;
+	let purpleOpeningCurlyBlock = false;
+
+	let blueOpeningBlock = false;
+	let blueOpeningCurlyBlock = false;
+
+	/** @type {Array<{ className: 'p' | "b", counter: number }>} */
+	let blockCounters = [];
+
+	/** @type {Array<{ className: 'p' | "b", counter: number }>} */
+	let curlyblockCounters = [];
 
 	words = words.map((word, i) => {
 		let className = null;
 
-		if (["for", "switch", "while", "if"].includes(word)) purpleOpeningBlock = true;
+		if (["for", "switch", "while", "if"].includes(word)) {
+			blockCounters.push({ className: "p", counter: 0 });
+			curlyblockCounters.push({ className: "p", counter: 0 });
+		} else if (["super", "constructor"].includes(word)) {
+			blockCounters.push({ className: "b", counter: 0 });
+			curlyblockCounters.push({ className: "b", counter: 0 });
+		}
+
+		if (word === "(") {
+			blockCounters.forEach((block) => block.counter++);
+			const closest = blockCounters[blockCounters.length - 1];
+			if (closest.counter == 1) return getHighlightResult(word, closest.className);
+		} else if (word === ")") {
+			blockCounters.forEach((block) => block.counter--);
+			const closest = blockCounters[blockCounters.length - 1];
+			if (closest.counter == 0) {
+				blockCounters.pop();
+				return getHighlightResult(word, closest.className);
+			}
+		}
+
+		if (word === "{") {
+			curlyblockCounters.forEach((block) => block.counter++);
+			const closest = curlyblockCounters[curlyblockCounters.length - 1];
+			if (closest.counter == 1) return getHighlightResult(word, closest.className);
+		} else if (word === "}") {
+			curlyblockCounters.forEach((block) => block.counter--);
+			const closest = curlyblockCounters[curlyblockCounters.length - 1];
+			if (closest.counter == 0) {
+				curlyblockCounters.pop();
+				return getHighlightResult(word, closest.className);
+			}
+		}
+
+		if (purpleKeywords.includes(word)) className = "p";
+		if (
+			['"', "'", "`"].some(
+				(stringOpener) => word.startsWith(stringOpener) && word.endsWith(stringOpener),
+			)
+		)
+			className = "str";
+		else if (['"', "'", "`"].some((stringOpener) => word.search(stringOpener) == 0)) className = "error";
+		else if (/\s|;|\!|\^|\&|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|\%|>|>=|=|<|<=/.test(word)) className = "w";
+
+		return getHighlightResult(word, className);
+	});
+
+	return words.join("");
+}
+
+function getHighlightResult(word, className) {
+	return className ? `<span class="hg-${className}">${word}</span>` : word;
+}
+
+/**
+ * words = words.map((word, i) => {
+		let className = null;
+
+		if (["for", "switch", "while", "if"].includes(word)) {
+			purpleOpeningBlock = true;
+			purpleOpeningCurlyBlock = true;
+		} else if (["super", "constructor", "while", "if"].includes(word)) {
+			blueOpeningBlock = true;
+			blueOpeningCurlyBlock = true;
+		}
 
 		if (purpleKeywords.includes(word)) className = "p";
 		else if (purpleOpeningBlock && ["(", ")"].includes(word)) {
 			className = "p";
 			if (word == ")") purpleOpeningBlock = false;
-		}
-		else if (blueKeywords.includes(word)) className = "b";
-		else if (['\"', '\'', '`'].some(stringOpener => word.startsWith(stringOpener) && word.endsWith(stringOpener))) className = "str";
-		else if (['\"', '\'', '`'].some(stringOpener => word.search(stringOpener) == 0)) className = "error";
-		else if (!/\s|;|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|%|>|>=|=|<|<=/.test(word)) className = "lb";
+		} else if (purpleOpeningCurlyBlock && ["{", "}"].includes(word)) {
+			className = "p";
+			if (word == "}") purpleOpeningCurlyBlock = false;
+		} else if (blueKeywords.includes(word)) className = "b";
+		else if (blueOpeningBlock && ["(", ")"].includes(word)) {
+			className = "b";
+			if (word == ")") blueOpeningBlock = false;
+		} else if (blueOpeningCurlyBlock && ["{", "}"].includes(word)) {
+			className = "b";
+			if (word == "}") blueOpeningCurlyBlock = false;
+		} else if (
+			['"', "'", "`"].some(
+				(stringOpener) => word.startsWith(stringOpener) && word.endsWith(stringOpener),
+			)
+		)
+			className = "str";
+		else if (['"', "'", "`"].some((stringOpener) => word.search(stringOpener) == 0)) className = "error";
+		else if (/\s|;|\!|\^|\&|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|\%|>|>=|=|<|<=/.test(word)) className = "w";
 
-		return className ? `<span class="hg-${className}">${word}</span>` : word;
+		return getHighlightResult(word, className);
 	});
 
-	return words.join("");
-}
+ */
