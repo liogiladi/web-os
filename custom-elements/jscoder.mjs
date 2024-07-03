@@ -15,6 +15,12 @@ const purpleKeywords = [
 	"switch",
 	"else",
 	"static",
+	"return",
+	"break",
+	"continue",
+	"throw",
+	"try",
+	"catch",
 ];
 
 const blueKeywords = [
@@ -23,8 +29,11 @@ const blueKeywords = [
 	"constructor",
 	"const",
 	"let",
+	"of",
+	"in",
 	"var",
 	"this",
+	"new",
 	"void",
 	"true",
 	"false",
@@ -53,6 +62,8 @@ export default class JSCoder extends Window {
 		this.setAttribute("icon-src", "/media/editor-icon.svg");
 		await super.connectedCallback();
 
+		this._content.className += " jscoder-content";
+
 		const style = document.createElement("style");
 		style.innerHTML = await readFileContents("/custom-elements/jscoder.css");
 		this.appendChild(style);
@@ -68,15 +79,65 @@ export default class JSCoder extends Window {
 
 		const runButton = document.createElement("button");
 		runButton.className = "run-button";
-		runButton.textContent = ">";
-		this.appendChild(runButton);
+		runButton.textContent = "▶";
 
-		//editor.oninput = () => (editorView.innerHTML = highlightText(editor.innerHTML));
-		editor.onscroll = () => (editorView.scrollTop = editor.scrollTop);
-		runButton.onclick = () => {
-			const result = new Function(editor.textContent)();
-			console.log(result);
+		const output = document.createElement("span");
+		output.className = "output";
+
+		const footer = document.createElement("footer");
+		footer.appendChild(output);
+		footer.appendChild(runButton);
+		this.appendChild(footer);
+
+		editor.onpaste = (e) => {
+			e.preventDefault();
+			document.execCommand("insertText", false, e.clipboardData.getData("text/plain"));
 		};
+		editor.oninput = () => (editorView.innerHTML = highlightText(editor.innerHTML));
+		editor.onscroll = () => (editorView.scrollTop = editor.scrollTop);
+		editor.onclick = () => editor.focus();
+		editor.onkeydown = (e) => {
+			if (e.key === "Tab") {
+				e.preventDefault();
+				document.execCommand("insertHTML", false, "&nbsp;&nbsp;&nbsp;");
+			}
+		};
+
+		runButton.onclick = () => {
+			try {
+				const preConditions = `
+					const logs = [];
+					const oldLog = console.log;
+					console.log = (value) => {
+						logs.push(value + "\\n");
+					};
+				`;
+
+				const returnStatement = `
+					console.log = oldLog;
+					return logs.join("");
+				`;
+
+				const result = new Function([preConditions, editor.textContent, returnStatement].join(" "))();
+				output.innerText = result;
+				output.dataset.error = "false";
+			} catch (error) {
+				output.dataset.error = "true";
+				output.innerText = `${error.name}: ${error.message}`;
+			}
+		};
+
+		output.addEventListener("click", () => {
+			if (this._fullscreen) return;
+
+			if (footer.clientHeight < footer.scrollHeight) {
+				// Expand if there's an overflow
+				const brs = (footer.innerHTML.match(/<br>/g) || []).length;
+				footer.style.maxHeight = brs > 0 ? `${brs * 35}px` : "100%";
+			} else {
+				footer.style.maxHeight = "35px";
+			}
+		});
 	}
 }
 
@@ -138,10 +199,8 @@ function highlightText(text) {
 				continue;
 			}
 
-			if (currentWord) {
-				words.push(currentWord);
-				currentWord = "";
-			}
+			currentWord += char;
+			continue;
 		}
 
 		const space =
@@ -159,7 +218,7 @@ function highlightText(text) {
 			words.push(currentWord, "<br>");
 			currentWord = "";
 			i += 3;
-		} else if (/\(|\)|\[|\]|\{|\}|\*|\+|-|\!|\.|\/|%|>|>=|=|<|<=/.test(char)) {
+		} else if (/\(|\)|\[|\]|\{|\}|\*|\+|-|!|\.|\/|%|>|>=|=|<|<=/.test(char)) {
 			if (currentWord) {
 				words.push(currentWord);
 				currentWord = "";
@@ -172,56 +231,14 @@ function highlightText(text) {
 		} else currentWord += char;
 	}
 
-	let purpleOpeningBlock = false;
-	let purpleOpeningCurlyBlock = false;
-
-	let blueOpeningBlock = false;
-	let blueOpeningCurlyBlock = false;
-
-	/** @type {Array<{ className: 'p' | "b", counter: number }>} */
-	let blockCounters = [];
-
-	/** @type {Array<{ className: 'p' | "b", counter: number }>} */
-	let curlyblockCounters = [];
-
 	words = words.map((word, i) => {
 		let className = null;
 
-		if (["for", "switch", "while", "if"].includes(word)) {
-			blockCounters.push({ className: "p", counter: 0 });
-			curlyblockCounters.push({ className: "p", counter: 0 });
-		} else if (["super", "constructor"].includes(word)) {
-			blockCounters.push({ className: "b", counter: 0 });
-			curlyblockCounters.push({ className: "b", counter: 0 });
-		}
+		if (!isNaN(Number(word))) className = "num";
+		else if (purpleKeywords.includes(word)) className = "p";
+		else if (blueKeywords.includes(word)) className = "b";
+		else if (words[i + 1] === "(") className = "f";
 
-		if (word === "(") {
-			blockCounters.forEach((block) => block.counter++);
-			const closest = blockCounters[blockCounters.length - 1];
-			if (closest.counter == 1) return getHighlightResult(word, closest.className);
-		} else if (word === ")") {
-			blockCounters.forEach((block) => block.counter--);
-			const closest = blockCounters[blockCounters.length - 1];
-			if (closest.counter == 0) {
-				blockCounters.pop();
-				return getHighlightResult(word, closest.className);
-			}
-		}
-
-		if (word === "{") {
-			curlyblockCounters.forEach((block) => block.counter++);
-			const closest = curlyblockCounters[curlyblockCounters.length - 1];
-			if (closest.counter == 1) return getHighlightResult(word, closest.className);
-		} else if (word === "}") {
-			curlyblockCounters.forEach((block) => block.counter--);
-			const closest = curlyblockCounters[curlyblockCounters.length - 1];
-			if (closest.counter == 0) {
-				curlyblockCounters.pop();
-				return getHighlightResult(word, closest.className);
-			}
-		}
-
-		if (purpleKeywords.includes(word)) className = "p";
 		if (
 			['"', "'", "`"].some(
 				(stringOpener) => word.startsWith(stringOpener) && word.endsWith(stringOpener),
@@ -229,54 +246,14 @@ function highlightText(text) {
 		)
 			className = "str";
 		else if (['"', "'", "`"].some((stringOpener) => word.search(stringOpener) == 0)) className = "error";
-		else if (/\s|;|\!|\^|\&|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|\%|>|>=|=|<|<=/.test(word)) className = "w";
+		else if (/\s|;|!|\^|&|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|%|>|>=|=|<|<=/.test(word)) className = "w";
 
-		return getHighlightResult(word, className);
+		return getHighlightedResult(word, className);
 	});
 
 	return words.join("");
 }
 
-function getHighlightResult(word, className) {
+function getHighlightedResult(word, className) {
 	return className ? `<span class="hg-${className}">${word}</span>` : word;
 }
-
-/**
- * words = words.map((word, i) => {
-		let className = null;
-
-		if (["for", "switch", "while", "if"].includes(word)) {
-			purpleOpeningBlock = true;
-			purpleOpeningCurlyBlock = true;
-		} else if (["super", "constructor", "while", "if"].includes(word)) {
-			blueOpeningBlock = true;
-			blueOpeningCurlyBlock = true;
-		}
-
-		if (purpleKeywords.includes(word)) className = "p";
-		else if (purpleOpeningBlock && ["(", ")"].includes(word)) {
-			className = "p";
-			if (word == ")") purpleOpeningBlock = false;
-		} else if (purpleOpeningCurlyBlock && ["{", "}"].includes(word)) {
-			className = "p";
-			if (word == "}") purpleOpeningCurlyBlock = false;
-		} else if (blueKeywords.includes(word)) className = "b";
-		else if (blueOpeningBlock && ["(", ")"].includes(word)) {
-			className = "b";
-			if (word == ")") blueOpeningBlock = false;
-		} else if (blueOpeningCurlyBlock && ["{", "}"].includes(word)) {
-			className = "b";
-			if (word == "}") blueOpeningCurlyBlock = false;
-		} else if (
-			['"', "'", "`"].some(
-				(stringOpener) => word.startsWith(stringOpener) && word.endsWith(stringOpener),
-			)
-		)
-			className = "str";
-		else if (['"', "'", "`"].some((stringOpener) => word.search(stringOpener) == 0)) className = "error";
-		else if (/\s|;|\!|\^|\&|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|\%|>|>=|=|<|<=/.test(word)) className = "w";
-
-		return getHighlightResult(word, className);
-	});
-
- */

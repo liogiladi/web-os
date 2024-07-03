@@ -1,9 +1,15 @@
+.jscoder-content {
+	display: flex;
+	flex-direction: column;
+	background-color: black;
+}
+
 .editor,
 .editorView {
 	box-sizing: border-box;
 	display: block;
 	width: 100%;
-	height: 100%;
+	height: calc(100% - 35px);
 	overflow-y: auto;
 	word-break: break-all;
 }
@@ -11,14 +17,14 @@
 .editor {
 	padding-inline: 10px;
 	border-block: 10px solid black;
-	background-color: black;
 	color: transparent;
 	caret-color: white;
+	cursor: text;
 }
 
 .editor::selection,
 br::selection {
-	background: rgba(58, 186, 218, 0.37);
+	background: #3abada5e;
 	color: transparent;
 }
 
@@ -31,7 +37,7 @@ br::selection {
 	left: 10px;
 	top: 10px;
 	width: calc(100% - 20px);
-	height: calc(100% - 20px);
+	height: calc(100% - 55px);
 	color: #79caff;
 	overflow: hidden;
 	user-select: none;
@@ -46,34 +52,85 @@ br::selection {
 	color: #467dff;
 }
 
+.hg-f {
+	color: #faff92;
+}
+
 .hg-w {
 	color: white;
 }
 
 .hg-str {
-	color: rgb(255, 145, 0);
+	color: #ff9100;
+}
+
+.hg-num {
+	color: #9dff95;
 }
 
 .hg-error {
 	color: red;
 }
 
-.run-button {
-	position: absolute;
-	bottom: 5px;
-	right: 5px;
-	width: 30px;
-	height: 30px;
-	border: 0;
-	border-radius: 50%;
-	background: linear-gradient(0deg, rgb(209, 90, 207) 0%, rgb(250, 167, 249) 100%);
-	box-shadow: 0px 5px 34px 0px rgba(0, 0, 0, 0.371);
-	font-weight: bold;
-	user-select: none;
+.jscoder-content footer {
+	position: fixed;
+	top: calc(100% - 35px);
+	display: grid;
+	grid-template-columns: 1fr auto;
+	width: 100%;
+	background-color: black;
+	max-height: 35px;
+	overflow: hidden;
+	transition: max-height 0.3s;
+}
+
+.output {
+	padding: 8px;
+	font-size: 0.8rem;
+	font-weight: 500;
+	color: white;
 	cursor: pointer;
-	transition: filter 0.3s, transform 0.1s;
+}
+
+.output * {
+	pointer-events: none;
+}
+
+.output[data-error="true"] {
+	color: red;
+}
+
+.run-button {
+	position: sticky;
+	top: 0;
+	right: 0;
+	cursor: pointer;
+	color: white;
+	background: none;
+	border: 0;
+	user-select: none;
+	padding-inline: 10px;
+	height: 35px;
 }
 
 .run-button:active {
 	transform: scale(0.9);
+}
+
+.jscoder-content[data-fullscreen="true"] .editor,
+.jscoder-content[data-fullscreen="true"] .editorView {
+	flex: 1;
+	height: calc(50% - 10px);
+}
+
+.jscoder-content[data-fullscreen="true"] footer {
+	position: static;
+	flex: 1;
+	max-height: unset !important;
+	border-top: 1px solid #ffffff26;
+	overflow: auto;
+}
+
+.jscoder-content[data-fullscreen="true"] .output {
+	cursor: default;
 }
