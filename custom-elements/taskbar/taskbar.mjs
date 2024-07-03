@@ -1,5 +1,5 @@
 import readFileContents from "/utils/readFileContents.js";
-import TasksData from "../utils/tasksData.js";
+import TasksData from "../../utils/tasksData.js";
 
 /**
  * @typedef TaskInfo
@@ -16,12 +16,7 @@ export default class Taskbar extends HTMLElement {
 	static instance;
 
 	/** @type {TasksData}  */
-	static tasks;
-
-	// eslint-disable-next-line no-unused-private-class-members
-	static #staticConstructor = (() => {
-		this.tasks = new TasksData();
-	})();
+	static tasks = new TasksData();
 
 	constructor() {
 		super();
