@@ -1,9 +1,11 @@
 <html lang="en">
+
 	<head>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>desktop</title>
 		<link rel="stylesheet" href="/styles/index.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
 	</head>
 	<script type="module" src="../custom-elements/define.mjs"></script>
 	<script type="module">
@@ -15,19 +17,16 @@
 		<main>
 			<section id="shortcuts">
 				<desktop-shortcut name="JSCoder" icon-src="../media/editor-icon.svg" ondblclick="openJSCoder"></desktop-shortcut>
-				
+				<desktop-shortcut name="Test"></desktop-shortcut>
 			</section>
 			<section id="windows">
 			</section>
-			<button id="theme-button">dark mode</button>
 
 			<ul id="context-menu" tabindex="0" onblur="(event) => console.log(event)">
 				<li><button>Edit mode</button></li>
 			</ul>
 		</main>
-		<aside>
-			
-		</aside>
+		<desktop-taskbar></desktop-taskbar>
 	</body>
 
 	<script>
@@ -46,7 +45,7 @@
 		});
 
 		menu.onblur = (event) => {
-			menu.style.display = "none"
+			menu.style.display = "none";
 		};
 
 		var windowsContainer = document.querySelector("#windows");
@@ -55,4 +54,5 @@
 			windowsContainer.appendChild(jscoder);
 		}
 	</script>
+
 </html>

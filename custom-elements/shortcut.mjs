@@ -3,6 +3,7 @@ import makeId from "/utils/makeId.js";
 import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
 import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
+import Taskbar from "./taskbar.mjs";
 
 const requiredAttributes = ["name"];
 export default class Shortcut extends HTMLElement {
@@ -17,7 +18,12 @@ export default class Shortcut extends HTMLElement {
 
 	async connectedCallback() {
 		for (const attribute of requiredAttributes) {
-			if (!this[attribute]) throw new Error(`<desktop-shortcut> is missing '${attribute.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()}' attribute`);
+			if (!this[attribute])
+				throw new Error(
+					`<desktop-shortcut> is missing '${attribute
+						.replace(/([a-z])([A-Z])/g, "$1-$2")
+						.toLowerCase()}' attribute`,
+				);
 		}
 		if (this.textContent) throw new Error("<desktop-shortcut> cannot have innerHTML");
 
@@ -35,25 +41,26 @@ export default class Shortcut extends HTMLElement {
 		img.src = this.iconSrc || "/media/folder.svg";
 		img.alt = "shortcut icon";
 		img.draggable = false;
-		
+
 		this.span = document.createElement("span");
 		this.span.innerText = this.name;
 		this.span.style.pointerEvents = "none";
 		this.span.onclick = this.selectInput;
-		
+
 		this.input = document.createElement("input");
 		this.input.type = "text";
 		this.input.onblur = this.deselectInput;
 
 		const style = document.createElement("style");
 		style.innerHTML = await readFileContents("/custom-elements/shortcut.css");
-		
+
 		template.append(style, img, this.span, this.input);
 		for (const attribute of Shortcut.observedAttributes) {
 			template.setAttribute(attribute, this[attribute]);
 		}
-		
-		this.ondblclick = window[this.getAttribute("ondblclick")];
+
+		this.ondblclick = this.dblClick.bind(this);
+
 		this.ondragstart = () => false;
 
 		shadowRoot.append(template);
@@ -61,7 +68,7 @@ export default class Shortcut extends HTMLElement {
 		makeDraggable(this, template, {
 			customStyles: { position: "relative" },
 			bubbleThroughController: true,
-			preventDrag: event => event.target === this.input,
+			preventDrag: (event) => event.target === this.input,
 		});
 
 		this.onfocus = this.focus;
@@ -70,7 +77,7 @@ export default class Shortcut extends HTMLElement {
 
 	attributeChangedCallback(_name, _oldValue, newValue) {
 		if (_name == "name") this.name = newValue;
-		if (_name == "icon-src") this.iconSrc = newValue;
+		else if (_name == "icon-src") this.iconSrc = newValue;
 	}
 
 	selectInput({ target }) {
@@ -99,6 +106,16 @@ export default class Shortcut extends HTMLElement {
 
 	blur() {
 		this.span.style.pointerEvents = "none";
+	}
+
+	dblClick(e) {
+		Taskbar.tasks.add({
+			name: this.name,
+			iconSrc: this.iconSrc,
+			count: 1,
+		});
+
+		window[this.getAttribute("ondblclick")](e);
 	}
 
 	get iconSrc() {

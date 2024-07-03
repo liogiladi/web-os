@@ -2,17 +2,21 @@ import Queue from "/utils/queue.js";
 import makeId from "/utils/makeId.js";
 import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
-import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
+import reorderedDraggableElements from "/utils/reorderdDraggableElements.js";
+import Taskbar from "./taskbar.mjs";
 
 const sizeTransition = "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
 export default class Window extends HTMLElement {
 	static observedAttributes = ["header-title", "icon-src"];
 	static orderedWindowIds = new Queue();
+	_content;
 
 	constructor() {
 		super();
 		this.observer = null;
+		this._content = null;
+		this._fullscreen = false;
 	}
 
 	async connectedCallback() {
@@ -24,7 +28,6 @@ export default class Window extends HTMLElement {
 
 		Window.orderedWindowIds.enqueue(this.id);
 
-		this.fullscreen = false;
 		this.windowedStyles = {
 			width: "min(500px, 100vw)",
 			height: "min(200px, 100vh)",
@@ -75,6 +78,7 @@ export default class Window extends HTMLElement {
 		/* ------------ content ------------- */
 		const content = document.createElement("div");
 		content.className = "content";
+		this._content = content;
 
 		// Move all child elements to .content
 		while (this.childNodes.length > 0) {
@@ -82,7 +86,7 @@ export default class Window extends HTMLElement {
 		}
 
 		// Observe childList such that every child that is appended to <desktop-window> goes to .content
-		this.observer = new MutationObserver((mutationList, _observer) => {
+		this.observer = new MutationObserver((mutationList) => {
 			for (const mutation of mutationList) {
 				if (mutation.type == "childList" && this.childNodes.length > 0) {
 					while (this.childNodes.length > 0) {
@@ -112,7 +116,7 @@ export default class Window extends HTMLElement {
 			customStyles: { position: "absolute", ...this.windowedStyles },
 		});
 
-		this.onfocus = () => reorderdDraggableElements(Window.orderedWindowIds, this.id, 1000);
+		this.onfocus = () => reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
 		this.ondragstart = () => false;
 	}
 
@@ -121,9 +125,10 @@ export default class Window extends HTMLElement {
 	}
 
 	toggleFullscreen() {
-		this.fullscreen = !this.fullscreen;
+		this._fullscreen = !this._fullscreen;
+		this._content.dataset.fullscreen = this._fullscreen;
 
-		if (this.fullscreen) {
+		if (this._fullscreen) {
 			this.windowedStyles = {
 				width: this.style.width,
 				height: this.style.height,
@@ -136,13 +141,14 @@ export default class Window extends HTMLElement {
 			}, 300);
 		}
 
-		this.style.width = this.fullscreen ? "100vw" : this.windowedStyles.width;
-		this.style.height = this.fullscreen ? "100vh" : this.windowedStyles.height;
-		this.style.transform = this.fullscreen ? "translate(0,0)" : this.windowedStyles.transform;
-		this.style.borderRadius = this.fullscreen ? "0px" : "4px";
+		this.style.width = this._fullscreen ? "100vw" : this.windowedStyles.width;
+		this.style.height = this._fullscreen ? "100vh" : this.windowedStyles.height;
+		this.style.transform = this._fullscreen ? "translate(0,0)" : this.windowedStyles.transform;
+		this.style.borderRadius = this._fullscreen ? "0px" : "4px";
 	}
 
 	close() {
+		Taskbar.tasks.remove(this.headerTitle);
 		Window.orderedWindowIds.removeFirstFromEnd(this.id);
 		this.remove();
 	}

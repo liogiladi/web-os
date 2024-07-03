@@ -39,7 +39,7 @@ main {
 	padding: 10px 30px;
 	font-size: 13px;
 	background: linear-gradient(0deg, rgba(209, 90, 207, 0.8) 0%, rgba(250, 167, 249, 0.8) 100%);
-    box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
+	box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
 	color: black;
 	font-weight: 800;
 	transition: background-color 0.1s;
