@@ -1,5 +1,5 @@
 import readFileContents from "/utils/readFileContents.js";
-import TasksData from "../../utils/tasksData.js";
+import TasksData from "/utils/tasksData.js";
 
 /**
  * @typedef TaskInfo
@@ -28,7 +28,7 @@ export default class Taskbar extends HTMLElement {
 		container.id = "taskbar";
 
 		const style = document.createElement("style");
-		style.innerHTML = await readFileContents("/custom-elements/taskbar.css");
+		style.innerHTML = await readFileContents("/custom-elements/taskbar/taskbar.css");
 
 		this.append(style);
 

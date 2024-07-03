@@ -3,7 +3,7 @@ import makeId from "/utils/makeId.js";
 import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
 import reorderedDraggableElements from "/utils/reorderdDraggableElements.js";
-import Taskbar from "./taskbar.mjs";
+import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
 
 const sizeTransition = "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 

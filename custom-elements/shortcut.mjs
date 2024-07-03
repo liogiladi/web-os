@@ -3,7 +3,7 @@ import makeId from "/utils/makeId.js";
 import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
 import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
-import Taskbar from "./taskbar.mjs";
+import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
 
 const requiredAttributes = ["name"];
 export default class Shortcut extends HTMLElement {

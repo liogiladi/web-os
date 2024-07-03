@@ -4,6 +4,7 @@ const requiredAttributes = ["iconSrc", "name"];
 
 export default class Task extends HTMLElement {
 	static observedAttributes = [...requiredAttributes];
+	previews;
 
 	constructor() {
 		super();
@@ -34,15 +35,13 @@ export default class Task extends HTMLElement {
 		img.alt = "task icon";
 		img.draggable = false;
 
-		this.span = document.createElement("span");
-		this.span.innerText = this.name;
-		this.span.style.pointerEvents = "none";
-		this.span.onclick = this.selectInput;
+		this.previews = document.createElement("div");
+		this.previews.className = "previews";
 
 		const style = document.createElement("style");
 		style.innerHTML = await readFileContents("/custom-elements/task.css");
 
-		container.append(style, img);
+		container.append(style, img, this.previews);
 
 		this.appendChild(container);
 

@@ -2,7 +2,7 @@
  * @typedef {import("../custom-elements/taskbar.mjs").TaskInfo} TaskInfo
  */
 
-import Taskbar from "../custom-elements/taskbar.mjs";
+import Taskbar from "../custom-elements/taskbar/taskbar.mjs";
 
 export default class TasksData {
 	constructor() {
