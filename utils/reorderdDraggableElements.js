@@ -1,11 +1,12 @@
 export default function reorderdDraggableElements(queue, thisId, minZindex) {
-    if (queue.length == 1) return;
+	if (queue.length == 1) return;
 
-    queue.removeFirstFromEnd(thisId);
-    queue.enqueue(thisId);
+	queue.removeFirstFromEnd(thisId);
+	queue.enqueue(thisId);
 
-    let pointer = queue.start;
-    for (let i = 0; pointer !== null; pointer = pointer.prev, i++) {
-        document.getElementById(pointer.value).style.zIndex = minZindex + i;
-    }
+	let pointer = queue.start;
+	for (let i = 0; pointer !== null; pointer = pointer.prev, i++) {
+		const el = document.getElementById(pointer.value);
+		if (el) el.style.zIndex = minZindex + i;
+	}
 }
