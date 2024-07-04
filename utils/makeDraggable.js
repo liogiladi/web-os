@@ -1,3 +1,5 @@
+import { TASKBAR_HEIGHT } from "./constants.js";
+
 var _previousMouseEvent = null;
 
 const initialOptions = {
@@ -23,7 +25,7 @@ export default function makeDraggable(element, controller, options = initialOpti
 	}
 
 	controller.onmousedown = (event) => {
-		if(!options.bubbleThroughController && event.target !== controller) return;
+		if (!options.bubbleThroughController && event.target !== controller) return;
 		if (options.preventDrag && options.preventDrag(event)) return;
 
 		event.target.focus();
@@ -37,7 +39,7 @@ function drag(event) {
 		const deltaX = event.pageX - _previousMouseEvent.pageX;
 		const deltaY = event.pageY - _previousMouseEvent.pageY;
 
-		const computedTransformMatrix = new WebKitCSSMatrix(window.getComputedStyle(this).transform);
+		const computedTransformMatrix = new DOMMatrix(window.getComputedStyle(this).transform);
 		const computedTranslation = {
 			x: computedTransformMatrix.m41,
 			y: computedTransformMatrix.m42,
@@ -51,10 +53,10 @@ function drag(event) {
 		// Prevent drag if element is exiting viewport
 		const rect = this.getBoundingClientRect();
 		const exceedsViewport = {
-			left: rect.x + deltaX <= 0,
-			right: rect.x + rect.width + deltaX >= window.innerWidth,
+			left: rect.x + deltaX <= -1,
+			right: rect.x + rect.width + deltaX >= window.innerWidth + 2,
 			top: rect.y + deltaY <= 0,
-			bottom: rect.y + rect.height + deltaY >= window.innerHeight,
+			bottom: rect.y + rect.height + deltaY >= window.innerHeight - Number.parseInt(TASKBAR_HEIGHT),
 		};
 
 		if (
@@ -69,7 +71,7 @@ function drag(event) {
 			exceedsViewport.top ||
 			event.pageY <= 0 ||
 			exceedsViewport.bottom ||
-			event.pageY >= window.innerHeight
+			event.pageY >= window.innerHeight - Number.parseInt(TASKBAR_HEIGHT)
 		) {
 			newTranslation.y = computedTranslation.y;
 		}

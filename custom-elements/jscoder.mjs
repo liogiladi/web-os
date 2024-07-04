@@ -66,16 +66,16 @@ export default class JSCoder extends Window {
 
 		const style = document.createElement("style");
 		style.innerHTML = await readFileContents("/custom-elements/jscoder.css");
-		this.appendChild(style);
+		//this.appendChild(style);
 
 		const editor = document.createElement("code");
 		editor.className = "editor";
 		editor.contentEditable = "true";
-		this.appendChild(editor);
+		//this.appendChild(editor);
 
 		const editorView = document.createElement("code");
 		editorView.className = "editorView";
-		this.appendChild(editorView);
+		//this.appendChild(editorView);
 
 		const runButton = document.createElement("button");
 		runButton.className = "run-button";
@@ -87,7 +87,10 @@ export default class JSCoder extends Window {
 		const footer = document.createElement("footer");
 		footer.appendChild(output);
 		footer.appendChild(runButton);
-		this.appendChild(footer);
+
+		//this.appendChild(footer);
+
+		this.append(style, editor, editorView, footer);
 
 		editor.onpaste = (e) => {
 			e.preventDefault();

@@ -5,17 +5,19 @@
 import Taskbar from "../custom-elements/taskbar/taskbar.mjs";
 
 export default class TasksData {
+	/** @type {Map<string, TaskInfo>} */
+	data;
+
 	constructor() {
-		/** @type {Record<string, TaskInfo>} */
-		this.tasks = {};
+		this.data = new Map();
 	}
 
 	/**
 	 * @param {TaskInfo} task
 	 */
 	add(task) {
-		if (task.name in this.tasks) {
-			this.tasks[task.name].count++;
+		if (this.data.has(task.name)) {
+			this.data.get(task.name).count++;
 		} else {
 			const taskElement = document.createElement("desktop-task");
 			taskElement.id = `task-${task.name}`;
@@ -23,7 +25,7 @@ export default class TasksData {
 			taskElement.setAttribute("icon-src", task.iconSrc);
 
 			Taskbar.instance.appendChild(taskElement);
-			this.tasks[task.name] = task;
+			this.data.set(task.name, task);
 		}
 	}
 
@@ -31,16 +33,18 @@ export default class TasksData {
 	 * @param {string} task
 	 */
 	remove(taskName) {
-		if (!(taskName in this.tasks)) {
+		if (!this.data.has(taskName)) {
 			throw new Error(`can't remove non existant task: ${taskName}`);
 		}
 
-		if (this.tasks[taskName].count > 1) {
-			this.tasks[taskName].count--;
+		if (this.data.get(taskName).count > 1) {
+			this.data.get(taskName).count--;
 		} else {
-			delete this.tasks[taskName];
+			this.data.delete(taskName);
 
 			const taskElement = Taskbar.shadowRoot.getElementById(`task-${taskName}`);
+			console.log(taskName);
+
 			taskElement.classList.add("unload-animation");
 
 			setTimeout(() => {
@@ -50,9 +54,13 @@ export default class TasksData {
 	}
 
 	/** @param {string} */
-	get(name) {
-		if (!(name in this.tasks)) throw new Error(`can't get non existant task: ${name}`);
+	get(taskName) {
+		if (!this.data.has(taskName)) throw new Error(`can't get non existant task: ${name}`);
 
-		return this.tasks[name];
+		return this.data.get(taskName);
+	}
+
+	[Symbol.iterator]() {
+		return this.data;
 	}
 }

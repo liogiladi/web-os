@@ -1,8 +1,8 @@
 .task {
+	position: relative;
 	display: block;
 	width: 50px;
 	height: 50px;
-	transition: transform 0.2s;
 }
 
 .load-animation {
@@ -13,16 +13,132 @@
 	animation: enter 0.5s 1 ease reverse forwards;
 }
 
-.task:hover {
-	transform: scale(1.1) translateY(-7px);
-}
-.task:active {
-	transform: scale(1) translateY(-7px);
+.task:not([data-focused]) .preview-image:hover,
+.task:has(.previews:hover) .preview-image {
+	transform: scale(1.1) translateY(-11px);
 }
 
-.task img {
+.task:not([data-focused]) .preview-image:hover,
+.task[data-focused] .preview-image {
+	transform: scale(1.1) translateY(-11px);
+}
+
+.task .preview-image:active {
+	transform: scale(1) translateY(-9px) !important;
+}
+
+.task .preview-image {
 	width: 100%;
 	height: 100%;
+	transition: transform 0.2s;
+}
+
+.task .previews {
+	box-sizing: border-box;
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: start;
+	height: 168px;
+	background: rgb(130 0 66 / 29%);
+	border-radius: 5px;
+	bottom: 85px;
+	right: 50%;
+	transform: translateX(50%);
+	backdrop-filter: blur(5px);
+	opacity: 0;
+	transition: 0.1s ease-out;
+	transition-delay: 0.35s;
+
+	overflow: hidden;
+}
+
+.task[data-focused] .previews {
+	opacity: 1;
+}
+
+.task .previews::before {
+	content: "";
+	position: absolute;
+	display: block;
+	top: 0;
+	width: 100%;
+	height: calc(100% + 10px);
+}
+
+.task:has(.preview-image:hover) .previews {
+	opacity: 1;
+}
+
+.task:has(.preview-image:active) .previews {
+	opacity: 0;
+}
+.task .previews:hover {
+	opacity: 1;
+}
+
+/* ------------ Preview ------------- */
+
+.task .preview {
+	position: relative;
+	width: 245px;
+	height: 100%;
+}
+
+.task .preview:hover {
+	background-color: #ffffff38;
+}
+
+.preview header {
+	display: flex;
+	justify-content: space-between;
+	padding: 10px;
+}
+
+.preview header .info {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
+}
+
+.preview header .info h2 {
+	color: white;
+	font-size: 1rem;
+	font-weight: normal;
+	margin: 0;
+}
+
+.preview header .info img {
+	width: 18px;
+}
+
+.preview > *:nth-child(2) {
+	top: 13px !important;
+	left: -52.2% !important;
+	transform: scale(45%) !important ;
+	pointer-events: none;
+}
+
+.preview .task-close-button {
+	width: 25px;
+	height: 25px;
+	border: 0;
+	border-radius: 2px;
+	aspect-ratio: 1/1;
+	font-size: 1rem;
+	color: white;
+	background: #0000003b;
+	opacity: 0;
+	cursor: pointer;
+}
+
+.preview .task-close-button:hover {
+	background: rgb(174, 36, 36);
+}
+
+.task .preview:hover .task-close-button {
+	opacity: 1;
 }
 
 @keyframes enter {

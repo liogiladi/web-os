@@ -12,15 +12,15 @@ body {
 	margin: 0 auto;
 	background-image: url("/media/bg.svg");
 	background-size: cover;
+	overflow: hidden;
 }
 
 main {
 	position: relative;
 	width: 100vw;
-	height: 100vh;
+	height: calc(100vh - 70px);
 	padding: 10px;
 	box-sizing: border-box;
-	overflow: hidden;
 }
 
 #shortcuts {

@@ -4,6 +4,7 @@ import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
 import reorderedDraggableElements from "/utils/reorderdDraggableElements.js";
 import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
+import { TASKBAR_HEIGHT } from "/utils/constants.js";
 
 const sizeTransition = "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
@@ -17,9 +18,12 @@ export default class Window extends HTMLElement {
 		this.observer = null;
 		this._content = null;
 		this._fullscreen = false;
+		this.clone = false;
 	}
 
 	async connectedCallback() {
+		if (this.clone) return;
+
 		if (!this.headerTitle) {
 			throw new Error("<desktop-window> is missing 'header-title' attribute");
 		}
@@ -30,7 +34,7 @@ export default class Window extends HTMLElement {
 
 		this.windowedStyles = {
 			width: "min(500px, 100vw)",
-			height: "min(200px, 100vh)",
+			height: `min(200px, calc(100vh - ${TASKBAR_HEIGHT}))`,
 			transform: "translate(0,0)",
 			left: 0,
 			top: 0,
@@ -45,7 +49,7 @@ export default class Window extends HTMLElement {
 
 		const closeButton = document.createElement("button");
 		closeButton.textContent = "x";
-		closeButton.onclick = this.close.bind(this);
+		closeButton.onclick = this.remove.bind(this);
 
 		const sizeButton = document.createElement("button");
 		sizeButton.textContent = "o";
@@ -81,16 +85,16 @@ export default class Window extends HTMLElement {
 		this._content = content;
 
 		// Move all child elements to .content
-		while (this.childNodes.length > 0) {
-			content.appendChild(this.childNodes[0]);
+		while (this.childNodes.length > 1) {
+			content.appendChild(this.childNodes[1]);
 		}
 
 		// Observe childList such that every child that is appended to <desktop-window> goes to .content
 		this.observer = new MutationObserver((mutationList) => {
 			for (const mutation of mutationList) {
 				if (mutation.type == "childList" && this.childNodes.length > 0) {
-					while (this.childNodes.length > 0) {
-						content.appendChild(this.childNodes[0]);
+					while (this.childNodes.length > 1) {
+						content.append(this.childNodes[1]);
 					}
 				}
 			}
@@ -109,8 +113,10 @@ export default class Window extends HTMLElement {
 		template.append(style, header, content);
 
 		/* ------------ attach elements ------------- */
-		const shadowRoot = this.shadowRoot || this.attachShadow({ mode: "open" });
-		shadowRoot.append(template);
+		//const shadowRoot = this.shadowRoot || this.attachShadow({ mode: "open" });
+		//shadowRoot.append(template);
+
+		if (this.childNodes.length === 0) this.appendChild(template);
 
 		makeDraggable(this, header, {
 			customStyles: { position: "absolute", ...this.windowedStyles },
@@ -142,15 +148,15 @@ export default class Window extends HTMLElement {
 		}
 
 		this.style.width = this._fullscreen ? "100vw" : this.windowedStyles.width;
-		this.style.height = this._fullscreen ? "100vh" : this.windowedStyles.height;
+		this.style.height = this._fullscreen ? `calc(100vh - ${TASKBAR_HEIGHT})` : this.windowedStyles.height;
 		this.style.transform = this._fullscreen ? "translate(0,0)" : this.windowedStyles.transform;
 		this.style.borderRadius = this._fullscreen ? "0px" : "4px";
 	}
 
-	close() {
+	remove() {
 		Taskbar.tasks.remove(this.headerTitle);
 		Window.orderedWindowIds.removeFirstFromEnd(this.id);
-		this.remove();
+		super.remove();
 	}
 
 	get headerTitle() {

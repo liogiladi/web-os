@@ -1,16 +1,24 @@
 #taskbar {
-	box-sizing: border-box;
 	position: fixed;
 	bottom: 0;
+	z-index: 9999;
 	display: flex;
 	justify-content: center;
-	padding: 10px;
+	align-items: center;
 	width: 100%;
 	height: 70px;
 	gap: 1rem;
+	transition: 0.3s;
+}
+
+#taskbar::before {
+	position: absolute;
+	bottom: 0;
+	content: "";
+	width: 100%;
+	height: 100%;
 	background: #45001114;
 	backdrop-filter: blur(5px);
-	transition: 0.3s;
 }
 
 #taskbar:not(:has(desktop-task)) {
