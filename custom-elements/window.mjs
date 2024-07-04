@@ -30,6 +30,8 @@ export default class Window extends HTMLElement {
 
 		if (!this.id) this.id = makeId(10);
 
+		this.tabIndex = 1;
+
 		Window.orderedWindowIds.enqueue(this.id);
 
 		this.windowedStyles = {
@@ -105,7 +107,6 @@ export default class Window extends HTMLElement {
 		/* ------------ template ------------- */
 		const template = document.createElement("template");
 		template.className = "window";
-		template.tabIndex = 0;
 
 		const style = document.createElement("style");
 		style.innerHTML = await readFileContents("/custom-elements/window.css");
@@ -122,7 +123,10 @@ export default class Window extends HTMLElement {
 			customStyles: { position: "absolute", ...this.windowedStyles },
 		});
 
-		this.onfocus = () => reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
+		this.addEventListener("focusin", () => {
+			reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
+		});
+
 		this.ondragstart = () => false;
 	}
 
