@@ -33,18 +33,23 @@
 	transition: transform 0.2s;
 }
 
+.task .preview-image * {
+	image-rendering: pixelated; /* Universal support since 2021   */
+	-ms-interpolation-mode: nearest-neighbor; /* IE8+                           */
+}
+
 .task .previews {
 	box-sizing: border-box;
-	position: fixed;
+	position: absolute;
 	display: flex;
 	justify-content: center;
 	align-items: start;
 	height: 168px;
 	background: rgb(130 0 66 / 29%);
 	border-radius: 5px;
-	bottom: 85px;
-	right: 50%;
-	transform: translateX(50%);
+	bottom: calc(100% + 23px);
+	left: 50%;
+	transform: translateX(-50%);
 	backdrop-filter: blur(5px);
 	opacity: 0;
 	transition: 0.1s ease-out;
