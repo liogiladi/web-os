@@ -21,6 +21,10 @@ main {
 	height: calc(100vh - 70px);
 	padding: 10px;
 	box-sizing: border-box;
+}	
+
+main[data-preview-window] #windows > *:not([data-window-to-preview]) {
+	display: none !important;
 }
 
 #shortcuts {

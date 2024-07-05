@@ -1,159 +1,233 @@
 import readFileContents from "/utils/readFileContents.js";
+import reorderedDraggableElements from "/utils/reorderdDraggableElements.js";
 import Taskbar from "./taskbar.mjs";
+import Window from "../window.mjs";
 
 const requiredAttributes = ["iconSrc", "name"];
 
 export default class Task extends HTMLElement {
-	static observedAttributes = [...requiredAttributes];
+    static observedAttributes = [...requiredAttributes];
 
-	/** @type {HTMLTemplateElement} */
-	container;
+    /** @type {HTMLTemplateElement} */
+    container;
 
-	/** @type {HTMLDivElement} */
-	previews;
+    /** @type {HTMLDivElement} */
+    previews;
 
-	constructor() {
-		super();
-		this.loaded = false;
-	}
+    constructor() {
+        super();
+        this.loaded = false;
+    }
 
-	async connectedCallback() {
-		if (this.loaded) return;
-		this.loaded = true;
+    async connectedCallback() {
+        if (this.loaded) return;
+        this.loaded = true;
 
-		// Attributes validations
-		for (const attribute of requiredAttributes) {
-			if (!this[attribute])
-				throw new Error(
-					`<desktop-task> is missing '${attribute
-						.replace(/([a-z])([A-Z])/g, "$1-$2")
-						.toLowerCase()}' attribute`,
-				);
-		}
+        // Attributes validations
+        for (const attribute of requiredAttributes) {
+            if (!this[attribute])
+                throw new Error(
+                    `<desktop-task> is missing '${attribute
+                        .replace(/([a-z])([A-Z])/g, "$1-$2")
+                        .toLowerCase()}' attribute`
+                );
+        }
 
-		this.id = `task-${this.name}`;
-		this.tabIndex = 1;
+        this.id = `task-${this.name}`;
+        this.tabIndex = 1;
 
-		this.container = document.createElement("template");
-		this.container.className = "task load-animation";
+        this.container = document.createElement("template");
+        this.container.className = "task load-animation";
 
-		const previewImage = document.createElement("img");
-		previewImage.className = "preview-image";
-		previewImage.src = this.iconSrc || "/media/folder.svg";
-		previewImage.alt = "task icon";
-		previewImage.draggable = false;
+        const taskIcon = document.createElement("img");
+        taskIcon.className = "preview-image";
+        taskIcon.src = this.iconSrc || "/media/folder.svg";
+        taskIcon.alt = "task icon";
+        taskIcon.draggable = false;
 
-		this.previews = document.createElement("div");
-		this.previews.className = "previews";
+        const amount = document.createElement("div");
+        amount.className = "amount";
 
-		const style = document.createElement("style");
-		style.innerHTML = await readFileContents("/custom-elements/taskbar/task.css");
+        this.previews = document.createElement("div");
+        this.previews.className = "previews";
 
-		this.container.append(style, previewImage, this.previews);
+        const style = document.createElement("style");
+        style.innerHTML = await readFileContents(
+            "/custom-elements/taskbar/task.css"
+        );
 
-		this.appendChild(this.container);
+        this.container.append(style, taskIcon, amount, this.previews);
 
-		setTimeout(() => {
-			this.container.classList.remove("load-animation");
-		}, 500);
+        this.appendChild(this.container);
 
-		this.container.onmouseenter = () => (this.hovers = true);
-		this.container.onmouseleave = () => (this.hovers = false);
+        setTimeout(() => {
+            this.container.classList.remove("load-animation");
+        }, 500);
 
-		previewImage.onmouseenter = () => {
-			// Only update the snapshot if the preview isn't visible
-			setTimeout(() => {
-				this.previews.style.display = "flex";
-			}, 400);
+        this.container.onmouseenter = () => (this.hovers = true);
+        this.container.onmouseleave = () => {
+            this.hovers = false;
 
-			const previewsChildren = [];
+            setTimeout(() => {
+                if (!this.hovers && !this.container.dataset.focused) {
+                    this.previews.replaceChildren();
+                }
+            }, 400);
+        };
 
-			const windows = document.querySelectorAll(`[header-title="${this.name}"`);
+        taskIcon.onmouseenter = () => {
+            // Only update the snapshot if the preview isn't visible
+            setTimeout(() => {
+                this.previews.style.display = "flex";
+            }, 400);
 
-			for (const window of windows) {
-				const preview = document.createElement("article");
-				preview.id = `window-preview-${window.id}`;
-				preview.className = "preview";
-				preview.windowId = window.id;
-				preview.onclick = this.openWindow(window.id);
+            const previewsChildren = [];
 
-				const header = document.createElement("header");
+            const windows = document.querySelectorAll(
+                `[header-title="${this.name}"`
+            );
 
-				const title = document.createElement("h2");
-				title.innerText = window.getAttribute("header-title");
+            for (const window of windows) {
+                const preview = this.createPreview(window);
+                previewsChildren.push(preview);
+            }
 
-				const icon = document.createElement("img");
-				icon.src = window.iconSrc;
+            this.previews.replaceChildren(...previewsChildren);
+        };
 
-				const infoWrapper = document.createElement("div");
-				infoWrapper.append(icon, title);
-				infoWrapper.className = "info";
+        taskIcon.onmouseout = () => {
+            if (!("focused" in this.container.dataset)) {
+                setTimeout(() => {
+                    if (!this.hovers) {
+                        this.previews.style.display = "none";
+                        this.previews.replaceChildren();
+                    }
+                }, 400);
+            }
+        };
 
-				const closeButton = document.createElement("button");
-				closeButton.className = "task-close-button";
-				closeButton.innerHTML = "x";
-				closeButton.onclick = this.closeWindow(window.id);
+        taskIcon.onclick = () => {
+            if (!("focused" in this.container.dataset)) {
+                this.container.dataset.focused = true;
+            }
+        };
 
-				header.append(infoWrapper, closeButton);
+        this.onblur = (e) => {
+            if (e.relatedTarget?.className === "task-close-button") return;
+            delete this.container.dataset.focused;
+            this.previews.style.display = "none";
+            this.previews.replaceChildren();
+        };
+    }
 
-				preview.append(header, window.cloneNode(true));
-				previewsChildren.push(preview);
-			}
+    attributeChangedCallback(_name, _oldValue, newValue) {
+        if (_name == "name") this.name = newValue;
+        else if (_name == "icon-src") this.iconSrc = newValue;
+    }
 
-			this.previews.replaceChildren(...previewsChildren);
-		};
+    get iconSrc() {
+        return this.getAttribute("icon-src");
+    }
 
-		previewImage.onmouseout = () => {
-			if (!("focused" in this.container.dataset)) {
-				setTimeout(() => {
-					if (!this.hovers) this.previews.style.display = "none";
-				}, 400);
-			}
-		};
+    set iconSrc(value) {
+        this.setAttribute("icon-src", value);
+    }
 
-		previewImage.onclick = () => {
-			if (!("focused" in this.container.dataset)) {
-				this.container.dataset.focused = "";
-			}
-		};
+    /**
+     * @param {Window} window
+     */
+    createPreview(window) {
+        const preview = document.createElement("article");
 
-		this.onblur = (e) => {
-			if (e.relatedTarget?.className === "task-close-button") return;
-			delete this.container.dataset.focused;
-			this.previews.style.display = "none";
-		};
-	}
+        preview.id = `window-preview-${window.id}`;
+        preview.className = "preview";
+        preview.windowId = window.id;
+        preview.onmouseenter = () => {
+            this.previewWindow.bind(preview)(window);
+        };
+        preview.onmouseleave = () => {
+            this.unpreviewWindow(window);
+        };
+        preview.onclick = this.openWindow(window);
 
-	attributeChangedCallback(_name, _oldValue, newValue) {
-		if (_name == "name") this.name = newValue;
-		else if (_name == "icon-src") this.iconSrc = newValue;
-	}
+        const header = document.createElement("header");
 
-	get iconSrc() {
-		return this.getAttribute("icon-src");
-	}
+        const title = document.createElement("h2");
+        title.innerText = window.getAttribute("header-title");
 
-	set iconSrc(value) {
-		this.setAttribute("icon-src", value);
-	}
+        const icon = document.createElement("img");
+        icon.src = window.iconSrc;
 
-	openWindow(id) {
-		/**
-		 * @param {Event} e
-		 */
-		return () => {
-			console.log("opening window: " + id);
-		};
-	}
+        const infoWrapper = document.createElement("div");
+        infoWrapper.append(icon, title);
+        infoWrapper.className = "info";
 
-	closeWindow(id) {
-		/**
-		 * @param {Event} e
-		 */
-		return () => {
-			this.hovers = true;
-			Taskbar.shadowRoot.getElementById(`window-preview-${id}`).remove();
-			document.getElementById(id).remove();
-		};
-	}
+        const closeButton = document.createElement("button");
+        closeButton.className = "task-close-button";
+        closeButton.innerHTML = "x";
+        closeButton.onclick = this.closeWindow(window.id);
+
+        header.append(infoWrapper, closeButton);
+
+        /** @type {Window} */
+        const windowClone = window.cloneNode(true);
+        windowClone.removeAttribute("id");
+        windowClone.style.pointerEvents = "none";
+        windowClone.unminimize(true);
+
+        preview.append(header, windowClone);
+
+        return preview;
+    }
+
+    /**
+     *
+     * @param {Window} window
+     */
+    previewWindow(window) {
+        const main = document.querySelector("main");
+        main.dataset.previewWindow = "";
+        window.dataset.windowToPreview = "";
+        if (window.minimized) window.unminimize(true);
+    }
+
+    unpreviewWindow(window) {
+        const main = document.querySelector("main");
+        main.removeAttribute("data-preview-window");
+        window.removeAttribute("data-window-to-preview");
+
+        if (window.minimized) window.minimize(true);
+    }
+
+    /**
+     * @param {Window} window
+     */
+    openWindow(window) {
+        /**
+         * @param {Event} e
+         */
+        return () => {
+            this.blur();
+            this.unpreviewWindow(window);
+
+            if(window.minimized) window.unminimize(false);
+
+            reorderedDraggableElements(
+                Window.orderedWindowIds,
+                window.id,
+                1000
+            );
+        };
+    }
+
+    closeWindow(id) {
+        /**
+         * @param {Event} e
+         */
+        return () => {
+            this.hovers = true;
+            Taskbar.shadowRoot.getElementById(`window-preview-${id}`).remove();
+            document.getElementById(id).remove();
+        };
+    }
 }

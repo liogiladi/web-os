@@ -1,58 +1,67 @@
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>desktop</title>
+        <link rel="stylesheet" href="/styles/index.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+        />
+    </head>
+    <script type="module" src="../custom-elements/define.mjs"></script>
+    <script type="module">
+        import { initTheme } from "/utils/theme.js";
+        initTheme();
+    </script>
 
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>desktop</title>
-		<link rel="stylesheet" href="/styles/index.css">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
-	</head>
-	<script type="module" src="../custom-elements/define.mjs"></script>
-	<script type="module">
-		import { initTheme } from "/utils/theme.js";
-		initTheme();
-	</script>
+    <body>
+        <main>
+            <div id="preview-bg"></div>
+            <section id="shortcuts">
+                <desktop-shortcut
+                    name="JSCoder"
+                    icon-src="../media/editor-icon.svg"
+                    ondblclick="openJSCoder"
+                ></desktop-shortcut>
+                <desktop-shortcut name="Test"></desktop-shortcut>
+            </section>
+            <section id="windows"></section>
 
-	<body>
-		<main>
-			<section id="shortcuts">
-				<desktop-shortcut name="JSCoder" icon-src="../media/editor-icon.svg" ondblclick="openJSCoder"></desktop-shortcut>
-				<desktop-shortcut name="Test"></desktop-shortcut>
-			</section>
-			<section id="windows">
-			</section>
+            <ul
+                id="context-menu"
+                tabindex="0"
+                onblur="(event) => console.log(event)"
+            >
+                <li><button>Edit mode</button></li>
+            </ul>
+        </main>
+        <desktop-taskbar></desktop-taskbar>
+    </body>
 
-			<ul id="context-menu" tabindex="0" onblur="(event) => console.log(event)">
-				<li><button>Edit mode</button></li>
-			</ul>
-		</main>
-		<desktop-taskbar></desktop-taskbar>
-	</body>
+    <script>
+        var main = document.querySelector("main");
+        var menu = document.querySelector("#context-menu");
+        menu.style.display = "none";
 
-	<script>
-		var main = document.querySelector("main");
-		var menu = document.querySelector("#context-menu");
-		menu.style.display = "none";
+        window.addEventListener("contextmenu", (event) => {
+            if (event.target !== main) return;
+            event.preventDefault();
 
-		window.addEventListener("contextmenu", (event) => {
-			if (event.target !== main) return;
-			event.preventDefault();
+            menu.focus();
+            menu.style.display = "unset";
+            menu.style.left = event.x;
+            menu.style.top = event.y;
+        });
 
-			menu.focus();
-			menu.style.display = "unset";
-			menu.style.left = event.x;
-			menu.style.top = event.y;
-		});
+        menu.onblur = (event) => {
+            menu.style.display = "none";
+        };
 
-		menu.onblur = (event) => {
-			menu.style.display = "none";
-		};
-
-		var windowsContainer = document.querySelector("#windows");
-		function openJSCoder() {
-			const jscoder = document.createElement("js-coder");
-			windowsContainer.appendChild(jscoder);
-		}
-	</script>
-
+        var windowsContainer = document.querySelector("#windows");
+        function openJSCoder() {
+            const jscoder = document.createElement("js-coder");
+            windowsContainer.appendChild(jscoder);
+        }
+    </script>
 </html>
