@@ -1,6 +1,6 @@
 import Shortcut from "./shortcut.mjs";
 import Window from "./window.mjs";
-import JSCoder from "./jscoder.mjs";
+import JSCoder from "./apps/jscoder.mjs";
 import Taskbar from "./taskbar/taskbar.mjs";
 import Task from "./taskbar/task.mjs";
 

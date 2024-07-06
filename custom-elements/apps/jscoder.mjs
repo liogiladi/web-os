@@ -1,4 +1,4 @@
-import Window from "./window.mjs";
+import Window from "../window.mjs";
 import readFileContents from "/utils/readFileContents.js";
 
 const purpleKeywords = [
@@ -65,7 +65,7 @@ export default class JSCoder extends Window {
 		this._content.className += " jscoder-content";
 
 		const style = document.createElement("style");
-		style.innerHTML = await readFileContents("/custom-elements/jscoder.css");
+		style.innerHTML = await readFileContents("/custom-elements/apps/jscoder.css");
 		//this.appendChild(style);
 
 		const editor = document.createElement("code");
