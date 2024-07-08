@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./browser.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <main>
+            <section>
+                <h1>Browser</h1>
+                <form id="search-bar">
+                    <input type="text" placeholder="search anything!" />
+                    <button>></button>
+                </form>
+            </section>
+        </main>
+        <script type="module">
+            import Browser from "/custom-elements/apps/browser.mjs"
+            const input = document.querySelector("#search-bar input");
+
+            document.getElementsByTagName("form")[0].onsubmit = search;
+
+            function search(e) {
+                e.preventDefault();
+
+                const params = new URLSearchParams();
+                params.set("q", input.value);
+                
+                window.location.href = `search.html?${params}`;
+            }
+        </script>
+    </body>
+</html>

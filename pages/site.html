@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./site.css">
+    <title>Document</title>
+</head>
+<body>
+    <header>
+        <h1></h1>
+        <h2></h2>
+    </header>
+    <main>
+    </main>
+    <footer>If you want more substance, maybe visit a real website 😉</footer>
+</body>
+<script>
+    const searchParams = new URL(window.location.href).searchParams;
+    
+    const id = searchParams.get("id");
+    const type = window.localStorage.getItem("t");
+    const paragraph =  window.localStorage.getItem("p")
+    
+    if(!id || !type || !paragraph) {
+        window.location.href = `browserError.html`;
+    }
+    
+    document.body.dataset.type = type.toLowerCase();
+     
+    const header = document.querySelector("header");
+    header.querySelector("h1").innerHTML = type;
+    header.querySelector("h2").innerHTML = id;
+
+    const main = document.querySelector("main");
+    main.innerHTML = paragraph;
+</script>
+</html>

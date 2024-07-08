@@ -3,17 +3,16 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>desktop</title>
-        <link rel="stylesheet" href="/styles/index.css" />
-        <link
-            rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
-        />
+        <link rel="stylesheet" href="/pages/index.css" />
     </head>
     <script type="module" src="../custom-elements/define.mjs"></script>
     <script type="module">
         import { initTheme } from "/utils/theme.js";
         initTheme();
     </script>
+    <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
+    <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
+
 
     <body>
         <main>
@@ -24,7 +23,11 @@
                     icon-src="../media/editor-icon.svg"
                     ondblclick="openJSCoder"
                 ></desktop-shortcut>
-                <desktop-shortcut name="Test"></desktop-shortcut>
+                <desktop-shortcut
+                    name="Browser"
+                    icon-src="../media/browser-icon.png"
+                    ondblclick="openBrowser"
+                ></desktop-shortcut>
             </section>
             <section id="windows"></section>
 
@@ -59,9 +62,18 @@
         };
 
         var windowsContainer = document.querySelector("#windows");
+
+        function openWindow(elementName) {
+            const window = document.createElement(elementName);
+            windowsContainer.appendChild(window);
+        }
+
         function openJSCoder() {
-            const jscoder = document.createElement("js-coder");
-            windowsContainer.appendChild(jscoder);
+            openWindow("js-coder");
+        }
+
+        function openBrowser() {
+            openWindow("web-browser");
         }
     </script>
 </html>

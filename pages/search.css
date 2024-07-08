@@ -1,0 +1,113 @@
+body {
+	margin: 0 auto;
+	overflow: hidden;
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+	width: 100vw;
+	height: 100vh;
+	box-sizing: border-box;
+    background-color: white;
+}
+
+body > header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 10px 20px;
+    border-bottom: 3px solid;
+    border-image: linear-gradient(to right, #ffee00, #ff6200) 30;
+}
+
+body > header h1 {
+    margin: 0;
+    font-size: clamp(2rem, 10vw, 4rem);
+    background: linear-gradient(#ff6200, #ffee00);
+    background-clip: text;
+    color: transparent;
+}
+
+#search-bar {
+    position: relative;
+    width: 100%;
+    transform: translateY(4px);
+}
+
+#search-bar input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    font-size: clamp(0.8rem, 2vw, 1.4rem);
+}
+
+#search-bar button {
+    position: absolute;
+    right: 0.7rem;
+    top: 50%;
+    font-weight: 900;
+    background: linear-gradient(to right, #ff6200, #ffee00);
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+main {
+    padding: 2rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#loading {
+    font-size: 1.3rem;
+}
+
+main:not([data-loading]) #loading {
+    display: none;
+}
+
+main[data-loading] #items {
+    display: none;
+}
+
+section {
+    display: flex;
+    flex-direction: column;
+}
+
+article > header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+}
+
+article > header > h3 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 300;
+   
+}
+
+article a {
+    text-decoration: auto;
+}
+
+article a:hover, article:has(header:hover) a {
+    text-decoration: underline;
+}
+
+article a:active, article:has(header:active) a {
+    color: purple;
+}
+
+article > header > div {
+    width: 30px;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background: linear-gradient(to right, #ff6200, #ffee00);
+}
+
+hr {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.083);
+}

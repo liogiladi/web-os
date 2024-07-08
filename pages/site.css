@@ -1,0 +1,61 @@
+body {
+	margin: 0 auto;
+	overflow: hidden;
+
+    display: grid;
+    grid-template-rows: auto 1fr;
+	width: 100vw;
+	height: 100vh;
+	box-sizing: border-box;
+}
+
+body > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 10px 20px;
+}
+
+body > header h1 {
+    margin: 0;
+    font-size: clamp(2rem, 10vw, 4rem);
+    color: white;
+}
+
+body > header h2 {
+    margin: 0;
+    font-size: clamp(1rem, 7vw, 2rem);
+    color: rgb(20, 18, 170);
+}
+
+main {
+    padding: 10px;
+    font-size: clamp(1rem, 3vw, 1.4rem);
+}
+
+footer {
+    text-align: center;
+    color: white;
+    padding: 10px 20px;
+    font-size: clamp(1rem, 4vw, 2rem);
+}
+
+body[data-type=research] header,
+body[data-type=research] footer {
+    background: linear-gradient(to right, #00aeff, #0066ff);
+
+}
+
+body[data-type=research] header h2 {
+    color: rgb(20, 18, 170);
+}
+
+body[data-type=personal] header,
+body[data-type=personal] footer {
+    background: linear-gradient(to right, #7300ff, #9d00ff);
+}
+
+body[data-type=personal] > header h2 {
+    color: rgb(90, 8, 127);
+}

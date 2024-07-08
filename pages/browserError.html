@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./error.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <main>
+            <section>
+                <h1>404</h1>
+                <p></p>
+            </section>
+        </main>
+    </body>
+
+    <script>
+        const info = document.querySelector("main p");
+
+        const params = new URL(window.location.href).searchParams;
+console.log(params.get("code"));
+        if (params.get("code") === "403") {
+            document.querySelector("h1").innerHTML = "403";
+            info.innerHTML = "Access Denied!";
+        } else if (params.get("url")) {
+            info.innerHTML = `Couldn't find "${params.get("url")}"`;
+        }
+    </script>
+</html>

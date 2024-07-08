@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./search.css" />
+        <title>Document</title>
+    </head>
+    <body>
+        <header>
+            <h1>Browser</h1>
+            <form id="search-bar" onsubmit="search(event)">
+                <input type="text" placeholder="search anything!" />
+                <button>></button>
+            </form>
+        </header>
+        <main data-loading>
+            <span id="loading">loading...</span>
+            <section id="items"></section>
+        </main>
+    </body>
+    <script>
+        const main = document.querySelector("main");
+        const input = document.querySelector("#search-bar input");
+        const itemsSection = document.querySelector("#items");
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get("q");
+        input.value = searchQuery;
+
+        setTimeout(() => {
+            main.removeAttribute("data-loading");
+        }, Math.random() * 2000 + 100);
+
+        function search(e) {
+            e.preventDefault();
+
+            const params = new URLSearchParams();
+            params.set("q", input.value);
+
+            window.location.href = `search.html?${params}`;
+        }
+    </script>
+    <script type="module">
+        import generateBrowserEntry from "/utils/generateBrowserEntry.js";
+        import makeId from "/utils/makeId.js";
+
+        generateItems(searchQuery);
+
+        function updateLocalStorage(info) {
+            window.localStorage.setItem("t", info.title.split(" - ")[0]);
+            window.localStorage.setItem("p", info.paragraph);
+        }
+
+        function generateItems(searchQuery) {
+            for (let i = 0; i < Math.round(Math.random() * 40 + 3); i++) {
+                const info = generateBrowserEntry(searchQuery);
+
+                const h2 = document.createElement("h2");
+                const a = document.createElement("a");
+                a.textContent = info.title;
+
+                const siteSearchParams = new URLSearchParams();
+
+                const id = makeId(10);
+                siteSearchParams.append("id", id);
+
+                const href = "site.html?" + siteSearchParams;
+                a.href = href;
+                a.onclick = () => updateLocalStorage(info);
+                h2.append(a);
+
+                const siteIcon = document.createElement("div");
+                const h3 = document.createElement("h3");
+                h3.innerHTML = "https://www.site.com/" + id;
+
+                const header = document.createElement("header");
+                header.append(siteIcon, h3);
+                header.onclick = () => {
+                    updateLocalStorage(info);
+                    window.location.href = href;
+                };
+
+                const p = document.createElement("p");
+                p.innerHTML = info.paragraph;
+
+                const item = document.createElement("article");
+                item.append(header, h2, p);
+
+                itemsSection.append(item, document.createElement("hr"));
+            }
+        }
+    </script>
+</html>

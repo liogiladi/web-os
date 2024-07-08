@@ -12,7 +12,12 @@ const sizeTransition =
 export default class Window extends HTMLElement {
     static observedAttributes = ["header-title", "icon-src"];
     static orderedWindowIds = new Queue();
+
+    /** @type {HTMLElement} */
     _content;
+
+    /** @type {{ width: number, height: number }} */
+    _defaultWindowSize;
 
     constructor() {
         super();
@@ -20,6 +25,7 @@ export default class Window extends HTMLElement {
         this._content = null;
         this._fullscreen = false;
         this.minimized = false;
+        this._defaultWindowSize = { width: "500px", height: "200px" };
     }
 
     async connectedCallback() {
@@ -36,12 +42,12 @@ export default class Window extends HTMLElement {
         Window.orderedWindowIds.enqueue(this.id);
 
         this.windowedStyles = {
-            width: "min(500px, 100vw)",
-            height: `min(200px, calc(100vh - ${TASKBAR_HEIGHT}))`,
+            width: `min(${this._defaultWindowSize.width}, 100vw)`,
+            height: `min(${this._defaultWindowSize.height}, calc(100vh - ${TASKBAR_HEIGHT}))`,
             transform: "translate(0,0)",
             left: 0,
             top: 0,
-			border: "1px solid #ffffff69"
+            border: "1px solid #ffffff69",
         };
 
         this.style.zIndex = 1000;
@@ -174,23 +180,23 @@ export default class Window extends HTMLElement {
      * @param {boolean} temporary
      */
     minimize(temporary) {
-		if (!temporary) this.minimized = true;
-		
+        if (!temporary) this.minimized = true;
+
         /** @type {HTMLEletemporaryment} */
         const task = Taskbar.shadowRoot.querySelector(
-			`#task-${this.headerTitle} img`
+            `#task-${this.headerTitle} img`
         );
         const rect = task.getBoundingClientRect();
-		
+
         const windowTransformMatrix = new DOMMatrix(
-			getComputedStyle(this).transform
+            getComputedStyle(this).transform
         );
-		
+
         if (!temporary) {
-			this.style.transition = "0.2s ease-in";
-			this.tempTransform = `translate(${windowTransformMatrix.m41}px, ${windowTransformMatrix.m42}px) scale(1)`;
+            this.style.transition = "0.2s ease-in";
+            this.tempTransform = `translate(${windowTransformMatrix.m41}px, ${windowTransformMatrix.m42}px) scale(1)`;
         }
-		
+
         this.style.transformOrigin = "bottom left";
         this.style.transform = `translate(${rect.left}px, ${rect.top}px) scale(0)`;
         this.style.opacity = 0;
