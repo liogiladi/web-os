@@ -135,6 +135,8 @@ export default class Window extends HTMLElement {
             customStyles: { position: "absolute", ...this.windowedStyles },
         });
 
+        reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
+
         this.addEventListener("focusin", () => {
             reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
         });
