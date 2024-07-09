@@ -109,25 +109,25 @@
 	-ms-user-select: none;
 }
 
-.window .top-left {
+.window .nw-resize {
 	top: -5px;
 	left: -5px;
 	cursor: nw-resize;
 }
 
-.window .top-right {
+.window .ne-resize {
 	top: -5px;
 	right: -5px;
 	cursor: ne-resize;
 }
 
-.window .bottom-right {
+.window .se-resize {
 	bottom: -5px;
 	right: -5px;
 	cursor: se-resize;
 }
 
-.window .bottom-left {
+.window .sw-resize {
 	bottom: -5px;
 	left: -5px;
 	cursor: sw-resize;

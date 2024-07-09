@@ -9,6 +9,8 @@ import { TASKBAR_HEIGHT } from "/utils/constants.js";
 const sizeTransition =
     "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
+const resizers = ["nw-resize", "ne-resize", "se-resize", "sw-resize"];
+
 export default class Window extends HTMLElement {
     static observedAttributes = ["header-title", "icon-src"];
     static orderedWindowIds = new Queue();
@@ -57,6 +59,7 @@ export default class Window extends HTMLElement {
 
         this.style.zIndex = 1000;
         this.style.borderRadius = "4px";
+        this.style.translate = "0 0";
 
         /* ------------ buttons ------------- */
         const buttons = document.createElement("div");
@@ -75,6 +78,32 @@ export default class Window extends HTMLElement {
         minimizeButton.onclick = () => this.minimize.bind(this)(false);
 
         buttons.append(closeButton, sizeButton, minimizeButton);
+
+        /* ------------ resizers ------------- */
+        const resizerElements = [];
+        for (const resizer of resizers) {
+            const resizerElement = document.createElement("div");
+            resizerElement.className = "dragger";
+            resizerElement.classList.add(resizer);
+            resizerElement.onmousedown = () => {
+                document.body.classList.add("cursor-override");
+                document.body.style.cursor = resizer;
+
+                window.onmousemove = (e) =>
+                    this.#resize.bind(this)(e, resizerElement);
+                window.onmouseup = () => {
+                    document.body.classList.remove("cursor-override");
+                    document.body.style.cursor = "unset";
+
+                    this.#lastMouseClient = undefined;
+
+                    window.onmousemove = null;
+                    window.onmouseup = null;
+                };
+            };
+
+            resizerElements.push(resizerElement);
+        }
 
         /* ------------ title ------------- */
         const span = document.createElement("span");
@@ -128,7 +157,7 @@ export default class Window extends HTMLElement {
         const style = document.createElement("style");
         style.innerHTML = await readFileContents("/custom-elements/window.css");
 
-        template.append(style, header, content);
+        template.append(style, header, content, ...resizerElements);
 
         /* ------------ attach elements ------------- */
         //const shadowRoot = this.shadowRoot || this.attachShadow({ mode: "open" });
@@ -248,6 +277,125 @@ export default class Window extends HTMLElement {
         }
 
         super.remove();
+    }
+
+    /** @type {{ x: number, y: number }} */
+    #lastMouseClient;
+
+    /**
+     * @param {MouseEvent} e
+     * @param {HTMLElement} resizerElement
+     */
+    #resize(e, resizerElement) {
+        if (this.#lastMouseClient === undefined) {
+            this.#lastMouseClient = {
+                x: e.clientX,
+                y: e.clientY,
+            };
+        }
+
+        const rect = resizerElement.getBoundingClientRect();
+        
+        const currentStyles = getComputedStyle(this);
+
+        const transformMatrix = new DOMMatrix(currentStyles.transform);
+        const translates = [transformMatrix.m41, transformMatrix.m42];
+        let translatesFactors = {
+            x: 0,
+            y:0
+        }
+
+        let difference;
+        let newDimensions;
+
+        switch (resizerElement.classList.item(1)) {
+            case "se-resize": {
+                difference = {
+                    x: e.clientX - rect.x,
+                    y: e.clientY - rect.y,
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width) + difference.x,
+                    height: Number.parseFloat(currentStyles.height) + difference.y,
+                };
+
+                break;
+            }
+            case "sw-resize": {
+                difference = {
+                    x: e.clientX - this.#lastMouseClient.x,
+                    y: e.clientY - rect.y,
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width) - difference.x,
+                    height: Number.parseFloat(currentStyles.height) + difference.y,
+                };
+
+                translatesFactors.x = 1;
+
+                break;
+            }
+            case "ne-resize": {
+                difference = {
+                    x: e.clientX - rect.x,
+                    y: e.clientY - this.#lastMouseClient.y,
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width) + difference.x,
+                    height: Number.parseFloat(currentStyles.height) - difference.y,
+                };
+
+                translatesFactors.y = 1;
+
+                break;
+            }
+            case "nw-resize": {
+                difference = {
+                    x: e.clientX - this.#lastMouseClient.x,
+                    y: e.clientY - this.#lastMouseClient.y,
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width) - difference.x,
+                    height: Number.parseFloat(currentStyles.height) - difference.y,
+                };
+
+                translatesFactors.x = 1;
+                translatesFactors.y = 1;
+
+                break;
+            }
+        }
+
+        if (
+            newDimensions.width >=
+                Number.parseFloat(this._defaultWindowSize.width) &&
+            e.clientX <= window.innerWidth
+        ) {
+            this.style.width = newDimensions.width + "px";
+            translates[0] += difference.x * translatesFactors.x;
+        }
+
+        if (
+            newDimensions.height >=
+                Number.parseFloat(this._defaultWindowSize.height) &&
+            e.clientY <=
+                window.innerHeight - Number.parseFloat(TASKBAR_HEIGHT)
+        ) {
+            this.style.height = newDimensions.height + "px";
+            translates[1] += difference.y * translatesFactors.y;
+
+        }
+
+        this.style.transform = `translate(${translates[0]}px,${translates[1]}px)`;
+        
+        this.#lastMouseClient = {
+            x: e.clientX,
+            y: e.clientY
+        };
     }
 
     get headerTitle() {
