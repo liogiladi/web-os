@@ -1,134 +1,184 @@
 /* ------------------ Window ------------------- */
 
 .window {
-	font-size: 1rem;
-	z-index: 101;
-	cursor: default;
-	min-width: min(500px, 100vw);
-	min-height: min(200px, 100vh);
-	height: 100%;
-	display: flex;
-	flex-direction: column;
+    font-size: 1rem;
+    z-index: 101;
+    cursor: default;
+    min-width: min(500px, 100vw);
+    min-height: min(200px, 100vh);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .window::before {
-	content: "";
-	position: absolute;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	border-radius: 4px;
-	background: linear-gradient(0deg, rgba(209, 90, 207, 0.8) 0%, rgba(250, 167, 249, 0.8) 100%);
-	box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
-	backdrop-filter: blur(30px);
-	z-index: -1;
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(
+        0deg,
+        rgba(209, 90, 207, 0.8) 0%,
+        rgba(250, 167, 249, 0.8) 100%
+    );
+    box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
+    backdrop-filter: blur(30px);
+    z-index: -1;
 }
 
 /* ------------------ Header ------------------- */
 
 .window header {
-	display: flex;
-	justify-content: space-between;
-	font-size: 14px;
-	user-select: none;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    user-select: none;
 }
 
 .window header .title {
-	display: flex;
-	align-items: center;
-	gap: 7px;
-	padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px;
 }
 
 .window header .title * {
-	pointer-events: none;
+    pointer-events: none;
 }
 
 .window header .title img {
-	width: 20px;
-	height: 20px;
+    width: 20px;
+    height: 20px;
 }
 
 .window header .buttons {
-	display: flex;
-	flex-direction: row-reverse;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .window header .buttons button {
-	background-color: transparent;
-	border: 0;
-	font-size: 1rem;
-	aspect-ratio: 1/1;
-	width: 40px;
-	padding: 10px 11px;
-	transition: background-color 0.1s;
+    background-color: transparent;
+    border: 0;
+    font-size: 1rem;
+    aspect-ratio: 1/1;
+    width: 40px;
+    padding: 10px 11px;
+    transition: background-color 0.1s;
 }
 
 .window header .buttons button:hover {
-	background-color: rgba(0, 0, 0, 0.102);
+    background-color: rgba(0, 0, 0, 0.102);
 }
 
 .window header .buttons button:first-of-type:hover {
-	background-color: rgb(255, 42, 42);
+    background-color: rgb(255, 42, 42);
 }
 
 /* ------------------ Content ------------------- */
 
 .content {
-	position: relative;
-	height: 100%;
-	flex-grow: 1;
-	overflow-y: auto;
+    position: relative;
+    height: 100%;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 ::-webkit-scrollbar {
-	width: 5px;
+    width: 5px;
 }
 
 ::-webkit-scrollbar-track {
-	background-color: transparent;
+    background-color: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-	background-color: white;
+    background-color: white;
 }
 
 ::-webkit-scrollbar-thumb:active {
-	background-color: #bfbfbf;
+    background-color: #bfbfbf;
 }
 
 .window .dragger {
-	position: absolute;
-	width: 15px;
-	height: 15px;
-	-webkit-user-drag: none;
-	user-select: none;
-	-moz-user-select: none;
-	-webkit-user-select: none;
-	-ms-user-select: none;
+    position: absolute;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.nw-resize,
+.ne-resize,
+.se-resize,
+.sw-resize {
+    z-index: 2;
+    width: 15px;
+    height: 15px;
+}
+
+.s-resize,
+.n-resize {
+    z-index: 1;
+
+    width: 100%;
+    height: 15px;
+}
+
+.e-resize,
+.w-resize {
+    z-index: 1;
+    width: 15px;
+    height: 100%;
 }
 
 .window .nw-resize {
-	top: -5px;
-	left: -5px;
-	cursor: nw-resize;
+    top: -5px;
+    left: -5px;
+    cursor: nw-resize;
 }
 
 .window .ne-resize {
-	top: -5px;
-	right: -5px;
-	cursor: ne-resize;
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
 }
 
 .window .se-resize {
-	bottom: -5px;
-	right: -5px;
-	cursor: se-resize;
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
 }
 
 .window .sw-resize {
-	bottom: -5px;
-	left: -5px;
-	cursor: sw-resize;
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+}
+
+.window .s-resize {
+    left: -5px;
+    bottom: -5px;
+    cursor: s-resize;
+}
+
+.window .n-resize {
+    left: -5px;
+    top: -5px;
+    cursor: n-resize;
+}
+
+.window .e-resize {
+    right: -5px;
+    top: -5px;
+    cursor: e-resize;
+}
+
+.window .w-resize {
+    left: -5px;
+    top: -5px;
+    cursor: w-resize;
 }

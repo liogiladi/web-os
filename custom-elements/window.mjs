@@ -9,7 +9,7 @@ import { TASKBAR_HEIGHT } from "/utils/constants.js";
 const sizeTransition =
     "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
-const resizers = ["nw-resize", "ne-resize", "se-resize", "sw-resize"];
+const resizers = ["nw-resize", "ne-resize", "se-resize", "sw-resize", "n-resize", "w-resize", "e-resize", "s-resize"];
 
 export default class Window extends HTMLElement {
     static observedAttributes = ["header-title", "icon-src"];
@@ -177,6 +177,12 @@ export default class Window extends HTMLElement {
                 );
             });
 
+            reorderedDraggableElements(
+                Window.orderedWindowIds,
+                this.id,
+                1000
+            );
+
             this.ondragstart = () => false;
         }
 
@@ -278,7 +284,7 @@ export default class Window extends HTMLElement {
         super.remove();
     }
 
-    /** @type {{ x: number, y: number }} */
+    /** @type {{ x?: number, y?: number }} */
     #lastMouseClient;
 
     /**
@@ -308,6 +314,62 @@ export default class Window extends HTMLElement {
         let newDimensions;
 
         switch (resizerElement.classList.item(1)) {
+            case "s-resize": {
+                difference = {
+                    x: 0,
+                    y: e.clientY - rect.y,
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width),
+                    height: Number.parseFloat(currentStyles.height) + difference.y,
+                };
+
+                break;
+            }
+            case "n-resize": {
+                difference = {
+                    x: 0,
+                    y: e.clientY - this.#lastMouseClient.y
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width),
+                    height: Number.parseFloat(currentStyles.height) - difference.y,
+                };
+
+                translatesFactors.y = 1;
+
+                break;
+            }
+            case "w-resize": {
+                difference = {
+                    x: e.clientX - this.#lastMouseClient.x,
+                    y: 0
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width) - difference.x,
+                    height: Number.parseFloat(currentStyles.height),
+                };
+
+                translatesFactors.x = 1;
+
+                break;
+            }
+            case "e-resize": {
+                difference = {
+                    x: e.clientX - rect.x,
+                    y: 0
+                };
+
+                newDimensions = {
+                    width: Number.parseFloat(currentStyles.width) + difference.x,
+                    height: Number.parseFloat(currentStyles.height),
+                };
+
+                break;
+            }
             case "se-resize": {
                 difference = {
                     x: e.clientX - rect.x,
