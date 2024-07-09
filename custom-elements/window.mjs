@@ -59,7 +59,6 @@ export default class Window extends HTMLElement {
 
         this.style.zIndex = 1000;
         this.style.borderRadius = "4px";
-        this.style.translate = "0 0";
 
         /* ------------ buttons ------------- */
         const buttons = document.createElement("div");
@@ -240,7 +239,7 @@ export default class Window extends HTMLElement {
         );
 
         if (!temporary) {
-            this.style.transition = "0.2s ease-in";
+            this.style.transition = "transform 0.2s ease-in, opacity 0.2s ease-in, scale 0.4s ease-in";
             this.tempTransform = `translate(${windowTransformMatrix.m41}px, ${windowTransformMatrix.m42}px) scale(1)`;
         }
 

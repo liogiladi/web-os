@@ -173,9 +173,10 @@ export default class Task extends HTMLElement {
         windowClone.style.pointerEvents = "none";
         windowClone.style.opacity = "1";
         windowClone.style.transformOrigin = "unset";
+        windowClone.style.transition = "unset";
         windowClone.style.transform = "unset";
         windowClone.style.scale = "unset";
-
+        
         windowClone.transformCallback = (contentElement) => {
             const contentRect = contentElement.getBoundingClientRect();
             const wrappeRect = preview.getBoundingClientRect();
@@ -207,7 +208,7 @@ export default class Task extends HTMLElement {
         const main = document.querySelector("main");
         main.dataset.previewWindow = "";
         window.dataset.windowToPreview = "";
-        console.log(window.minimized);
+
         if (window.minimized) window.unminimize(true);
     }
 
