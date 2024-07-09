@@ -76,10 +76,9 @@ export default class Task extends HTMLElement {
         };
 
         taskIcon.onmouseenter = () => {
-            // Only update the snapshot if the preview isn't visible
-            setTimeout(() => {
-                this.previews.style.display = "flex";
-            }, 400);
+            if (this.previews.childElementCount > 0) return;
+
+            this.previews.replaceChildren();
 
             const previewsChildren = [];
 
@@ -99,7 +98,6 @@ export default class Task extends HTMLElement {
             if (!("focused" in this.container.dataset)) {
                 setTimeout(() => {
                     if (!this.hovers) {
-                        this.previews.style.display = "none";
                         this.previews.replaceChildren();
                     }
                 }, 400);
@@ -115,7 +113,6 @@ export default class Task extends HTMLElement {
         this.onblur = (e) => {
             if (e.relatedTarget?.className === "task-close-button") return;
             delete this.container.dataset.focused;
-            this.previews.style.display = "none";
             this.previews.replaceChildren();
         };
     }
@@ -171,11 +168,33 @@ export default class Task extends HTMLElement {
 
         /** @type {Window} */
         const windowClone = window.cloneNode(true);
+        windowClone.temporary = true;
         windowClone.removeAttribute("id");
         windowClone.style.pointerEvents = "none";
-        windowClone.unminimize(true);
+        windowClone.style.opacity = "1";
+        windowClone.style.transformOrigin = "unset";
+        windowClone.style.transform = "unset";
+        windowClone.style.scale = "unset";
 
-        preview.append(header, windowClone);
+        windowClone.transformCallback = (contentElement) => {
+            const contentRect = contentElement.getBoundingClientRect();
+            const wrappeRect = preview.getBoundingClientRect();
+
+            const factor = -45;
+            const scaleAmtX = Math.min(
+                (wrappeRect.width + factor) / contentRect.width,
+                (wrappeRect.height + factor) / contentRect.height
+            );
+            const scaleAmtY = scaleAmtX;
+
+            contentElement.style.scale = `${scaleAmtX} ${scaleAmtY}`;
+        };
+
+        const windowPreviewWrapper = document.createElement("div");
+        windowPreviewWrapper.className = "window-preview-wrapper";
+        windowPreviewWrapper.append(windowClone);
+
+        preview.append(header, windowPreviewWrapper);
 
         return preview;
     }
@@ -188,6 +207,7 @@ export default class Task extends HTMLElement {
         const main = document.querySelector("main");
         main.dataset.previewWindow = "";
         window.dataset.windowToPreview = "";
+        console.log(window.minimized);
         if (window.minimized) window.unminimize(true);
     }
 
@@ -210,7 +230,7 @@ export default class Task extends HTMLElement {
             this.blur();
             this.unpreviewWindow(window);
 
-            if(window.minimized) window.unminimize(false);
+            if (window.minimized) window.unminimize(false);
 
             reorderedDraggableElements(
                 Window.orderedWindowIds,

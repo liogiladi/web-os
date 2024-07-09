@@ -34,8 +34,8 @@ export default class Browser extends Window {
     constructor() {
         super();
         this._defaultWindowSize = {
-            width: "800px",
-            height: "700px",
+            width: "1000px",
+            height: "1000px",
         };
     }
 

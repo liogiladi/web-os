@@ -19,6 +19,9 @@ export default class Window extends HTMLElement {
     /** @type {{ width: number, height: number }} */
     _defaultWindowSize;
 
+    temporary;
+    transformCallback;
+
     constructor() {
         super();
         this.observer = null;
@@ -39,12 +42,14 @@ export default class Window extends HTMLElement {
 
         this.tabIndex = 1;
 
-        Window.orderedWindowIds.enqueue(this.id);
+        if (!this.temporary) {
+            Window.orderedWindowIds.enqueue(this.id);
+        }
 
         this.windowedStyles = {
             width: `min(${this._defaultWindowSize.width}, 100vw)`,
             height: `min(${this._defaultWindowSize.height}, calc(100vh - ${TASKBAR_HEIGHT}))`,
-            transform: "translate(0,0)",
+            transform: `translate(0,0)`,
             left: 0,
             top: 0,
             border: "1px solid #ffffff69",
@@ -131,17 +136,25 @@ export default class Window extends HTMLElement {
 
         if (this.childNodes.length === 0) this.appendChild(template);
 
-        makeDraggable(this, header, {
-            customStyles: { position: "absolute", ...this.windowedStyles },
-        });
+        if (!this.temporary) {
+            makeDraggable(this, header, {
+                customStyles: { position: "absolute", ...this.windowedStyles },
+            });
 
-        reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
+            this.addEventListener("focusin", () => {
+                reorderedDraggableElements(
+                    Window.orderedWindowIds,
+                    this.id,
+                    1000
+                );
+            });
 
-        this.addEventListener("focusin", () => {
-            reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
-        });
+            this.ondragstart = () => false;
+        }
 
-        this.ondragstart = () => false;
+        if (this.transformCallback) {
+            this.transformCallback(this);
+        }
     }
 
     disconnectedCallback() {
@@ -182,7 +195,10 @@ export default class Window extends HTMLElement {
      * @param {boolean} temporary
      */
     minimize(temporary) {
-        if (!temporary) this.minimized = true;
+        if (!temporary) {
+            console.log("yay?");
+            this.minimized = true;
+        }
 
         /** @type {HTMLEletemporaryment} */
         const task = Taskbar.shadowRoot.querySelector(
@@ -200,7 +216,8 @@ export default class Window extends HTMLElement {
         }
 
         this.style.transformOrigin = "bottom left";
-        this.style.transform = `translate(${rect.left}px, ${rect.top}px) scale(0)`;
+        this.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
+        this.style.scale = 0;
         this.style.opacity = 0;
     }
 
@@ -220,12 +237,16 @@ export default class Window extends HTMLElement {
 
         this.style.transformOrigin = "unset";
         this.style.transform = this.tempTransform;
+        this.style.scale = 1;
         this.style.opacity = 1;
     }
 
     remove() {
-        Taskbar.tasks.remove(this.headerTitle);
-        Window.orderedWindowIds.removeFirstFromEnd(this.id);
+        if (!this.temporary) {
+            Taskbar.tasks.remove(this.headerTitle);
+            Window.orderedWindowIds.removeFirstFromEnd(this.id);
+        }
+
         super.remove();
     }
 

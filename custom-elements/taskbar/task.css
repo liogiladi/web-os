@@ -83,6 +83,8 @@
     width: 245px;
     height: 100%;
 	border-radius: 5px;
+    display: grid;
+    grid-template-rows: auto 1fr;
 }
 
 .task .preview:hover {
@@ -93,6 +95,7 @@
     display: flex;
     justify-content: space-between;
     padding: 10px;
+    padding-bottom: 0;
 }
 
 .preview header .info {
@@ -113,10 +116,14 @@
     width: 18px;
 }
 
-.preview > *:nth-child(2) {
-    top: 13px !important;
-    left: -52.2% !important;
-    transform: scale(45%) !important ;
+.preview .window-preview-wrapper {
+    position: relative;
+}
+
+.preview .window-preview-wrapper > * {
+    top: 50% !important;
+    left: 50% !important;
+    translate: -50% -50%;
     pointer-events: none;
 }
 
