@@ -19,14 +19,19 @@
             <div id="preview-bg"></div>
             <section id="shortcuts">
                 <desktop-shortcut
+                    wc-tag-name="js-coder"
                     name="JSCoder"
                     icon-src="../media/editor-icon.svg"
-                    ondblclick="openJSCoder"
                 ></desktop-shortcut>
                 <desktop-shortcut
+                    wc-tag-name="web-browser"
                     name="Browser"
                     icon-src="../media/browser-icon.png"
-                    ondblclick="openBrowser"
+                ></desktop-shortcut>
+                <desktop-shortcut
+                    wc-tag-name="web-calculator"
+                    name="Calcs"
+                    icon-src="../media/browser-icon.png"
                 ></desktop-shortcut>
             </section>
             <section id="windows"></section>
@@ -61,19 +66,7 @@
             menu.style.display = "none";
         };
 
-        var windowsContainer = document.querySelector("#windows");
+        //var windowsContainer = document.querySelector("#windows");
 
-        function openWindow(elementName) {
-            const window = document.createElement(elementName);
-            windowsContainer.appendChild(window);
-        }
-
-        function openJSCoder() {
-            openWindow("js-coder");
-        }
-
-        function openBrowser() {
-            openWindow("web-browser");
-        }
     </script>
 </html>

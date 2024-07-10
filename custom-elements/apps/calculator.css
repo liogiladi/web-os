@@ -1,0 +1,124 @@
+.calcs-content {
+    --width: 50px;
+    --height: 50px;
+    --gap: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+    padding: 10px;
+    transition: opacity 0.1s;
+    container-type: size;
+}
+
+.calcs-content::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: url(../../media/metal.jpg);
+    background-size: cover;
+    filter: grayscale();
+    box-shadow: inset 0 0 36px 2px #0000076b;
+}
+
+.calcs-content .misc {
+    display: flex;
+    flex-direction: row-reverse;
+    gap: var(--gap);
+}
+
+.calcs-content .misc .name-and-model {
+    padding: 5px;
+    width: 100%;
+    backdrop-filter: invert(1);
+    color: white;
+    border: 5px inset #00000073;
+    box-shadow: inset 0 0 36px 6px #000008a3;
+}
+
+.name-and-model h2 {
+    margin: 0;
+    font-size: calc(2.5cqw + 2.5cqh);
+}
+.name-and-model h3 {
+    margin: 0;
+    font-size: calc(2cqw + 2cqh);
+}
+
+.calcs-content .buttons {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    overflow: hidden;
+    gap: var(--gap);
+}
+
+.calcs-content .number-buttons {
+    display: grid;
+    grid-template-rows: repeat(3, var(--height));
+    grid-template-columns: repeat(3, var(--width));
+    gap: var(--gap);
+    width: fit-content;
+    height: fit-content;
+    direction: rtl;
+}
+
+.operators,
+.constants {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    height: fit-content;
+    gap: var(--gap);
+}
+
+.functions {
+    display: grid;
+    grid-template-columns: var(--width) var(--width);
+    height: fit-content;
+    gap: var(--gap);
+}
+
+.calcs-content button {
+    flex: none;
+    width: var(--width);
+    height: var(--height);
+    border: 4px outset #00000099;
+    background: linear-gradient(45deg, #282828, #9a9a9a63);
+    backdrop-filter: invert(1) brightness(2.5);
+    cursor: pointer;
+    font-size: calc(2cqw + 2cqh);
+    color: white;
+    box-shadow: 0 0 36px 2px #00000057;
+}
+
+.number-buttons button {
+    background: linear-gradient(45deg, #ffffff, #9a9a9a63);
+    color: black;
+    mix-blend-mode: hard-light;
+    backdrop-filter: unset;
+}
+
+.calcs-content button:active {
+    transform: scale(0.9);
+}
+
+.operators button {
+    font-size: calc(3cqw + 3cqh);
+}
+
+.misc button:first-child {
+    background-color: red;
+    mix-blend-mode: multiply;
+    font-weight: bold;
+}
+
+.constants button:last-child {
+    background-color: #4ebc4e;
+    mix-blend-mode: multiply;
+    font-weight: bold;
+}
