@@ -24,9 +24,6 @@ export default class Window extends HTMLElement {
     temporary;
     transformCallback;
 
-    onResize;
-    onToggleFullscreen;
-
     constructor() {
         super();
         this.observer = null;
@@ -226,8 +223,6 @@ export default class Window extends HTMLElement {
             ? "translate(0,0)"
             : this.windowedStyles.transform;
         this.style.borderRadius = this._fullscreen ? "0px" : "4px";
-
-        this.onToggleFullscreen?.();
     }
 
     /**
@@ -298,8 +293,6 @@ export default class Window extends HTMLElement {
      * @param {HTMLElement} resizerElement
      */
     #resize(e, resizerElement) {
-        this.onResize?.();
-
         if (this.#lastMouseClient === undefined) {
             this.#lastMouseClient = {
                 x: e.clientX,
