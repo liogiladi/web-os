@@ -9,7 +9,16 @@ import { TASKBAR_HEIGHT } from "/utils/constants.js";
 const sizeTransition =
     "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
-const resizers = ["nw-resize", "ne-resize", "se-resize", "sw-resize", "n-resize", "w-resize", "e-resize", "s-resize"];
+const resizers = [
+    "nw-resize",
+    "ne-resize",
+    "se-resize",
+    "sw-resize",
+    "n-resize",
+    "w-resize",
+    "e-resize",
+    "s-resize",
+];
 
 export default class Window extends HTMLElement {
     static observedAttributes = ["header-title", "icon-src"];
@@ -177,11 +186,7 @@ export default class Window extends HTMLElement {
                 );
             });
 
-            reorderedDraggableElements(
-                Window.orderedWindowIds,
-                this.id,
-                1000
-            );
+            reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
 
             this.ondragstart = () => false;
         }
@@ -205,7 +210,7 @@ export default class Window extends HTMLElement {
                 height: this.style.height,
                 transform: this.style.transform,
             };
-            
+
             this.style.transition = sizeTransition;
         } else {
             setTimeout(() => {
@@ -223,6 +228,11 @@ export default class Window extends HTMLElement {
             ? "translate(0,0)"
             : this.windowedStyles.transform;
         this.style.borderRadius = this._fullscreen ? "0px" : "4px";
+
+        // Disable draggers
+        this.querySelectorAll(".dragger").forEach((el) => {
+            el.style.display = this._fullscreen ? "none" : "unset";
+        });
     }
 
     /**
@@ -246,7 +256,8 @@ export default class Window extends HTMLElement {
         );
 
         if (!temporary) {
-            this.style.transition = "transform 0.2s ease-in, opacity 0.2s ease-in, scale 0.4s ease-in";
+            this.style.transition =
+                "transform 0.2s ease-in, opacity 0.2s ease-in, scale 0.4s ease-in";
             this.tempTransform = `translate(${windowTransformMatrix.m41}px, ${windowTransformMatrix.m42}px) scale(1)`;
         }
 
@@ -301,15 +312,15 @@ export default class Window extends HTMLElement {
         }
 
         const rect = resizerElement.getBoundingClientRect();
-        
+
         const currentStyles = getComputedStyle(this);
 
         const transformMatrix = new DOMMatrix(currentStyles.transform);
         const translates = [transformMatrix.m41, transformMatrix.m42];
         let translatesFactors = {
             x: 0,
-            y:0
-        }
+            y: 0,
+        };
 
         let difference;
         let newDimensions;
@@ -323,7 +334,8 @@ export default class Window extends HTMLElement {
 
                 newDimensions = {
                     width: Number.parseFloat(currentStyles.width),
-                    height: Number.parseFloat(currentStyles.height) + difference.y,
+                    height:
+                        Number.parseFloat(currentStyles.height) + difference.y,
                 };
 
                 break;
@@ -331,12 +343,13 @@ export default class Window extends HTMLElement {
             case "n-resize": {
                 difference = {
                     x: 0,
-                    y: e.clientY - this.#lastMouseClient.y
+                    y: e.clientY - this.#lastMouseClient.y,
                 };
 
                 newDimensions = {
                     width: Number.parseFloat(currentStyles.width),
-                    height: Number.parseFloat(currentStyles.height) - difference.y,
+                    height:
+                        Number.parseFloat(currentStyles.height) - difference.y,
                 };
 
                 translatesFactors.y = 1;
@@ -346,11 +359,12 @@ export default class Window extends HTMLElement {
             case "w-resize": {
                 difference = {
                     x: e.clientX - this.#lastMouseClient.x,
-                    y: 0
+                    y: 0,
                 };
 
                 newDimensions = {
-                    width: Number.parseFloat(currentStyles.width) - difference.x,
+                    width:
+                        Number.parseFloat(currentStyles.width) - difference.x,
                     height: Number.parseFloat(currentStyles.height),
                 };
 
@@ -361,11 +375,12 @@ export default class Window extends HTMLElement {
             case "e-resize": {
                 difference = {
                     x: e.clientX - rect.x,
-                    y: 0
+                    y: 0,
                 };
 
                 newDimensions = {
-                    width: Number.parseFloat(currentStyles.width) + difference.x,
+                    width:
+                        Number.parseFloat(currentStyles.width) + difference.x,
                     height: Number.parseFloat(currentStyles.height),
                 };
 
@@ -378,8 +393,10 @@ export default class Window extends HTMLElement {
                 };
 
                 newDimensions = {
-                    width: Number.parseFloat(currentStyles.width) + difference.x,
-                    height: Number.parseFloat(currentStyles.height) + difference.y,
+                    width:
+                        Number.parseFloat(currentStyles.width) + difference.x,
+                    height:
+                        Number.parseFloat(currentStyles.height) + difference.y,
                 };
 
                 break;
@@ -391,8 +408,10 @@ export default class Window extends HTMLElement {
                 };
 
                 newDimensions = {
-                    width: Number.parseFloat(currentStyles.width) - difference.x,
-                    height: Number.parseFloat(currentStyles.height) + difference.y,
+                    width:
+                        Number.parseFloat(currentStyles.width) - difference.x,
+                    height:
+                        Number.parseFloat(currentStyles.height) + difference.y,
                 };
 
                 translatesFactors.x = 1;
@@ -406,8 +425,10 @@ export default class Window extends HTMLElement {
                 };
 
                 newDimensions = {
-                    width: Number.parseFloat(currentStyles.width) + difference.x,
-                    height: Number.parseFloat(currentStyles.height) - difference.y,
+                    width:
+                        Number.parseFloat(currentStyles.width) + difference.x,
+                    height:
+                        Number.parseFloat(currentStyles.height) - difference.y,
                 };
 
                 translatesFactors.y = 1;
@@ -421,8 +442,10 @@ export default class Window extends HTMLElement {
                 };
 
                 newDimensions = {
-                    width: Number.parseFloat(currentStyles.width) - difference.x,
-                    height: Number.parseFloat(currentStyles.height) - difference.y,
+                    width:
+                        Number.parseFloat(currentStyles.width) - difference.x,
+                    height:
+                        Number.parseFloat(currentStyles.height) - difference.y,
                 };
 
                 translatesFactors.x = 1;
@@ -444,19 +467,17 @@ export default class Window extends HTMLElement {
         if (
             newDimensions.height >=
                 Number.parseFloat(this._defaultWindowSize.height) &&
-            e.clientY <=
-                window.innerHeight - Number.parseFloat(TASKBAR_HEIGHT)
+            e.clientY <= window.innerHeight - Number.parseFloat(TASKBAR_HEIGHT)
         ) {
             this.style.height = newDimensions.height + "px";
             translates[1] += difference.y * translatesFactors.y;
-
         }
 
         this.style.transform = `translate(${translates[0]}px,${translates[1]}px)`;
-        
+
         this.#lastMouseClient = {
             x: e.clientX,
-            y: e.clientY
+            y: e.clientY,
         };
     }
 
