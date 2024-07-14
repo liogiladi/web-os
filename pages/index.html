@@ -8,7 +8,16 @@
     <script type="module" src="../custom-elements/define.mjs"></script>
     <script type="module">
         import { initTheme } from "/utils/theme.js";
+        import { FileStorage } from "/utils/fileStorage.js";
+        import { createPictureShortcut } from "/utils/createFromFileStorage.js";
+
         initTheme();
+        FileStorage.init();
+
+        // init shortcuts
+        for(const [id, info] of FileStorage.getPictures()) {
+            createPictureShortcut(info);
+        }
     </script>
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
     <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
@@ -34,7 +43,9 @@
                     icon-src="../media/calcs-icon.png"
                 ></desktop-shortcut>
             </section>
-            <section id="windows"></section>
+            <section id="windows">
+                <web-recorder></web-recorder>
+            </section>
 
             <ul
                 id="context-menu"
