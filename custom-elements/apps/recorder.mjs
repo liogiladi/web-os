@@ -60,6 +60,7 @@ export default class Recorder extends Window {
 
     async connectedCallback() {
         this.headerTitle = "Recorder";
+        this.iconSrc = "/media/recorder-icon.png";
 
         await super.connectedCallback();
 

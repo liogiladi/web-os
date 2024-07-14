@@ -3,7 +3,6 @@
  * @param {import("../utils/fileStorage.js").Picture} info 
  */
 export function createPictureShortcut(info) {
-    console.log(info);
     /** @type {Shortcut} */
     const shortcut = document.createElement("desktop-shortcut");
     shortcut.id = info.id;

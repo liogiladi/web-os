@@ -15,13 +15,12 @@
         FileStorage.init();
 
         // init shortcuts
-        for(const [id, info] of FileStorage.getPictures()) {
+        for (const [id, info] of FileStorage.getPictures()) {
             createPictureShortcut(info);
         }
     </script>
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
     <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
-
 
     <body>
         <main>
@@ -42,10 +41,13 @@
                     name="Calcs"
                     icon-src="../media/calcs-icon.png"
                 ></desktop-shortcut>
+                <desktop-shortcut
+                    wc-tag-name="web-recorder"
+                    name="Recorder"
+                    icon-src="../media/recorder-icon.png"
+                ></desktop-shortcut>
             </section>
-            <section id="windows">
-                <web-recorder></web-recorder>
-            </section>
+            <section id="windows"></section>    
 
             <ul
                 id="context-menu"
@@ -78,6 +80,5 @@
         };
 
         //var windowsContainer = document.querySelector("#windows");
-
     </script>
 </html>
