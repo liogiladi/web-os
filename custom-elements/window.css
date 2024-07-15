@@ -43,6 +43,7 @@
     align-items: center;
     gap: 7px;
     padding: 10px;
+    pointer-events: none;
 }
 
 .window header .title * {
