@@ -33,6 +33,9 @@ export default class Window extends HTMLElement {
     temporary;
     transformCallback;
 
+    /** @type {object} */
+    intermediateData;
+
     constructor() {
         super();
         this.observer = null;
@@ -241,13 +244,12 @@ export default class Window extends HTMLElement {
      */
     minimize(temporary) {
         if (!temporary) {
-            console.log("yay?");
             this.minimized = true;
         }
 
         /** @type {HTMLEletemporaryment} */
         const task = Taskbar.shadowRoot.querySelector(
-            `#task-${this.headerTitle} img`
+            `#task-${this.tagName.toLowerCase()} img`
         );
         const rect = task.getBoundingClientRect();
 
@@ -289,7 +291,7 @@ export default class Window extends HTMLElement {
 
     remove() {
         if (!this.temporary) {
-            Taskbar.tasks.remove(this.headerTitle);
+            Taskbar.tasks.remove(this.tagName.toLowerCase());
             Window.orderedWindowIds.removeFirstFromEnd(this.id);
         }
 

@@ -82,9 +82,7 @@ export default class Task extends HTMLElement {
 
             const previewsChildren = [];
 
-            const windows = document.querySelectorAll(
-                `[header-title="${this.name}"`
-            );
+            const windows = document.querySelectorAll(this.name);
 
             for (const window of windows) {
                 const preview = this.createPreview(window);

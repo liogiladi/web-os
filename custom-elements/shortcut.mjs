@@ -6,11 +6,22 @@ import reorderdDraggableElements from "/utils/reorderdDraggableElements.js";
 import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
 
 const requiredAttributes = ["wcTagName", "name"];
+
+/**
+ * @typedef {Shortcut} Shortcut
+ */
 export default class Shortcut extends HTMLElement {
-    static observedAttributes = ["iconSrc", ...requiredAttributes];
+    static observedAttributes = [
+        "iconSrc",
+        "uniqueIconSrc",
+        ...requiredAttributes,
+    ];
     static orderedFolderIds = new Queue();
     span;
     input;
+
+    /** @type {object} */
+    intermediateData;
 
     constructor() {
         super();
@@ -39,7 +50,7 @@ export default class Shortcut extends HTMLElement {
         template.tabIndex = 0;
 
         const img = document.createElement("img");
-        img.src = this.iconSrc || "/media/folder.svg";
+        img.src = this.uniqueIconSrc || this.iconSrc || "/media/folder.svg";
         img.alt = "shortcut icon";
         img.draggable = false;
 
@@ -114,13 +125,19 @@ export default class Shortcut extends HTMLElement {
 
     dblClick() {
         Taskbar.tasks.add({
-            name: this.name,
+            name: this.wcTagName,
             iconSrc: this.iconSrc,
             count: 1,
         });
 
         const windowsContainer = document.getElementById("windows");
         const window = document.createElement(this.wcTagName);
+        window.headerTitle = this.name;
+        window.iconSrc = this.iconSrc;
+
+        if (this.intermediateData) {
+            window.intermediateData = this.intermediateData;
+        }
 
         windowsContainer.appendChild(window);
     }
@@ -139,5 +156,13 @@ export default class Shortcut extends HTMLElement {
 
     set wcTagName(value) {
         this.setAttribute("wc-tag-name", value);
+    }
+
+    get uniqueIconSrc() {
+        return this.getAttribute("unique-icon-src");
+    }
+
+    set uniqueIconSrc(value) {
+        this.setAttribute("unique-icon-src", value);
     }
 }

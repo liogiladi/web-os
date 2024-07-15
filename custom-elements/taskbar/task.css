@@ -86,6 +86,7 @@
 	border-radius: 5px;
     display: grid;
     grid-template-rows: auto 1fr;
+    container-type: size;
 }
 
 .task .preview:hover {
@@ -97,6 +98,8 @@
     justify-content: space-between;
     padding: 10px;
     padding-bottom: 0;
+    width: 100cqw;
+    box-sizing: border-box;
 }
 
 .preview header .info {
@@ -104,12 +107,16 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
+    max-width: 80cqw;
 }
 
 .preview header .info h2 {
     color: white;
     font-size: 1rem;
     font-weight: normal;
+    text-wrap: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
     margin: 0;
 }
 

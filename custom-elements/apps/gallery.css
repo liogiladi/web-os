@@ -1,0 +1,14 @@
+.gallery-content {
+    display: grid;
+    place-items: center;
+    container-type: size;
+}
+
+.gallery-content img {
+    width: 90cqw;
+    max-width: 100cqh;
+    max-height: 80cqh;
+    -webkit-box-shadow: 7px 7px 37px 0px rgba(0, 0, 0, 0.75);
+    -moz-box-shadow: 7px 7px 37px 0px rgba(0, 0, 0, 0.75);
+    box-shadow: -2px 5px 20px 0px rgb(0 0 0 / 34%);
+}
