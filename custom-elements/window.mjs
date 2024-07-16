@@ -179,6 +179,7 @@ export default class Window extends HTMLElement {
         if (!this.temporary) {
             makeDraggable(this, header, {
                 customStyles: { position: "absolute", ...this.windowedStyles },
+                preventDrag: () => this._fullscreen,
             });
 
             this.addEventListener("focusin", () => {
