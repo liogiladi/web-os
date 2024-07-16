@@ -10,9 +10,17 @@
 
 body {
 	margin: 0 auto;
+	overflow: hidden;
+}
+
+body::before {
+	content: "";
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
 	background-image: url("/media/bg.svg");
 	background-size: cover;
-	overflow: hidden;
+	backdrop-filter: saturate(1.2);
 }
 
 .cursor-override * {
@@ -29,6 +37,24 @@ main {
 
 main[data-preview-window] #windows > *:not([data-window-to-preview]) {
 	display: none !important;
+}
+
+#os-logo {
+	position: fixed;
+    left: 50%;
+    top: 50%;
+	width: clamp(273px, 25%, 312px);
+    transform: translate(-52%, -50%);
+	transition: transform 0.2s;
+	cursor: pointer;
+}
+
+#os-logo:hover {
+	transform: translate(-52%, -50%) scale(1.1);
+}
+
+#os-logo:active {
+	transform: translate(-52%, -50%) scale(0.9);
 }
 
 #shortcuts {

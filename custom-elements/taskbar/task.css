@@ -26,13 +26,7 @@
 .task .preview-image {
     width: 100%;
     height: 100%;
-    object-fit: cover;
     transition: transform 0.2s;
-}
-
-.task .preview-image * {
-    image-rendering: pixelated; /* Universal support since 2021   */
-    -ms-interpolation-mode: nearest-neighbor; /* IE8+                           */
 }
 
 .task .previews {
