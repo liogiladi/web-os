@@ -182,7 +182,12 @@ export default class Window extends HTMLElement {
                 preventDrag: () => this._fullscreen,
             });
 
-            this.addEventListener("focusin", () => {
+            this.addEventListener("focusin", (e) => {
+                // We don't wan't to reorder if pressed on any of these buttons
+                if([closeButton, sizeButton, minimizeButton].includes(e.target)) {
+                    return;
+                }
+
                 reorderedDraggableElements(
                     Window.orderedWindowIds,
                     this.id,
