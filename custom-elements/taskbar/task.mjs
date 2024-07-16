@@ -174,6 +174,7 @@ export default class Task extends HTMLElement {
         windowClone.style.transition = "unset";
         windowClone.style.transform = "unset";
         windowClone.style.scale = "unset";
+        windowClone.intermediateData = window.intermediateData;
         
         windowClone.transformCallback = (contentElement) => {
             const contentRect = contentElement.getBoundingClientRect();
