@@ -99,12 +99,14 @@ export default class Window extends HTMLElement {
             resizerElement.onmousedown = () => {
                 document.body.classList.add("cursor-override");
                 document.body.style.cursor = resizer;
+                this.style.pointerEvents = "none";
 
                 window.onmousemove = (e) =>
                     this.#resize.bind(this)(e, resizerElement);
                 window.onmouseup = () => {
                     document.body.classList.remove("cursor-override");
                     document.body.style.cursor = "unset";
+                    this.style.pointerEvents = "all";
 
                     this.#lastMouseClient = undefined;
 
@@ -184,7 +186,9 @@ export default class Window extends HTMLElement {
 
             this.addEventListener("focusin", (e) => {
                 // We don't wan't to reorder if pressed on any of these buttons
-                if([closeButton, sizeButton, minimizeButton].includes(e.target)) {
+                if (
+                    [closeButton, sizeButton, minimizeButton].includes(e.target)
+                ) {
                     return;
                 }
 
