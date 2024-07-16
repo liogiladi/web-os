@@ -31,7 +31,7 @@ main {
 	position: relative;
 	width: 100vw;
 	height: calc(100vh - 70px);
-	padding: 10px;
+	padding: 1rem;
 	box-sizing: border-box;
 }	
 
