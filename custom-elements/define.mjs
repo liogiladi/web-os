@@ -8,6 +8,7 @@ import Calculator from "./apps/calculator.mjs";
 import Recorder from "./apps/recorder.mjs";
 import Gallery from "./apps/gallery.mjs";
 import Clock from "./widgets/clock.mjs";
+import IMH from "./apps/imh.mjs";
 
 // General
 customElements.define("desktop-shortcut", Shortcut);
@@ -21,6 +22,7 @@ customElements.define("js-coder", JSCoder);
 customElements.define("web-browser", Browser);
 customElements.define("web-calculator", Calculator);
 customElements.define("web-recorder", Recorder);
+customElements.define("web-imh", IMH);
 
 // Widgets
 customElements.define("desktop-clock", Clock);

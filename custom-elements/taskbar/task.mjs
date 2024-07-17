@@ -40,7 +40,7 @@ export default class Task extends HTMLElement {
         this.container.className = "task load-animation";
 
         const taskIcon = document.createElement("img");
-        taskIcon.className = "preview-image";
+        taskIcon.className = "task-icon";
         taskIcon.src = this.iconSrc || "/media/folder.svg";
         taskIcon.alt = "task icon";
         taskIcon.draggable = false;
@@ -109,7 +109,7 @@ export default class Task extends HTMLElement {
         };
 
         this.onblur = (e) => {
-            if (e.relatedTarget?.className === "task-close-button") return;
+             if (e.relatedTarget?.className === "task-close-button") return;
             delete this.container.dataset.focused;
             this.previews.replaceChildren();
         };
@@ -165,34 +165,43 @@ export default class Task extends HTMLElement {
         header.append(infoWrapper, closeButton);
 
         /** @type {Window} */
-        const windowClone = window.cloneNode(true);
-        windowClone.temporary = true;
-        windowClone.removeAttribute("id");
-        windowClone.style.pointerEvents = "none";
-        windowClone.style.opacity = "1";
-        windowClone.style.transformOrigin = "unset";
-        windowClone.style.transition = "unset";
-        windowClone.style.transform = "unset";
-        windowClone.style.scale = "unset";
-        windowClone.intermediateData = window.intermediateData;
-        
-        windowClone.transformCallback = (contentElement) => {
-            const contentRect = contentElement.getBoundingClientRect();
-            const wrappeRect = preview.getBoundingClientRect();
+        let windowPreview;
 
-            const factor = -45;
-            const scaleAmtX = Math.min(
-                (wrappeRect.width + factor) / contentRect.width,
-                (wrappeRect.height + factor) / contentRect.height
-            );
-            const scaleAmtY = scaleAmtX;
+        if (window.customTaskPreview) {
+            windowPreview = window.customTaskPreview;
+            windowPreview.classList.add("custom-preview");
+        } else {
+            windowPreview = window.cloneNode(true);
+            windowPreview.temporary = true;
+            windowPreview.removeAttribute("id");
+            windowPreview.style.pointerEvents = "none";
+            windowPreview.style.opacity = "1";
+            windowPreview.style.transformOrigin = "unset";
+            windowPreview.style.transition = "unset";
+            windowPreview.style.transform = "unset";
+            windowPreview.style.scale = "unset";
+            windowPreview.intermediateData = window.intermediateData;
+            windowPreview.onResize?.();
+            windowPreview.onToggleFullscreen?.();
 
-            contentElement.style.scale = `${scaleAmtX} ${scaleAmtY}`;
-        };
+            windowPreview.transformCallback = (contentElement) => {
+                const contentRect = contentElement.getBoundingClientRect();
+                const wrappeRect = preview.getBoundingClientRect();
+
+                const factor = -45;
+                const scaleAmtX = Math.min(
+                    (wrappeRect.width + factor) / contentRect.width,
+                    (wrappeRect.height + factor) / contentRect.height
+                );
+                const scaleAmtY = scaleAmtX;
+
+                contentElement.style.scale = `${scaleAmtX} ${scaleAmtY}`;
+            };
+        }
 
         const windowPreviewWrapper = document.createElement("div");
         windowPreviewWrapper.className = "window-preview-wrapper";
-        windowPreviewWrapper.append(windowClone);
+        windowPreviewWrapper.append(windowPreview);
 
         preview.append(header, windowPreviewWrapper);
 

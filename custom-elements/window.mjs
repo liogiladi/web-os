@@ -36,6 +36,15 @@ export default class Window extends HTMLElement {
     /** @type {object} */
     intermediateData;
 
+    /** @type {(e: UIEvent) => void} */
+    onResize;
+
+    /** @type {() => void} */
+    onToggleFullscreen;
+
+    /** @type {HTMLElement | undefined} */
+    customTaskPreview;
+
     constructor() {
         super();
         this.observer = null;
@@ -246,6 +255,8 @@ export default class Window extends HTMLElement {
         this.querySelectorAll(".dragger").forEach((el) => {
             el.style.display = this._fullscreen ? "none" : "unset";
         });
+
+        this.onToggleFullscreen?.();
     }
 
     /**
@@ -491,6 +502,8 @@ export default class Window extends HTMLElement {
             x: e.clientX,
             y: e.clientY,
         };
+
+        this.onResize?.(e);
     }
 
     get headerTitle() {

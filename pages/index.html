@@ -4,6 +4,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>desktop</title>
         <link rel="stylesheet" href="/pages/index.css" />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""
+        />
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     </head>
     <script type="module" src="../custom-elements/define.mjs"></script>
     <script type="module">
@@ -24,7 +31,7 @@
 
     <body>
         <main>
-            <img id="os-logo" src="/media/os-logo.png" alt="os-logo"/>
+            <img id="os-logo" src="/media/os-logo.png" alt="os-logo" draggable="false"/>
             <div id="preview-bg"></div>
             <section id="shortcuts">
                 <desktop-shortcut
@@ -47,8 +54,13 @@
                     name="Recorder"
                     icon-src="../media/recorder-icon.png"
                 ></desktop-shortcut>
+                <desktop-shortcut
+                    wc-tag-name="web-imh"
+                    name="I.M.H"
+                    icon-src="../media/imh-icon.png"
+                ></desktop-shortcut>
             </section>
-            <section id="windows"></section>    
+            <section id="windows"></section>
 
             <ul
                 id="context-menu"
@@ -82,6 +94,6 @@
             menu.style.display = "none";
         };
 
-        //var windowsContainer = document.querySelector("#windows");
+        window.L = L;
     </script>
 </html>

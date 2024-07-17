@@ -1,0 +1,22 @@
+.imh-content {
+    padding: 1rem;
+    background-image: url("/media/imh-bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.imh-content * {
+    user-select: none;
+}
+
+.imh {
+    position: relative;
+    display: none;
+    height: 100%;
+    border-radius: 11px;
+    overflow:hidden;
+}
+
+.imh .leaflet-marker-icon {
+    filter: hue-rotate(284deg);
+}

@@ -13,20 +13,21 @@
     animation: enter 0.5s 1 ease reverse forwards;
 }
 
-.task:not([data-focused]) .preview-image:hover,
-.task:has(.previews:hover) .preview-image,
-.task[data-focused] .preview-image {
+.task:not([data-focused]) .task-icon:hover,
+.task:has(.previews:hover) .task-icon,
+.task[data-focused] .task-icon {
     transform: scale(1.1) translateY(-11px);
 }
 
-.task .preview-image:active {
+.task .task-icon:active {
     transform: scale(1) translateY(-9px) !important;
 }
 
-.task .preview-image {
+.task .task-icon {
     width: 100%;
     height: 100%;
     transition: transform 0.2s;
+    user-select: none;
 }
 
 .task .previews {
@@ -60,11 +61,11 @@
     height: 20px;
 }
 
-.task:has(.preview-image:hover) .previews {
+.task:has(.task-icon:hover) .previews {
     opacity: 1;
 }
 
-.task:has(.preview-image:active) .previews {
+.task:has(.task-icon:active) .previews {
     opacity: 0;
 }
 .task .previews:hover {
@@ -122,7 +123,13 @@
     position: relative;
 }
 
-.preview .window-preview-wrapper > * {
+.preview .window-preview-wrapper:has(.custom-preview) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.preview .window-preview-wrapper:not(:has(.custom-preview)) > * {
     top: 50% !important;
     left: 50% !important;
     translate: -50% -50%;
@@ -169,7 +176,7 @@
     pointer-events: none;
 }
 
-.task:not([data-focused]) .preview-image:hover + .amount,
+.task:not([data-focused]) .task-icon:hover + .amount,
 .task:has(.previews:hover) .amount,
 .task[data-focused] .amount {
 	left: 50%;
