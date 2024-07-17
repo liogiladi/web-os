@@ -24,7 +24,7 @@
 	object-fit: cover;
 	user-select: none;
 	pointer-events: none;
-	filter: drop-shadow(0 4px 9px #0000003b)
+	filter: drop-shadow(0 4px 2px #0000002b);
 }
 
 .shortcut span {
@@ -36,10 +36,14 @@
 	user-select: none;
 	color: white;
 	text-shadow: 0px 1px 4px black;
+	text-wrap: nowrap;
 }
 
-.shortcut input {
+.shortcut textarea {
+	position: absolute;
+	bottom: -1rem;
 	display: none;
+	place-items: top;
 	border: 0;
 	outline: 1px solid black;
 	padding: 0;
@@ -47,9 +51,13 @@
 	text-align: center;
 	font-size: 1rem;
 	font-family: "JetBrains";
+	resize: none;
 }
 
-.shortcut input:focus {
+.shortcut textarea:focus {
 	outline-width: 3px;
+}
 
+.shortcut textarea::-webkit-scrollbar {
+    display: none;
 }

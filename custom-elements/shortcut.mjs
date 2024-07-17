@@ -17,8 +17,12 @@ export default class Shortcut extends HTMLElement {
         ...requiredAttributes,
     ];
     static orderedFolderIds = new Queue();
+
+    /** @type {HTMLSpanElement} */
     span;
-    input;
+
+    /** @type {HTMLTextAreaElement} */
+    textarea;
 
     /** @type {object} */
     intermediateData;
@@ -57,18 +61,17 @@ export default class Shortcut extends HTMLElement {
         this.span = document.createElement("span");
         this.span.innerText = this.name;
         this.span.style.pointerEvents = "none";
-        this.span.onclick = this.selectInput;
+        this.span.onclick = this.selectInput.bind(this);
 
-        this.input = document.createElement("input");
-        this.input.type = "text";
-        this.input.onblur = this.deselectInput;
+        this.textarea = document.createElement("textarea");
+        this.textarea.onblur = this.deselectInput.bind(this);
 
         const style = document.createElement("style");
         style.innerHTML = await readFileContents(
             "/custom-elements/shortcut.css"
         );
 
-        template.append(style, img, this.span, this.input);
+        template.append(style, img, this.span, this.textarea);
         for (const attribute of Shortcut.observedAttributes) {
             template.setAttribute(attribute, this[attribute]);
         }
@@ -82,7 +85,7 @@ export default class Shortcut extends HTMLElement {
         makeDraggable(this, template, {
             customStyles: { position: "relative" },
             bubbleThroughController: true,
-            preventDrag: (event) => event.target === this.input,
+            preventDrag: (event) => event.target === this.textarea,
         });
 
         this.onfocus = this.focus;
@@ -95,23 +98,29 @@ export default class Shortcut extends HTMLElement {
         else if (_name == "wc-tag-name") this.wcTagName = newValue;
     }
 
+    /**
+     * @param {MouseEvent} e
+     */
     selectInput({ target }) {
         if (document.activeElement === target) return;
-        target.style.display = "none";
+        target.style.opacity = 0;
+        target.style.pointerEvents = "none";
 
-        const input = this.parentElement.querySelector("input");
-        input.value = target.innerHTML;
-        input.style.display = "unset";
-        input.focus();
+        this.textarea.value = target.innerHTML;
+        this.textarea.style.display = "unset";
+        this.textarea.focus();
+        this.textarea.scrollTop = 0;
+        this.textarea.style.bottom = target.innerHTML.length < 8 ? "calc(20px - 1rem)" : "-1rem";
+        this.textarea.style.height = target.innerHTML.length > 8 ? "unset" : "20px";
     }
 
     deselectInput({ target }) {
         target.style.display = "none";
         target.parentNode;
 
-        const span = target.parentNode.querySelector("span");
-        span.innerHTML = target.value;
-        span.style.display = "unset";
+        this.span.innerHTML = target.value;
+        this.span.style.opacity = 1;
+        this.span.style.pointerEvents = "all";
     }
 
     focus() {
