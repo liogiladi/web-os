@@ -20,7 +20,7 @@ body::before {
 	height: 100vh;
 	background-image: url("/media/bg.svg");
 	background-size: cover;
-	backdrop-filter: saturate(1.2);
+	filter: saturate(1.2);
 }
 
 .cursor-override * {
@@ -62,7 +62,7 @@ main[data-preview-window] #windows > *:not([data-window-to-preview]) {
 	flex-direction: column;
 	flex-wrap: wrap;
 	height: 100%;
-	gap: 10px;
+	gap: 20px;
 	width: fit-content;
 }
 
