@@ -44,17 +44,17 @@ main[data-preview-window] #windows > *:not([data-window-to-preview]) {
     left: 50%;
     top: 50%;
 	width: clamp(273px, 25%, 312px);
-    transform: translate(-52%, -50%);
+    transform: translate(-50%, -50%);
 	transition: transform 0.2s;
 	cursor: pointer;
 }
 
-#os-logo:hover {
-	transform: translate(-52%, -50%) scale(1.1);
+body:not(.cursor-override) #os-logo:hover {
+	transform: translate(-50%, -50%) scale(1.1);
 }
 
-#os-logo:active {
-	transform: translate(-52%, -50%) scale(0.9);
+body:not(.cursor-override) #os-logo:active {
+	transform: translate(-50%, -50%) scale(0.9);
 }
 
 #shortcuts {
