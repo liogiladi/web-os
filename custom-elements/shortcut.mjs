@@ -88,6 +88,8 @@ export default class Shortcut extends HTMLElement {
             preventDrag: (event) => event.target === this.textarea,
         });
 
+        this.style.userSelect = "none";
+
         this.onfocus = this.focus;
         this.onblur = this.blur;
     }
