@@ -114,16 +114,16 @@ export default class Taskbar extends HTMLElement {
         const closeButton = document.createElement("button");
         closeButton.style.backgroundImage = `url("/media/close-button.png")`;
         closeButton.onclick = () => {
-            this.settings.classList.remove("load-animation");
-            this.settings.classList.add("unload-animation");
+            this.settings.classList.remove("settings-load-animation");
+            this.settings.classList.add("settings-unload-animation");
 
-            this.settingsButtons.classList.remove("load-animation");
-            this.settingsButtons.classList.add("unload-animation");
+            this.settingsButtons.classList.remove("settings-load-animation");
+            this.settingsButtons.classList.add("settings-unload-animation");
 
             setTimeout(() => {
                 this.container.dataset.settingsOpen = false;
-                this.settings.classList.remove("unload-animation");
-                this.settingsButtons.classList.remove("unload-animation");
+                this.settings.classList.remove("settings-unload-animation");
+                this.settingsButtons.classList.remove("settings-unload-animation");
             }, 300);
         };
 
@@ -145,9 +145,9 @@ export default class Taskbar extends HTMLElement {
             for (const mutation of mutationList) {
                 if (
                     mutation.type === "childList" &&
-                    this.childNodes.length > 1
+                    this.childNodes.length > 0
                 ) {
-                    while (this.childNodes.length > 1) {
+                    while (this.childNodes.length > 0) {
                         tasks.appendChild(this.childNodes[0]);
                     }
                 }

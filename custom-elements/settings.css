@@ -18,11 +18,11 @@ desktop-settings {
     transition: 0.3s;
 }
 
-.load-animation {
-    animation: enter 0.5s 1 ease forwards;
+.settings-load-animation {
+    animation: settings-enter 0.5s 1 ease forwards;
 }
 
-@keyframes enter {
+@keyframes settings-enter {
     0% {
         opacity: 0;
         transform: translate(0, -5rem);
@@ -37,11 +37,11 @@ desktop-settings {
     }
 }
 
-.unload-animation {
-    animation: exit 0.3s forwards;
+.settings-unload-animation {
+    animation: settings-exit 0.3s forwards;
 }
 
-@keyframes exit {
+@keyframes settings-exit {
     0% {
         opacity: 1;
         transform: translate(0, 0);
@@ -207,7 +207,7 @@ desktop-settings {
     #account-settings form input {
         width: 100%;
         font-size: 1.2rem !important;
-        max-width: unset
+        max-width: unset;
         font-size: clamp(0.9rem, 1.5vw ,1.2rem);
     }
     

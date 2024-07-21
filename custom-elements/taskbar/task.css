@@ -5,12 +5,12 @@
     height: 45px;
 }
 
-.load-animation {
-    animation: enter 0.5s 1 ease forwards;
+.task-load-animation {
+    animation: task-enter 0.5s 1 ease forwards;
 }
 
-.unload-animation {
-    animation: enter 0.5s 1 ease reverse forwards;
+.task-unload-animation {
+    animation: task-enter 0.5s 1 ease reverse forwards;
 }
 
 .task:not([data-focused]) .task-icon:hover,
@@ -201,7 +201,7 @@
     }
 }
 
-@keyframes enter {
+@keyframes task-enter {
     0% {
         opacity: 0;
         transform: translateY(50px);

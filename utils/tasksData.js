@@ -78,7 +78,7 @@ export default class TasksData {
             );
             console.log(taskName);
 
-            taskElement.classList.add("unload-animation");
+            taskElement.classList.add("task-unload-animation");
 
             setTimeout(() => {
                 taskElement.remove();

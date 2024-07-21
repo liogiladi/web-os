@@ -29,9 +29,11 @@
             Taskbar.instance.container.dataset.settingsOpen = true;
 
             setTimeout(() => {
-                Taskbar.instance.settings.classList.add("load-animation");
+                Taskbar.instance.settings.classList.add(
+                    "settings-load-animation"
+                );
                 Taskbar.instance.settingsButtons.classList.add(
-                    "load-animation"
+                    "settings-load-animation"
                 );
             }, 500);
         }

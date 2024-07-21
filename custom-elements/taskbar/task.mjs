@@ -37,7 +37,7 @@ export default class Task extends HTMLElement {
         this.tabIndex = 1;
 
         this.container = document.createElement("template");
-        this.container.className = "task load-animation";
+        this.container.className = "task task-load-animation";
 
         const taskIcon = document.createElement("img");
         taskIcon.className = "task-icon";
@@ -61,7 +61,7 @@ export default class Task extends HTMLElement {
         this.appendChild(this.container);
 
         setTimeout(() => {
-            this.container.classList.remove("load-animation");
+            this.container.classList.remove("task-load-animation");
         }, 500);
 
         this.container.onmouseenter = () => (this.hovers = true);
