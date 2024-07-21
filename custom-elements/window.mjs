@@ -199,7 +199,7 @@ export default class Window extends HTMLElement {
             this.addEventListener("focusin", (e) => {
                 // We don't wan't to reorder if pressed on any of these buttons
                 if (
-                    [closeButton, sizeButton, minimizeButton].includes(e.target)
+                    [closeButton, minimizeButton].includes(e.target)
                 ) {
                     return;
                 }
