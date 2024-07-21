@@ -14,24 +14,44 @@
     </head>
     <script type="module" src="../custom-elements/define.mjs"></script>
     <script type="module">
-        import { initTheme } from "/utils/theme.js";
         import { FileStorage } from "/utils/fileStorage.js";
         import { createPictureShortcut } from "/utils/createFromFileStorage.js";
+        import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
 
-        initTheme();
         FileStorage.init();
 
         // init shortcuts
         for (const [id, info] of FileStorage.getPictures()) {
             createPictureShortcut(info);
         }
+
+        function openSettings(event) {
+            Taskbar.instance.container.dataset.settingsOpen = true;
+
+            setTimeout(() => {
+                Taskbar.instance.settings.classList.add("load-animation");
+                Taskbar.instance.settingsButtons.classList.add(
+                    "load-animation"
+                );
+            }, 500);
+        }
+
+        document
+            .querySelector("#os-logo")
+            .addEventListener("click", openSettings);
     </script>
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
     <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
 
     <body>
         <main>
-            <img id="os-logo" src="/media/os-logo.png" alt="os-logo" draggable="false"/>
+            <!-- <settings-menu></settings-menu> -->
+            <img
+                id="os-logo"
+                src="/media/os-logo.png"
+                alt="os-logo"
+                draggable="false"
+            />
             <div id="preview-bg"></div>
             <section id="shortcuts">
                 <desktop-shortcut

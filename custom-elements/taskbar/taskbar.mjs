@@ -8,7 +8,10 @@ import TasksData from "/utils/tasksData.js";
  * @prop {number} count
  */
 
-const notificationsIconsSrcs = ["../media/audio-icon.svg", "../media/wifi-icon.svg"]
+const notificationsIconsSrcs = [
+    "../media/audio-icon.svg",
+    "../media/wifi-icon.svg",
+];
 
 export default class Taskbar extends HTMLElement {
     /** @type {ShadowRoot} */
@@ -16,6 +19,15 @@ export default class Taskbar extends HTMLElement {
 
     /** @type {Taskbar} */
     static instance;
+
+    /** @type {HTMLElement} */
+    container;
+
+    /** @type {Settings} */
+    settings;
+
+    /** @type {HTMLElement} */
+    settingsButtons;
 
     /** @type {TasksData}  */
     static tasks = new TasksData();
@@ -29,15 +41,17 @@ export default class Taskbar extends HTMLElement {
     }
 
     async connectedCallback() {
-        const container = document.createElement("footer");
-        container.id = "taskbar";
+        this.container = document.createElement("footer");
+        this.container.id = "taskbar";
+
+        this.taskbarContent = document.createElement("div");
+        this.taskbarContent.id = "taskbar-content";
+        this.container.append(this.taskbarContent);
 
         const style = document.createElement("style");
         style.innerHTML = await readFileContents(
             "/custom-elements/taskbar/taskbar.css"
         );
-
-        container.append(style);
 
         // Right area - notifications
         const notifications = document.createElement("div");
@@ -57,14 +71,14 @@ export default class Taskbar extends HTMLElement {
 
         notifications.append(timeInfo);
 
-        for(const src of notificationsIconsSrcs) {
+        for (const src of notificationsIconsSrcs) {
             const notification = document.createElement("img");
             notification.src = src;
             notification.className = "notification";
             notifications.append(notification);
         }
 
-        container.append(notifications);
+        this.taskbarContent.append(notifications);
 
         // Left area - social links
         const socialLinks = document.createElement("div");
@@ -85,23 +99,55 @@ export default class Taskbar extends HTMLElement {
         linkedIn.append(linkedInIcon);
 
         socialLinks.append(linkedIn, github);
-        container.append(socialLinks);
+        this.taskbarContent.append(socialLinks);
+
+        // Settings
+        this.settings = document.createElement("desktop-settings");
+        this.container.append(this.settings);
+
+        this.settingsButtons = document.createElement("div");
+        this.settingsButtons.id = "settings-buttons";
+
+        const powerOffButton = document.createElement("button");
+        powerOffButton.style.backgroundImage = `url("/media/off-button.png")`;
+
+        const closeButton = document.createElement("button");
+        closeButton.style.backgroundImage = `url("/media/close-button.png")`;
+        closeButton.onclick = () => {
+            this.settings.classList.remove("load-animation");
+            this.settings.classList.add("unload-animation");
+
+            this.settingsButtons.classList.remove("load-animation");
+            this.settingsButtons.classList.add("unload-animation");
+
+            setTimeout(() => {
+                this.container.dataset.settingsOpen = false;
+                this.settings.classList.remove("unload-animation");
+                this.settingsButtons.classList.remove("unload-animation");
+            }, 300);
+        };
+
+        const signOutButton = document.createElement("button");
+        signOutButton.style.backgroundImage = `url("/media/out-button.png")`;
+
+        this.settingsButtons.append(powerOffButton, closeButton, signOutButton);
+        this.taskbarContent.append(this.settingsButtons);
 
         // Tasks
         const tasks = document.createElement("div");
         tasks.id = "taskbar-tasks";
-        container.append(tasks);
+        this.taskbarContent.append(tasks);
 
-        this.append(container);
+        this.append(this.container);
 
         // Observe childList such that every child that is appended to <desktop-window> goes to tasks wrapper
         this.observer = new MutationObserver((mutationList) => {
             for (const mutation of mutationList) {
                 if (
                     mutation.type === "childList" &&
-                    this.childNodes.length > 0
+                    this.childNodes.length > 1
                 ) {
-                    while (this.childNodes.length > 0) {
+                    while (this.childNodes.length > 1) {
                         tasks.appendChild(this.childNodes[0]);
                     }
                 }
@@ -111,7 +157,7 @@ export default class Taskbar extends HTMLElement {
         this.observer.observe(this, { childList: true });
 
         const shadowRoot = this.attachShadow({ mode: "open" });
-        shadowRoot.append(container);
+        shadowRoot.append(style, this.container);
 
         Taskbar.shadowRoot = shadowRoot;
 

@@ -1,0 +1,214 @@
+desktop-settings {
+    display: none;
+}
+
+#taskbar[data-settings-open=true] desktop-settings {
+    width: 100%;
+    height: calc(100% - 67px);
+    position: fixed;
+    left: 0;
+    top: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 4fr 1fr;
+    padding: 1.4rem;
+    box-sizing: border-box;
+    gap: 1.7rem;
+    opacity: 0;
+    transition: 0.3s;
+}
+
+.load-animation {
+    animation: enter 0.5s 1 ease forwards;
+}
+
+@keyframes enter {
+    0% {
+        opacity: 0;
+        transform: translate(0, -5rem);
+    }
+    70% {
+        opacity: 1;
+        transform: translate(0, 0.5rem);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+}
+
+.unload-animation {
+    animation: exit 0.3s forwards;
+}
+
+@keyframes exit {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(0, 5rem);
+    }
+}
+
+.settings {
+    width: 100%;
+    height: 100%;
+    background-color: #36003994;
+    border-radius: 9px;
+    backdrop-filter: blur(15px);
+    height: 100%;
+    overflow: hidden;
+}
+
+.settings h2 {
+    text-align: center;
+    font-size: 1.2rem;
+    background-color: #2a05284d;
+    border-radius: 5rem;
+    padding: 0.3rem 2.5rem;
+    width: fit-content;
+    color: white;
+    position: relative;
+    left: 50%;
+    translate: -50%;
+}
+
+#account-settings {
+    grid-row: span 2;
+    display: grid;
+    grid-template-rows: auto 1fr;
+}
+
+#account-settings form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 1.2rem;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+#account-settings #profile-img-wrapper {
+    width: min(65%, 17.375rem);
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background: linear-gradient(#b307b5, transparent);
+    cursor: pointer;
+}
+
+#account-settings #profile-img-wrapper img {
+    width: 100%;
+    border-radius: 50%;
+    scale: 0.94;
+    pointer-events: none;
+}
+
+#account-settings form #inputs {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+#account-settings form input {
+    text-align: center;
+    font-size: 1.2rem;
+    background-color: #2a05289e;
+    border-radius: 5rem;
+    padding: 0.3rem 2.5rem;
+    color: white;
+    width: 55%;
+    max-width: 17rem;
+    border: 0;
+    font-family: 'JetBrains';
+}
+
+#account-settings form input[type=submit] {
+    width: fit-content;
+    font-weight: bold;
+    background-color: white;
+    color: #6b066d;
+    cursor: pointer;
+}
+
+#resolution-settings input {
+    appearance: none;
+    position: relative;
+    width: 95%;
+    height: 1.2rem;
+    border-radius: 5rem;
+    left: 50%;
+    translate: -50%;
+    background: #360039a6;
+    margin-top: 0.3rem;
+}
+
+::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 2rem;
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    background: white;
+    cursor: pointer;
+}
+
+#theme-settings {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+}
+
+#themes {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 50% 50%;
+    gap: 0.7rem;
+    padding: 1.5rem;
+    padding-top: 0;
+    overflow: hidden;
+}
+
+#themes button {
+    border: 0;
+    padding: 6px;
+    background: linear-gradient(#b307b5, transparent);
+    border-radius: 0.8rem;
+    cursor: pointer;
+    transition: 0.1s;
+}
+
+#themes button:hover {
+    scale: 0.95;
+}
+
+#themes button[data-selected] {
+    scale: 0.9;
+    cursor: default;
+}
+
+#themes button img {
+    width: 100%;
+    height: 100%;
+    border-radius: 0.6rem;
+    object-fit: cover;
+}
+
+@media screen and (max-width: 900px) {
+    #account-settings form input {
+        width: 100%;
+        font-size: 1.2rem !important;
+        max-width: unset
+        font-size: clamp(0.9rem, 1.5vw ,1.2rem);
+    }
+    
+}

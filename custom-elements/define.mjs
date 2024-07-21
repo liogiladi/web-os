@@ -9,11 +9,13 @@ import Recorder from "./apps/recorder.mjs";
 import Gallery from "./apps/gallery.mjs";
 import Clock from "./widgets/clock.mjs";
 import IMH from "./apps/imh.mjs";
+import Settings from "./settings.mjs";
 
 // General
 customElements.define("desktop-shortcut", Shortcut);
 customElements.define("desktop-taskbar", Taskbar);
 customElements.define("desktop-task", Task);
+customElements.define("desktop-settings", Settings);
 
 // Windows
 customElements.define("desktop-window", Window);

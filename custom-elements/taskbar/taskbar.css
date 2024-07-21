@@ -1,114 +1,164 @@
 #taskbar {
-	position: fixed;
-	bottom: 0;
-	z-index: 9999;
-	display: flex;
-	flex-direction: row-reverse;
-    justify-content: space-between;
-	align-items: center;
-	width: 100%;
-	height: 67px;
-	transition: 0.3s;
+    position: fixed;
+    bottom: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 67px;
+    transition: 0.3s ease-in-out;
 }
 
 #taskbar::before {
-	position: absolute;
-	bottom: 0;
-	content: "";
-	width: 100%;
-	height: 100%;
-	background: #0000001a;
-	backdrop-filter: blur(9px);
+    position: absolute;
+    bottom: 0;
+    content: "";
+    width: 100%;
+    height: 100%;
+    background: #0000001a;
+    transition: 0.3s ease-in-out;
+    backdrop-filter: blur(9px);
 }
 
-/* #taskbar:not(:has(desktop-task)) {
-	height: 0;
-	padding: 0;
-} */
+#taskbar[data-settings-open=true] {
+    height: 100%;
+}
+
+#taskbar[data-settings-open=true]::before {
+    background: #00000069;
+	backdrop-filter: blur(25px);
+}
+
+#taskbar #settings-buttons {
+	display: none;
+}
+
+#taskbar[data-settings-open=true] #settings-buttons {
+	position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+
+}
+
+#settings-buttons button {
+	display: block;
+    width: 45px;
+    height: 45px;
+	background-size: cover;
+    border: 0;
+    background-color: transparent;
+	cursor: pointer;
+	transition: 0.1s;
+}
+
+#settings-buttons button:hover {
+	filter: brightness(0.9);
+}
+
+#settings-buttons button:active {
+	scale: 0.9;
+
+}
+
+
+#taskbar-content {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 67px;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: center;
+}
 
 #taskbar-notifications {
-	position: relative;
-	display: flex;
-	flex-direction: row-reverse;
-	align-items: center;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
 }
 
 #taskbar-notifications > * {
-	border-radius: 5px;
-	transition: background-color 0.1s;
+    border-radius: 5px;
+    transition: background-color 0.1s;
 }
 
 #taskbar-notifications > .notification {
-	height: fit-content;
-	width: 22px;
-	padding: 0.5rem;
-	aspect-ratio: 1/1;
+    height: fit-content;
+    width: 22px;
+    padding: 0.5rem;
+    aspect-ratio: 1/1;
 }
 
 #taskbar-time-info {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	margin-right: 0.5rem;
-	padding: 0.5rem 1rem;
-	color: white;
-	user-select: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 0.5rem;
+    padding: 0.5rem 1rem;
+    color: white;
+    user-select: none;
 }
 
 #taskbar-notifications > #taskbar-time-info:hover,
 #taskbar-notifications > .notification:hover {
-	background-color: #0000001a;
+    background-color: #0000001a;
 }
 
 #taskbar-notifications > #taskbar-time-info:active,
 #taskbar-notifications > .notification:active {
-	background-color: #0000002d;
+    background-color: #0000002d;
 }
 
 #taskbar-time-info span:first-of-type {
-	font-size: 1.1rem;
+    font-size: 1.1rem;
 }
 
 #taskbar-time-info span:nth-of-type(2) {
-	font-size: 0.8rem;
+    font-size: 0.8rem;
 }
 
 #taskbar-tasks {
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	translate: -50% -50%;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	gap: 1rem;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
 }
 
 #taskbar-social-links {
-	position: relative;
-	display: flex;
-	flex-direction: row-reverse;
-	gap: 0.8rem;
-	padding-left: 1.1rem;
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 0.8rem;
+    padding-left: 1.1rem;
 }
 
 #taskbar-social-links a {
-	width: 40px;
-	aspect-ratio: 1/1;
-	container-type: size;
-	opacity: 0.2;
-	transition: opacity 0.1s, scale 0.1s;
+    width: 40px;
+    aspect-ratio: 1/1;
+    container-type: size;
+    opacity: 0.2;
+    transition: opacity 0.1s, scale 0.1s;
 }
 
 #taskbar-social-links a:hover {
-	opacity: 1;
+    opacity: 1;
 }
 
 #taskbar-social-links a:active {
-	scale: 0.9;
+    scale: 0.9;
 }
 
 #taskbar-social-links a img {
-	width: 40px;
-	aspect-ratio: 1/1;
+    width: 40px;
+    aspect-ratio: 1/1;
 }
