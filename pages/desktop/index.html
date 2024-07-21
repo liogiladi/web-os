@@ -3,7 +3,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>desktop</title>
-        <link rel="stylesheet" href="/pages/index.css" />
+        <link rel="stylesheet" href="/pages/desktop/index.css" />
         <link
             rel="stylesheet"
             href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -12,7 +12,7 @@
         />
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     </head>
-    <script type="module" src="../custom-elements/define.mjs"></script>
+    <script type="module" src="/custom-elements/define.mjs"></script>
     <script type="module">
         import { FileStorage } from "/utils/fileStorage.js";
         import { createPictureShortcut } from "/utils/createFromFileStorage.js";
@@ -72,27 +72,27 @@
                 <desktop-shortcut
                     wc-tag-name="js-coder"
                     name="JSCoder"
-                    icon-src="../media/editor-icon.svg"
+                    icon-src="/media/editor-icon.svg"
                 ></desktop-shortcut>
                 <desktop-shortcut
                     wc-tag-name="web-browser"
                     name="Browser"
-                    icon-src="../media/browser-icon.png"
+                    icon-src="/media/browser-icon.png"
                 ></desktop-shortcut>
                 <desktop-shortcut
                     wc-tag-name="web-calculator"
                     name="Calcs"
-                    icon-src="../media/calcs-icon.png"
+                    icon-src="/media/calcs-icon.png"
                 ></desktop-shortcut>
                 <desktop-shortcut
                     wc-tag-name="web-recorder"
                     name="Recorder"
-                    icon-src="../media/recorder-icon.png"
+                    icon-src="/media/recorder-icon.png"
                 ></desktop-shortcut>
                 <desktop-shortcut
                     wc-tag-name="web-imh"
                     name="I.M.H"
-                    icon-src="../media/imh-icon.png"
+                    icon-src="/media/imh-icon.png"
                 ></desktop-shortcut>
             </section>
             <section id="windows"></section>

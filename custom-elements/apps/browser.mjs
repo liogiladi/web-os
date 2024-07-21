@@ -99,24 +99,24 @@ export default class Browser extends Window {
             if (e.target.value === "http://www.browser.com") {
                 src = `http://${window.location.hostname}${
                     isDev ? ":3000" : ""
-                }/pages/browser.html`;
+                }/pages/desktop/browser.html`;
             } else if (
                 e.target.value.startsWith("http://www.browser.com/search?q")
             ) {
                 src = `http://${window.location.hostname}${
                     isDev ? ":3000" : ""
-                }/pages/search.html?q=${e.target.value.split(/\?q=(.*)/s)[1]}`;
+                }/pages/desktop/search.html?q=${e.target.value.split(/\?q=(.*)/s)[1]}`;
             } else if (e.target.value.startsWith("http://www.site.com/")) {
                 errorCode = "403";
             }
         } else if (e.target.value.includes("/")) {
             src = `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/browserError.html?url=${e.target.value}`;
+            }/pages/desktop/browserError.html?url=${e.target.value}`;
         } else {
             src = `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/search.html?q=${e.target.value}`;
+            }/pages/desktop/search.html?q=${e.target.value}`;
         }
 
         const urlExists = await checkURL(src);
@@ -124,7 +124,7 @@ export default class Browser extends Window {
         if (!urlExists) {
             src = `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/browserError.html?url=${e.target.value}&code=${errorCode}`;
+            }/pages/desktop/browserError.html?url=${e.target.value}&code=${errorCode}`;
         }
 
         this.#iframe.src = src;
@@ -141,7 +141,7 @@ export default class Browser extends Window {
 
         iframe.src = `http://${window.location.hostname}${
             isDev ? ":3000" : ""
-        }/pages/browser.html`;
+        }/pages/desktop/browser.html`;
 
         iframe.onload = this.#updateSearchBarURL.bind(this);
 
@@ -201,7 +201,7 @@ export default class Browser extends Window {
             url.href ===
             `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/browser.html`
+            }/pages/desktop/browser.html`
         ) {
             this.#searchBar.value = `http://www.browser.com`;
         }

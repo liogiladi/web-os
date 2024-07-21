@@ -9,8 +9,8 @@ import TasksData from "/utils/tasksData.js";
  */
 
 const notificationsIconsSrcs = [
-    "../media/audio-icon.svg",
-    "../media/wifi-icon.svg",
+    "/media/audio-icon.svg",
+    "/media/wifi-icon.svg",
 ];
 
 export default class Taskbar extends HTMLElement {
@@ -91,7 +91,7 @@ export default class Taskbar extends HTMLElement {
 
         const github = document.createElement("a");
         const githubIcon = document.createElement("img");
-        githubIcon.src = "../../media/github-icon.svg";
+        githubIcon.src = "/media/github-icon.svg";
         github.href = "https://github.com/liogiladi";
         github.target = "_blank";
         github.append(githubIcon);
