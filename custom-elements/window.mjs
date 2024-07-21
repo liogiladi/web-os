@@ -4,7 +4,6 @@ import makeDraggable from "/utils/makeDraggable.js";
 import readFileContents from "/utils/readFileContents.js";
 import reorderedDraggableElements from "/utils/reorderdDraggableElements.js";
 import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
-import { TASKBAR_HEIGHT } from "/utils/constants.js";
 
 const sizeTransition =
     "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
@@ -69,9 +68,11 @@ export default class Window extends HTMLElement {
             Window.orderedWindowIds.enqueue(this.id);
         }
 
+        const taskbarHeight = Taskbar.getHeight();
+
         this.windowedStyles = {
             width: `min(${this._defaultWindowSize.width}, 100vw)`,
-            height: `min(${this._defaultWindowSize.height}, calc(100vh - ${TASKBAR_HEIGHT}))`,
+            height: `min(${this._defaultWindowSize.height}, calc(100vh - ${taskbarHeight}px))`,
             transform: `translate(0,0)`,
             left: 0,
             top: 0,
@@ -79,7 +80,9 @@ export default class Window extends HTMLElement {
         };
 
         this.style.zIndex = 1000;
-        this.style.borderRadius = "4px";
+        this.style.borderRadius = "0.25rem";
+        this.style.minWidth = this._defaultWindowSize.width;
+        this.style.minHeight = this._defaultWindowSize.height;
 
         /* ------------ buttons ------------- */
         const buttons = document.createElement("div");
@@ -241,15 +244,19 @@ export default class Window extends HTMLElement {
         }
 
         this.style.width = this._fullscreen
-            ? "100vw"
+            ? "calc(100vw - 2px)"
             : this.windowedStyles.width;
+
+        const taskbarHeight = Taskbar.getHeight();
+
         this.style.height = this._fullscreen
-            ? `calc(100vh - ${TASKBAR_HEIGHT})`
+            ? `calc(100vh - ${taskbarHeight + 2}px)`
             : this.windowedStyles.height;
+
         this.style.transform = this._fullscreen
             ? "translate(0,0)"
             : this.windowedStyles.transform;
-        this.style.borderRadius = this._fullscreen ? "0px" : "4px";
+        this.style.borderRadius = this._fullscreen ? "0px" : "0.25rem";
 
         // Disable draggers
         this.querySelectorAll(".dragger").forEach((el) => {
@@ -481,16 +488,20 @@ export default class Window extends HTMLElement {
         if (
             newDimensions.width >=
                 Number.parseFloat(this._defaultWindowSize.width) &&
-            e.clientX <= window.innerWidth
+            e.clientX <= window.innerWidth - 11 &&
+            e.clientX >= 0
         ) {
             this.style.width = newDimensions.width + "px";
             translates[0] += difference.x * translatesFactors.x;
         }
 
+        const taskbarHeight = Taskbar.getHeight();
+
         if (
             newDimensions.height >=
                 Number.parseFloat(this._defaultWindowSize.height) &&
-            e.clientY <= window.innerHeight - Number.parseFloat(TASKBAR_HEIGHT)
+            e.clientY <= window.innerHeight - taskbarHeight - 10 &&
+            e.clientY >= 0
         ) {
             this.style.height = newDimensions.height + "px";
             translates[1] += difference.y * translatesFactors.y;

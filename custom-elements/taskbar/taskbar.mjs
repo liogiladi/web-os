@@ -38,6 +38,8 @@ export default class Taskbar extends HTMLElement {
     /** @type {number} */
     #timeIntervalId;
 
+    height;
+
     constructor() {
         super();
         Taskbar.instance = this;
@@ -177,5 +179,14 @@ export default class Taskbar extends HTMLElement {
 
     disconnectedCallback() {
         clearInterval(this.#timeIntervalId);
+    }
+
+    static getHeight() {
+        if(!this.instance.height) {
+            this.instance.height  = this.instance.taskbarContent.getBoundingClientRect().height;
+            return this.instance.height;
+        }
+
+        return this.instance.height;
     }
 }

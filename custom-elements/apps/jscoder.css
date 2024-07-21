@@ -9,14 +9,14 @@
 	box-sizing: border-box;
 	display: block;
 	width: 100%;
-	height: calc(100% - 35px);
+	height: calc(100% - 2.188rem);
 	overflow-y: auto;
 	word-break: break-all;
 }
 
 .editor {
-	padding-inline: 10px;
-	border-block: 10px solid black;
+	padding-inline: 0.625rem;
+	border-block: 0.625rem solid black;
 	color: transparent;
 	caret-color: white;
 	cursor: text;
@@ -34,10 +34,10 @@ br::selection {
 
 .editorView {
 	position: absolute;
-	left: 10px;
-	top: 10px;
-	width: calc(100% - 20px);
-	height: calc(100% - 55px);
+	left: 0.625rem;
+	top: 0.625rem;
+	width: calc(100% - 1.25rem);
+	height: calc(100% - 3.438rem);
 	color: #79caff;
 	overflow: hidden;
 	user-select: none;
@@ -74,12 +74,12 @@ br::selection {
 
 .jscoder-content footer {
 	position: fixed;
-	top: calc(100% - 35px);
+	top: calc(100% - 2.188rem);
 	display: grid;
 	grid-template-columns: 1fr auto;
 	width: 100%;
 	background-color: black;
-	max-height: 35px;
+	max-height: 2.188rem;
 	overflow: hidden;
 	transition: max-height 0.3s;
 }
@@ -109,8 +109,9 @@ br::selection {
 	background: none;
 	border: 0;
 	user-select: none;
-	padding-inline: 10px;
-	height: 35px;
+	padding-inline: 0.625rem;
+	font-size: 1rem;
+	height: 2.188rem;
 }
 
 .run-button:active {
@@ -120,7 +121,7 @@ br::selection {
 .jscoder-content[data-fullscreen="true"] .editor,
 .jscoder-content[data-fullscreen="true"] .editorView {
 	flex: 1;
-	height: calc(50% - 10px);
+	height: calc(50% - 0.625rem);
 }
 
 .jscoder-content[data-fullscreen="true"] footer {

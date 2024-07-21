@@ -138,7 +138,7 @@ export default class JSCoder extends Window {
 				const brs = (footer.innerHTML.match(/<br>/g) || []).length;
 				footer.style.maxHeight = brs > 0 ? `${brs * 35}px` : "100%";
 			} else {
-				footer.style.maxHeight = "35px";
+				footer.style.maxHeight = "2.188rem";
 			}
 		});
 	}

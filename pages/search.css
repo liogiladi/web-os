@@ -14,7 +14,7 @@ body > header {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 10px 20px;
+    padding: 0.625rem 1.25rem;
     border-bottom: 3px solid;
     border-image: linear-gradient(to right, #ffee00, #ff6200) 30;
 }
@@ -30,7 +30,7 @@ body > header h1 {
 #search-bar {
     position: relative;
     width: 100%;
-    transform: translateY(4px);
+    transform: translateY(0.25rem);
 }
 
 #search-bar input {

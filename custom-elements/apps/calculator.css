@@ -1,9 +1,9 @@
 .calcs-content {
-    --gap: 5px;
+    --gap: 0.313rem;
     display: grid;
     grid-template-rows: 1fr 4fr;
     gap: var(--gap);
-    padding: 10px;
+    padding: 0.625rem;
     transition: opacity 0.1s;
     container-type: size;
 }
@@ -34,11 +34,11 @@
 }
 
 .calcs-content .misc .name-and-model {
-    padding: 5px;
+    padding: 0.313rem;
     width: calc(100% / 7 * 4);
     backdrop-filter: invert(1);
     color: white;
-    border: 5px inset #00000073;
+    border: 0.313rem inset #00000073;
     box-shadow: inset 0 0 36px 6px #000008a3;
 }
 
@@ -73,7 +73,7 @@
     display: block;
     width: 100%;
     height: 100%;
-    padding: 5px;
+    padding: 0.313rem;
     box-sizing: border-box;
     left: 0;
     top: 0;
@@ -139,7 +139,7 @@
 }
 
 .calcs-content button {
-    border: 4px outset #00000099;
+    border: 0.25rem outset #00000099;
     background: linear-gradient(45deg, #282828, #9a9a9a63);
     backdrop-filter: invert(1) brightness(2.5);
     cursor: pointer;

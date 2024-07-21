@@ -1,8 +1,8 @@
 .browser {
-    --input-height: 45px;
+    --input-height: 2.813rem;
 
     display: grid;
-    padding: 7px;
+    padding: 0.438rem;
     grid-template-rows: var(--input-height) calc(100% - var(--input-height));
     padding-top: 0;
 }
@@ -14,12 +14,13 @@
 }
 
 .top-bar button {
-    height: calc(100% - 14px);
+    height: calc(100% - 0.875rem);
     aspect-ratio: 1/1;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     border: 0;
     font-weight: 700;
     transition: transform 0.2s;
+    font-size: 1rem;
 }
 
 .top-bar button:not(:disabled):active {
@@ -37,7 +38,8 @@
     border: 0;
     border-radius: 3px;
     outline: 2px solid transparent;
-    padding-inline: 10px;
+    padding-inline: 0.625rem;
+    font-size: 1rem;
 }
 
 .browser input:focus {
@@ -48,7 +50,7 @@
     box-sizing: border-box;
     width: 100%;
     height: 100%;
-    border-radius: 5px;
+    border-radius: 0.313rem;
     border: 0;
     background-color: white;
 }

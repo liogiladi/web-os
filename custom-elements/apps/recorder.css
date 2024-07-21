@@ -40,7 +40,7 @@
     .previews
     > *:nth-child(1) {
     outline: 1px solid red;
-    outline-offset: 4px;
+    outline-offset: 0.25rem;
     animation: flash-outline infinite 1.5s;
 }
 

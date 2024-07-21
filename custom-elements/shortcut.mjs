@@ -112,8 +112,8 @@ export default class Shortcut extends HTMLElement {
         this.textarea.style.display = "unset";
         this.textarea.focus();
         this.textarea.scrollTop = 0;
-        this.textarea.style.bottom = target.innerHTML.length < 8 ? "calc(20px - 1rem)" : "-1rem";
-        this.textarea.style.height = target.innerHTML.length > 8 ? "unset" : "20px";
+        this.textarea.style.bottom = target.innerHTML.length < 8 ? "calc(1.25rem - 1rem)" : "-1rem";
+        this.textarea.style.height = target.innerHTML.length > 8 ? "unset" : "1.25rem";
     }
 
     deselectInput({ target }) {

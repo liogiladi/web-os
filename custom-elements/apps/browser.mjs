@@ -223,10 +223,5 @@ export default class Browser extends Window {
         } else {
             this.#forwardOrBack = false;
         }
-
-        console.log({
-            len: this.#historyLength,
-            i: this.#historyIndex,
-        });
     }
 }

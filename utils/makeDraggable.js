@@ -1,4 +1,4 @@
-import { TASKBAR_HEIGHT } from "./constants.js";
+import Taskbar from "../custom-elements/taskbar/taskbar.mjs";
 
 var _previousMouseEvent = null;
 
@@ -67,6 +67,8 @@ function drag(event) {
             y: computedTranslation.y + deltaY,
         };
 
+        const taskbarHeight = Taskbar.getHeight();
+
         // Prevent drag if element is exiting viewport
         const rect = this.getBoundingClientRect();
         const exceedsViewport = {
@@ -75,7 +77,7 @@ function drag(event) {
             top: rect.y + deltaY <= 0,
             bottom:
                 rect.y + rect.height + deltaY >=
-                window.innerHeight - Number.parseInt(TASKBAR_HEIGHT),
+                window.innerHeight - taskbarHeight,
         };
 
         if (
@@ -86,11 +88,12 @@ function drag(event) {
         ) {
             newTranslation.x = computedTranslation.x;
         }
+
         if (
             exceedsViewport.top ||
             event.pageY <= 0 ||
             exceedsViewport.bottom ||
-            event.pageY >= window.innerHeight - Number.parseInt(TASKBAR_HEIGHT)
+            event.pageY >= window.innerHeight - taskbarHeight
         ) {
             newTranslation.y = computedTranslation.y;
         }

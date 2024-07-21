@@ -3,7 +3,7 @@
     bottom: 0;
     z-index: 9999;
     width: 100%;
-    height: 67px;
+    height: 4.188rem;
     transition: 0.3s ease-in-out;
 }
 
@@ -15,7 +15,7 @@
     height: 100%;
     background: #0000001a;
     transition: 0.3s ease-in-out;
-    backdrop-filter: blur(9px);
+    backdrop-filter: blur(0.563rem);
 }
 
 #taskbar[data-settings-open=true] {
@@ -24,7 +24,7 @@
 
 #taskbar[data-settings-open=true]::before {
     background: #00000069;
-	backdrop-filter: blur(25px);
+	backdrop-filter: blur(1.563rem);
 }
 
 #taskbar #settings-buttons {
@@ -46,8 +46,8 @@
 
 #settings-buttons button {
 	display: block;
-    width: 45px;
-    height: 45px;
+    width: 2.813rem;
+    height: 2.813rem;
 	background-size: cover;
     border: 0;
     background-color: transparent;
@@ -68,7 +68,7 @@
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 67px;
+    height: 4.188rem;
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-between;
@@ -83,13 +83,13 @@
 }
 
 #taskbar-notifications > * {
-    border-radius: 5px;
+    border-radius: 0.313rem;
     transition: background-color 0.1s;
 }
 
 #taskbar-notifications > .notification {
     height: fit-content;
-    width: 22px;
+    width: 1.375rem;
     padding: 0.5rem;
     aspect-ratio: 1/1;
 }
@@ -143,7 +143,7 @@
 }
 
 #taskbar-social-links a {
-    width: 40px;
+    width: 2.5rem;
     aspect-ratio: 1/1;
     container-type: size;
     opacity: 0.2;
@@ -159,6 +159,6 @@
 }
 
 #taskbar-social-links a img {
-    width: 40px;
+    width: 2.5rem;
     aspect-ratio: 1/1;
 }

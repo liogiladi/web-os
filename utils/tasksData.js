@@ -59,8 +59,6 @@ export default class TasksData {
                 `#task-${taskName} .amount`
             );
 
-			console.log(tasksAmountElement);
-
             if (this.data.get(taskName).count === 1)
                 tasksAmountElement.style.opacity = 0;
 
@@ -76,7 +74,6 @@ export default class TasksData {
             const taskElement = Taskbar.shadowRoot.getElementById(
                 `task-${taskName}`
             );
-            console.log(taskName);
 
             taskElement.classList.add("task-unload-animation");
 

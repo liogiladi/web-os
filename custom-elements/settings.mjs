@@ -1,4 +1,5 @@
 import readFileContents from "../utils/readFileContents.js";
+import Taskbar from "./taskbar/taskbar.mjs";
 
 /**
  * @typedef {object} Theme
@@ -168,12 +169,14 @@ export default class Settings extends HTMLElement {
         const resolutionTitle = document.createElement("h2");
         resolutionTitle.innerHTML = "Resolution";
 
+        const resolution = localStorage.getItem("resolution");
+
         const slider = document.createElement("input");
         Object.assign(slider, {
             type: "range",
-            min: 1,
-            max: 100,
-            value: 50,
+            min: 20,
+            max: 60,
+            value: resolution ? (50/16) * Number.parseFloat(resolution) : 40,
             step: 9.9,
             oninput: ((e) => this.#changeResolution(e.target.value)).bind(this),
         });
@@ -193,7 +196,6 @@ export default class Settings extends HTMLElement {
      * @param {Theme} theme
      */
     #changeTheme(key, theme) {
-        //TODO: theme
         delete this.querySelector("#theme-settings button[data-selected]")
             .dataset.selected;
         this.querySelector(`#${key}-theme`).dataset.selected = "";
@@ -205,8 +207,14 @@ export default class Settings extends HTMLElement {
     }
 
     #changeResolution(value) {
-        //TODO: resolution
-        console.log(value);
+        const resolution = `${value * (16 / 50)}px`;
+        localStorage.setItem("resolution", resolution);
+
+        const root = document.querySelector(":root");
+        root.style.setProperty("--resolution", resolution);
+
+        Taskbar.instance.height = undefined;
+        Taskbar.instance.height = Taskbar.getHeight();
     }
 
     #onProfilePictureChange(e) {

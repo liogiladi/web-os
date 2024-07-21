@@ -25,6 +25,10 @@
         root.style.setProperty("--theme-filter", theme.filter);
         root.style.setProperty("--window-bg", theme.windowBg);
 
+        const resolution = localStorage.getItem("resolution") || "16px";    
+        root.style.setProperty("--resolution", resolution);
+
+
         FileStorage.init();
 
         // init shortcuts

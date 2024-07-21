@@ -16,7 +16,7 @@ desktop-clock::before {
     border-radius: 50%;
     transform-origin: top left;
     scale: 1.1;
-    translate: -7px -7px;
+    translate: -0.438rem -0.438rem;
     filter: var(--theme-filter);
 }
 
@@ -94,8 +94,8 @@ desktop-clock::before {
     bottom: 50%;
     left: 50%;
     transform-origin: bottom;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: 0.313rem;
+    border-top-right-radius: 0.313rem;
 }
 
 .clock-container .seconds-hand {
@@ -112,7 +112,7 @@ desktop-clock::before {
 }
 
 .clock-container .hours-hand {
-    width: 4px;
+    width: 0.25rem;
     height: 30%;
     background-color: rgb(0, 0, 0);
 }
