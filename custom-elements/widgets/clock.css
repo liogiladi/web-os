@@ -17,6 +17,7 @@ desktop-clock::before {
     transform-origin: top left;
     scale: 1.1;
     translate: -7px -7px;
+    filter: var(--theme-filter);
 }
 
 .clock-container {
@@ -24,7 +25,18 @@ desktop-clock::before {
     width: 100%;
     height: 100%;
     border-radius: 50%;
+}
+
+.clock-container::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
     background: linear-gradient(white, #FF67F8);
+    filter: var(--theme-filter);
 }
 
 .clock-container::after {

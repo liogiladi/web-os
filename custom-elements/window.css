@@ -19,11 +19,7 @@
     width: 100%;
     height: 100%;
     border-radius: 4px;
-    background: linear-gradient(
-        0deg,
-        rgba(209, 90, 207, 0.8) 0%,
-        rgba(250, 167, 249, 0.8) 100%
-    );
+    background: var(--window-bg);
     box-shadow: -1px 5px 15px -6px rgba(0, 0, 0, 0.459);
     backdrop-filter: blur(30px) saturate(3);
     z-index: -1;

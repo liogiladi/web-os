@@ -20,7 +20,7 @@ body::before {
 	height: 100vh;
 	background-image: url("/media/bg.svg");
 	background-size: cover;
-	filter: saturate(1.2);
+	filter: saturate(1.2) var(--theme-filter);
 }
 
 .cursor-override * {
@@ -47,6 +47,7 @@ main[data-preview-window] #windows > *:not([data-window-to-preview]) {
     transform: translate(-50%, -50%);
 	transition: transform 0.2s;
 	cursor: pointer;
+	filter: var(--theme-filter);
 }
 
 body:not(.cursor-override) #os-logo:hover {
@@ -81,6 +82,7 @@ body:not(.cursor-override) #os-logo:active {
 	transition: background-color 0.1s;
 	cursor: pointer;
 	transition: filter 0.3s, transform 0.1s;
+	filter: var(--theme-filter)
 }
 
 #theme-button:hover {

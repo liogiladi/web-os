@@ -29,6 +29,9 @@ export default class Taskbar extends HTMLElement {
     /** @type {HTMLElement} */
     settingsButtons;
 
+    /** @type {HTMLElement} */
+    tasksWrapper;
+
     /** @type {TasksData}  */
     static tasks = new TasksData();
 
@@ -124,6 +127,9 @@ export default class Taskbar extends HTMLElement {
                 this.container.dataset.settingsOpen = false;
                 this.settings.classList.remove("settings-unload-animation");
                 this.settingsButtons.classList.remove("settings-unload-animation");
+
+                this.tasksWrapper.style.opacity = 1;
+                this.tasksWrapper.style.pointerEvents = "all";
             }, 300);
         };
 
@@ -134,9 +140,9 @@ export default class Taskbar extends HTMLElement {
         this.taskbarContent.append(this.settingsButtons);
 
         // Tasks
-        const tasks = document.createElement("div");
-        tasks.id = "taskbar-tasks";
-        this.taskbarContent.append(tasks);
+        this.tasksWrapper = document.createElement("div");
+        this.tasksWrapper.id = "taskbar-tasks";
+        this.taskbarContent.append(this.tasksWrapper);
 
         this.append(this.container);
 
@@ -148,7 +154,7 @@ export default class Taskbar extends HTMLElement {
                     this.childNodes.length > 0
                 ) {
                     while (this.childNodes.length > 0) {
-                        tasks.appendChild(this.childNodes[0]);
+                        this.tasksWrapper.appendChild(this.childNodes[0]);
                     }
                 }
             }

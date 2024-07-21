@@ -1,14 +1,47 @@
 import readFileContents from "../utils/readFileContents.js";
 
 /**
- * @type {Record<string, string>}
+ * @typedef {object} Theme
+ * @prop {string} [name]
+ * @prop {string} [filter]
+ * @prop {string} windowBg
  */
-const THEMES_FILTERS = {
-    purple: "",
-    blue: "hue-rotate(264deg)",
-    red: "hue-rotate(50deg)",
-    yellow: "hue-rotate(111deg) brightness(1.5)",
-};
+
+/**
+ * @type {Readonly<Record<string, Theme>>}
+ */
+export const THEMES_FILTERS = Object.freeze({
+    purple: {
+        windowBg: `linear-gradient(
+            0deg,
+            rgba(209, 90, 207, 0.8) 0%,
+            rgba(250, 167, 249, 0.8) 100%
+        )`,
+    },
+    blue: {
+        filter: "hue-rotate(264deg)",
+        windowBg: `linear-gradient(
+            0deg,
+            rgb(90 154 209 / 80%) 0%,
+            rgb(167 194 250 / 80%) 100%
+        )`,
+    },
+    red: {
+        filter: "hue-rotate(50deg)",
+        windowBg: `linear-gradient(
+            0deg,
+            rgb(209 90 102 / 80%) 0%,
+            rgb(250 167 188 / 80%) 100%
+        )`,
+    },
+    yellow: {
+        filter: "hue-rotate(111deg) brightness(1.5)",
+        windowBg: `linear-gradient(
+            0deg, rgb(209 195 90 / 80%) 0%,
+            rgb(250 227 167 / 80%) 100%
+        )`,
+    },
+});
 
 export default class Settings extends HTMLElement {
     /** @type {HTMLImageElement} */
@@ -37,9 +70,11 @@ export default class Settings extends HTMLElement {
         const themes = document.createElement("div");
         themes.id = "themes";
 
-        const currentTheme = localStorage.getItem("theme") || "purple";
+        const currentTheme = localStorage.getItem("theme")
+            ? JSON.parse(localStorage.getItem("theme")).name
+            : "purple";
 
-        for (const [key, filter] of Object.entries(THEMES_FILTERS)) {
+        for (const [key, theme] of Object.entries(THEMES_FILTERS)) {
             const themeButton = document.createElement("button");
             themeButton.id = `${key}-theme`;
 
@@ -47,9 +82,10 @@ export default class Settings extends HTMLElement {
             bg.src = `/media/${key}-theme.png`;
 
             themeButton.append(bg);
-            themeButton.onclick = () => this.#changeTheme.bind(this)(key, filter);
+            themeButton.onclick = () =>
+                this.#changeTheme.bind(this)(key, theme);
 
-            if(key === currentTheme) themeButton.dataset.selected = "";
+            if (key === currentTheme) themeButton.dataset.selected = "";
             themes.append(themeButton);
         }
 
@@ -67,21 +103,21 @@ export default class Settings extends HTMLElement {
 
         const form = document.createElement("form");
         form.onsubmit = this.#onAccountInfoSubmit.bind(this);
-        
+
         //Profile
         const profilePictureInput = document.createElement("input");
         Object.assign(profilePictureInput, {
             type: "file",
             onchange: this.#onProfilePictureChange.bind(this),
-            hidden: true
-        })
-        
+            hidden: true,
+        });
+
         const profileImgWrapper = document.createElement("div");
         profileImgWrapper.id = "profile-img-wrapper";
-        profileImgWrapper.onclick=() => profilePictureInput.click();
+        profileImgWrapper.onclick = () => profilePictureInput.click();
 
         this.#profileImg = document.createElement("img");
-        this.#profileImg.src = "/media/default-profile-pic.png"
+        this.#profileImg.src = "/media/default-profile-pic.png";
         profileImgWrapper.append(this.#profileImg);
 
         // Fields
@@ -103,7 +139,7 @@ export default class Settings extends HTMLElement {
         inputs.id = "inputs";
         inputs.append(nameInput, passInput);
 
-        if(accountInfo) {
+        if (accountInfo) {
             this.#profileImg.src = accountInfo.profilePicSrc;
             nameInput.value = accountInfo.name;
             passInput.value = "password";
@@ -112,10 +148,15 @@ export default class Settings extends HTMLElement {
         const submitButton = document.createElement("input");
         Object.assign(submitButton, {
             type: "submit",
-            value: "save"
+            value: "save",
         });
 
-        form.append(profilePictureInput, profileImgWrapper, inputs, submitButton);
+        form.append(
+            profilePictureInput,
+            profileImgWrapper,
+            inputs,
+            submitButton
+        );
 
         accountSettings.append(accountTitle, form);
 
@@ -134,7 +175,7 @@ export default class Settings extends HTMLElement {
             max: 100,
             value: 50,
             step: 9.9,
-            oninput: ((e) => this.#changeResolution(e.target.value)).bind(this)
+            oninput: ((e) => this.#changeResolution(e.target.value)).bind(this),
         });
 
         resoultionSettings.append(resolutionTitle, slider);
@@ -147,11 +188,20 @@ export default class Settings extends HTMLElement {
         this.append(style, themeSettings, accountSettings, resoultionSettings);
     }
 
-    #changeTheme(key, filter) {
+    /**
+     * @param {string} key
+     * @param {Theme} theme
+     */
+    #changeTheme(key, theme) {
         //TODO: theme
-        delete this.querySelector("#theme-settings button[data-selected]").dataset.selected;
+        delete this.querySelector("#theme-settings button[data-selected]")
+            .dataset.selected;
         this.querySelector(`#${key}-theme`).dataset.selected = "";
-        console.log(filter);
+
+        localStorage.setItem("theme", JSON.stringify({ name: key, ...theme }));
+        const root = document.querySelector(":root");
+        root.style.setProperty("--theme-filter", theme.filter);
+        root.style.setProperty("--window-bg", theme.windowBg);
     }
 
     #changeResolution(value) {
@@ -159,14 +209,13 @@ export default class Settings extends HTMLElement {
         console.log(value);
     }
 
-
     #onProfilePictureChange(e) {
         //TODO: update img by file select
     }
 
     /**
-     * 
-     * @param {Event} e 
+     *
+     * @param {Event} e
      */
     #onAccountInfoSubmit(e) {
         //TODO: account submit
