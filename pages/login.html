@@ -78,9 +78,31 @@
         </main>
     </body>
     <script type="module">
+        const logo = document.querySelector("#os-logo");
+
+        const fromLogout = localStorage.getItem("logout");
+        if (fromLogout) {
+            localStorage.removeItem("logout");
+
+            const transitionWidth = localStorage.getItem(
+                "logo-width-from-login"
+            );
+
+            if (transitionWidth) {
+                localStorage.removeItem("logo-width-from-login");
+                logo.style.width = transitionWidth;
+            }
+
+            logo.style.opacity = 1;
+        } else {
+            logo.dataset.animate = "true";
+        }
+
+        localStorage.setItem("logged", "");
+
+
         let userInfo = JSON.parse(localStorage.getItem("user-info") || "false");
 
-        const logo = document.querySelector("#os-logo");
         const submitButton = document.querySelector("input[type=submit]");
 
         const form = document.querySelector("form");
@@ -93,31 +115,38 @@
             .addEventListener("change", handleProfileChange);
 
         // Sequences
-        setTimeout(() => {
-            //logo.style.transform = "translate(0, -40vh)";
-            logo.style.scale = "0.3";
-            logo.style.top = "10vh";
+        setTimeout(
+            () => {
+                //logo.style.transform = "translate(0, -40vh)";
+                logo.style.scale = "0.2";
+                logo.style.top = "10vh";
 
-            setTimeout(() => {
-                if (localStorage.getItem("user-info")) {
-                    const userProfile = document.querySelector("#user-profile");
-                    userProfile.removeAttribute("hidden");
-                    userProfile.src =
-                        userInfo.profilePic || "/media/default-profile-pic.png";
+                setTimeout(() => {
+                    if (localStorage.getItem("user-info")) {
+                        const userProfile =
+                            document.querySelector("#user-profile");
+                        userProfile.removeAttribute("hidden");
+                        userProfile.src =
+                            userInfo.profilePic ||
+                            "/media/default-profile-pic.png";
 
-                    const usernameInput =
-                        document.querySelector("[name=username]");
-                    usernameInput.disabled = true;
-                    usernameInput.value = userInfo.username;
+                        const usernameInput =
+                            document.querySelector("[name=username]");
+                        usernameInput.disabled = true;
+                        usernameInput.value = userInfo.username;
 
-                    const submitButton =
-                        document.querySelector("input[type=submit]");
-                    submitButton.value = "Sign in";
+                        const submitButton =
+                            document.querySelector("input[type=submit]");
+                        submitButton.value = "Sign in";
 
-                    form.removeAttribute("hidden");
-                } else form.removeAttribute("hidden");
-            }, 1000);
-        }, 2400);
+                        form.removeAttribute("hidden");
+
+                        resetMessage.style.opacity = 1;
+                    } else form.removeAttribute("hidden");
+                }, 1000);
+            },
+            fromLogout ? 100 : 2400
+        );
 
         // Form
         let profilePicDataURL;
@@ -157,6 +186,8 @@
                     }, 600);
                     return;
                 }
+
+                resetMessage.style.opacity = 0;
 
                 return continueToDesktop();
             }
@@ -212,13 +243,17 @@
                 setTimeout(() => {
                     h1.style.opacity = 0;
                     logo.style.transition = "0.7s 1.2s ease-out";
-                    logo.style.width = "clamp(11.063rem, 20%, 15.5rem)";
                     logo.style.top = "50%";
                     logo.style.scale = "1";
 
                     setTimeout(() => {
                         // Redirect To Desktop
                         localStorage.setItem("from-boot", "true");
+                        localStorage.setItem("logged", "true");
+                        localStorage.setItem(
+                            "logo-width-from-login",
+                            getComputedStyle(logo).width
+                        );
                         window.location.replace("desktop/index.html");
                     }, 2000);
                 }, 2000);
@@ -227,29 +262,36 @@
 
         // Reset
         const resetBar = document.querySelector("#reset-bar");
-        window.onkeydown = (e) => {
-            if (e.key === "F10") {
-                if(resetBar.value >= 100) {
-                    resetBar.remove();
-                    form.remove();
-                    logo.remove();
-                    document.querySelector("#reset-message").remove();
-                
-                    localStorage.removeItem("user-info");
-                    
-                    setTimeout(() => {
-                        window.location.replace("boot.html");
-                    }, 1500);
+        const resetMessage = document.querySelector("#reset-message");
+
+        if (!userInfo) {
+            resetBar.remove();
+            resetMessage.remove();
+        } else {
+            window.onkeydown = (e) => {
+                if (e.key === "F10") {
+                    if (resetBar.value >= 100) {
+                        resetBar.remove();
+                        form.remove();
+                        logo.remove();
+                        resetMessage.remove();
+
+                        localStorage.removeItem("user-info");
+
+                        setTimeout(() => {
+                            window.location.replace("boot.html");
+                        }, 1500);
+                    }
+
+                    resetBar.value += 1.5;
                 }
+            };
 
-                resetBar.value += 1.5;
-            }
-        };
-
-        window.onkeyup = (e) => {
-            if (e.key === "F10" && resetBar.value < 100) {
-                resetBar.value = 0;
-            }
-        };
+            window.onkeyup = (e) => {
+                if (e.key === "F10" && resetBar.value < 100) {
+                    resetBar.value = 0;
+                }
+            };
+        }
     </script>
 </html>

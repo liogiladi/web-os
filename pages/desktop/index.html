@@ -19,15 +19,16 @@
         import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
         import { THEMES_FILTERS } from "/custom-elements/settings.mjs";
 
-        const theme = JSON.parse(String(localStorage.getItem("theme"))) || THEMES_FILTERS.purple;
-        
+        const theme =
+            JSON.parse(String(localStorage.getItem("theme"))) ||
+            THEMES_FILTERS.purple;
+
         const root = document.querySelector(":root");
         root.style.setProperty("--theme-filter", theme.filter);
         root.style.setProperty("--window-bg", theme.windowBg);
 
-        const resolution = localStorage.getItem("resolution") || "16px";    
+        const resolution = localStorage.getItem("resolution") || "16px";
         root.style.setProperty("--resolution", resolution);
-
 
         FileStorage.init();
 
@@ -61,7 +62,7 @@
     <body>
         <div id="transition-layer">
             <img
-                id="transition-logo"
+                class="center-logo"
                 src="/media/logo-basic.svg"
                 alt="os-logo"
                 draggable="false"
@@ -71,6 +72,7 @@
             <!-- <settings-menu></settings-menu> -->
             <img
                 id="os-logo"
+                class="center-logo"
                 src="/media/os-logo.png"
                 alt="os-logo"
                 draggable="false"
@@ -105,13 +107,13 @@
             </section>
             <section id="windows"></section>
 
-            <ul
+            <!-- <ul
                 id="context-menu"
                 tabindex="0"
                 onblur="(event) => console.log(event)"
             >
                 <li><button>Edit mode</button></li>
-            </ul>
+            </ul> -->
 
             <desktop-clock></desktop-clock>
         </main>
@@ -119,20 +121,37 @@
     </body>
 
     <script>
+        if(!localStorage.getItem("logged")) {
+            window.location.replace("../login.html");   
+        };
+
         const transitionLayer = document.querySelector("#transition-layer");
-        if(localStorage.getItem("from-boot")) {
-            setTimeout(() => {
-                localStorage.removeItem("from-boot");
-            }, 1500);
-        } else {
-            transitionLayer.style.display = "none";
-            transitionLayer.style.opacity = 0;
-            transitionLayer.style.pointerEvents = "none";
+        const transitionLogo = transitionLayer.querySelector("img");
+        
+        const transitionWidth = localStorage.getItem("logo-width-from-login");
+        if(transitionWidth) {
+            localStorage.removeItem("logo-width-from-login");
+            transitionLogo.style.width = transitionWidth;
         }
 
+        function hideTransitionLayer() {
+            transitionLayer.style.opacity = 0;
+            transitionLayer.style.pointerEvents = "none";
+            transitionLayer.style.userSelect = "none";
+            transitionLayer.className = "";
+        }
+
+        if (localStorage.getItem("from-boot")) {
+            setTimeout(() => {
+                localStorage.removeItem("from-boot");
+                hideTransitionLayer();
+            }, 200);
+        } else {
+            hideTransitionLayer();
+        }
 
         var main = document.querySelector("main");
-        var menu = document.querySelector("#context-menu");
+        /* var menu = document.querySelector("#context-menu");
         menu.style.display = "none";
 
         window.addEventListener("contextmenu", (event) => {
@@ -147,7 +166,7 @@
 
         menu.onblur = (event) => {
             menu.style.display = "none";
-        };
+        }; */
 
         window.L = L;
     </script>

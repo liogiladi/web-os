@@ -137,6 +137,7 @@ export default class Taskbar extends HTMLElement {
 
         const signOutButton = document.createElement("button");
         signOutButton.style.backgroundImage = `url("/media/out-button.png")`;
+        signOutButton.onclick = this.#logout.bind(this);
 
         this.settingsButtons.append(powerOffButton, closeButton, signOutButton);
         this.taskbarContent.append(this.settingsButtons);
@@ -179,6 +180,19 @@ export default class Taskbar extends HTMLElement {
 
     disconnectedCallback() {
         clearInterval(this.#timeIntervalId);
+    }
+
+    #logout() {
+        const transitionLayer = document.querySelector("#transition-layer");
+        transitionLayer.style.opacity = 1;
+        transitionLayer.style.pointerEvents = "all";
+        localStorage.setItem("logout", "true");
+        localStorage.setItem("logo-width-from-login", getComputedStyle(document.querySelector("#transition-layer img")).width);
+        localStorage.removeItem("logged");
+        
+        setTimeout(() => {
+            window.location.replace("../login.html")
+        }, 1000);
     }
 
     static getHeight() {

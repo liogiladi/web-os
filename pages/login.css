@@ -33,7 +33,7 @@ main {
     position: fixed;
     left: 50%;
     top: 50%;
-    width: min(25%, 11rem);
+    width: clamp(11.063rem, 20%, 15.5rem);
     height: fit-content;
     translate: -50% -50%;
     transform-origin: center;
@@ -41,11 +41,11 @@ main {
     overflow: visible;
 }
 
-#os-logo path {
+#os-logo[data-animate] path {
     opacity: 0;
 }
 
-#os-logo path:nth-of-type(1) {
+#os-logo[data-animate] path:nth-of-type(1) {
     animation: enterFromLeft 1.3s 0.8s ease-out forwards;
 }
 
@@ -60,7 +60,7 @@ main {
     }
 }
 
-#os-logo path:nth-of-type(2) {
+#os-logo[data-animate] path:nth-of-type(2) {
     animation: enterFromBottom 1.3s 0.8s ease-out forwards;
 }
 
@@ -75,7 +75,7 @@ main {
     }
 }
 
-#os-logo path:nth-of-type(3) {
+#os-logo[data-animate] path:nth-of-type(3) {
     animation: enterFromTop 1.3s 0.8s ease-out forwards;
 }
 
@@ -286,6 +286,8 @@ h1 {
     bottom: 10px;
     color: rgba(255, 0, 0, 0.356);
     font-family: "Boot";
+    transition: opacity 0.3s;
+    opacity: 0;
 }
 
 progress[value]::-webkit-progress-value {
