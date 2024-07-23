@@ -6,10 +6,13 @@
         <title>Document</title>
         <link rel="stylesheet" href="./login.css" />
     </head>
-    <script type="module">
+    <script>
         const resolution = localStorage.getItem("resolution") || "16px";
         const root = document.querySelector(":root");
         root.style.setProperty("--resolution", resolution);
+
+        var fromLogout = localStorage.getItem("logout");
+        root.style.setProperty("--initial-opacity", fromLogout ? 1 : 0);
     </script>
     <body>
         <main>
@@ -83,7 +86,6 @@
 
         const logo = document.querySelector("#os-logo");
 
-        const fromLogout = localStorage.getItem("logout");
         if (fromLogout) {
             localStorage.removeItem("logout");
 
@@ -98,6 +100,7 @@
 
             logo.style.opacity = 1;
         } else {
+            logo.style.opacity = 1;
             logo.dataset.animate = "true";
         }
 

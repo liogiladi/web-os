@@ -39,6 +39,7 @@ main {
     transform-origin: center;
     transition: 0.7s ease-in-out;
     overflow: visible;
+    opacity: var(--initial-opacity);
 }
 
 #os-logo[data-animate] path {
