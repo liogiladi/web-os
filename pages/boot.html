@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./boot.css">
+        <title>Document</title>
+    </head>
+    <body>
+        <h1 data-start="true">_</h1>
+    </body>
+    <script type="module">
+        import bootLines, { binaries } from "/utils/bootLines.js";
+
+        const h1 = document.querySelector("h1");
+
+        setTimeout(() => {
+            h1.dataset.start = false;
+            h1.innerHTML = "Welcome to WebOs ^_^";
+
+            // Determine by saved theme
+            h1.style.color = "purple";
+
+            let i = 0;
+
+            setTimeout(() => {
+                // Log all lines
+                let intervalId = setInterval(() => {
+                    if (i >= bootLines.length) {
+                        clearInterval(intervalId);
+
+                        // Log binaries
+                        const binariesWrapper = document.createElement("div");
+                        binariesWrapper.id = "binaries";
+                        document.body.append(binariesWrapper);
+
+                        i = 0;
+                        intervalId = setInterval(() => {
+                            if (i >= binaries.length) {
+                                clearInterval(intervalId);
+
+                                setTimeout(() => {
+                                    document.body.replaceChildren([]);
+
+                                    setTimeout(() => {
+                                        // Redirect To Login Page
+                                        window.location.replace("login.html");
+                                    }, 300);
+
+                                    return;
+                                }, 800);
+
+                                return;
+                            }
+
+                            const binary = document.createElement("span");
+                            binary.className = "binary";
+                            binary.innerHTML = binaries[i];
+                            binariesWrapper.append(binary);
+
+                            window.scrollTo({
+                                top: document.body.scrollHeight,
+                            });
+                            i++;
+                        }, 6);
+
+                        return;
+                    }
+
+                    const line = document.createElement("span");
+
+                    const lineInfo = bootLines[i];
+                    const isOK = lineInfo.result
+                        ? lineInfo.result === "OK"
+                        : true;
+
+                    line.innerHTML = `
+                    <span>[${isOK ? "&nbsp;&nbsp;" : ""}<span class='result ${
+                        !isOK ? "failed" : ""
+                    }'>${lineInfo.result || "OK"}</span>${
+                        isOK ? "&nbsp;&nbsp;" : ""
+                    }]</span>
+                    <span class='status'>${lineInfo.status}</span>
+                    <span>${lineInfo.description}</span>
+                `;
+
+                    document.body.append(line, document.createElement("br"));
+                    i++;
+                }, 30);
+            }, 1000);
+        }, 2000);
+    </script>
+</html>

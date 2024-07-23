@@ -59,6 +59,14 @@
     <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
 
     <body>
+        <div id="transition-layer">
+            <img
+                id="transition-logo"
+                src="/media/logo-basic.svg"
+                alt="os-logo"
+                draggable="false"
+            />
+        </div>
         <main>
             <!-- <settings-menu></settings-menu> -->
             <img
@@ -111,6 +119,18 @@
     </body>
 
     <script>
+        const transitionLayer = document.querySelector("#transition-layer");
+        if(localStorage.getItem("from-boot")) {
+            setTimeout(() => {
+                localStorage.removeItem("from-boot");
+            }, 1500);
+        } else {
+            transitionLayer.style.display = "none";
+            transitionLayer.style.opacity = 0;
+            transitionLayer.style.pointerEvents = "none";
+        }
+
+
         var main = document.querySelector("main");
         var menu = document.querySelector("#context-menu");
         menu.style.display = "none";

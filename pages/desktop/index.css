@@ -32,6 +32,29 @@ body::before {
 	pointer-events: none !important;
 }
 
+#transition-layer {
+	position: fixed;
+	z-index: 10000;
+	width: 100%;
+	height: 100%;
+	background: linear-gradient(black, #101010);
+	animation: fade-out 1s 0.2s forwards;
+}
+
+@keyframes fade-out {
+	from {
+		opacity: 1;
+	}
+	to {
+		opacity: 0;
+		pointer-events: none;
+	}
+}
+
+#transition-logo {
+	cursor: default !important;
+}
+
 main {
 	position: relative;
 	width: 100vw;
@@ -44,15 +67,15 @@ main[data-preview-window] #windows > *:not([data-window-to-preview]) {
 	display: none !important;
 }
 
-#os-logo {
+#os-logo, #transition-logo {
 	position: fixed;
     left: 50%;
     top: 50%;
-	width: clamp(17.063rem, 25%, 19.5rem);
+	width: clamp(11.063rem, 20%, 15.5rem);
     transform: translate(-50%, -50%);
 	transition: transform 0.2s;
 	cursor: pointer;
-	filter: var(--theme-filter);
+	filter: var(--theme-filter) drop-shadow(0 0.25rem 15px #00000001);
 }
 
 body:not(.cursor-override) #os-logo:hover {

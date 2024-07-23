@@ -6,6 +6,7 @@ import Taskbar from "./taskbar/taskbar.mjs";
  * @prop {string} [name]
  * @prop {string} [filter]
  * @prop {string} windowBg
+ * @prop {string} plainColor
  */
 
 /**
@@ -18,6 +19,7 @@ export const THEMES_FILTERS = Object.freeze({
             rgba(209, 90, 207, 0.8) 0%,
             rgba(250, 167, 249, 0.8) 100%
         )`,
+        plainColor: "fuchsia"
     },
     blue: {
         filter: "hue-rotate(264deg)",
@@ -26,6 +28,7 @@ export const THEMES_FILTERS = Object.freeze({
             rgb(90 154 209 / 80%) 0%,
             rgb(167 194 250 / 80%) 100%
         )`,
+        plainColor: "#1f8bff"
     },
     red: {
         filter: "hue-rotate(50deg)",
@@ -34,6 +37,7 @@ export const THEMES_FILTERS = Object.freeze({
             rgb(209 90 102 / 80%) 0%,
             rgb(250 167 188 / 80%) 100%
         )`,
+        plainColor: "#ff2e54"
     },
     yellow: {
         filter: "hue-rotate(111deg) brightness(1.5)",
@@ -41,6 +45,7 @@ export const THEMES_FILTERS = Object.freeze({
             0deg, rgb(209 195 90 / 80%) 0%,
             rgb(250 227 167 / 80%) 100%
         )`,
+        plainColor: "yellow"
     },
 });
 

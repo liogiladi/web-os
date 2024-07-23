@@ -1,0 +1,61 @@
+html,
+body {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+}
+
+@font-face {
+    font-family: "Boot";
+    src: url(/media/boot.ttf);
+}
+
+* {
+    font-size: 1.1rem;
+    font-family: "Boot";
+    font-weight: 200;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    box-sizing: border-box;
+    color: white;
+    padding: 1rem;
+    background-color: black;
+    overflow: hidden;
+}
+
+h1 {
+    margin-bottom: 0.7rem;
+}
+
+h1[data-start="true"] {
+    animation: blink 0.7s infinite step-start;
+}
+
+.result {
+    color: #00a400;
+}
+
+.failed {
+    color: red;
+}
+
+#binaries {
+    display: flex;
+    flex-wrap: wrap;
+    color: yellow;
+    width: 100%;
+}
+
+.status {
+    color: #9e9e9e;
+}
+
+@keyframes blink {
+    50% {
+        opacity: 0;
+    }
+}

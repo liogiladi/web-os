@@ -1,0 +1,248 @@
+@font-face {
+    font-family: "JetBrains";
+    src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: "Boot";
+    src: url(/media/boot.ttf);
+}
+
+:root {
+    font-size: var(--resolution);
+}
+
+html,
+body,
+main {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+}
+
+main {
+    display: grid;
+    place-items: center;
+    background: linear-gradient(black, #101010);
+}
+
+#os-logo {  
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: min(25%, 11rem);
+    height: fit-content;
+    translate: -50% -50%;
+    transform-origin: center;
+    transition: 0.7s ease-in-out;
+    overflow: visible;
+}
+
+#os-logo path {
+    opacity: 0;
+}
+
+#os-logo path:nth-of-type(1) {
+    animation: enterFromLeft 1.3s 0.8s ease-out forwards;
+}
+
+@keyframes enterFromLeft {
+    from {
+        opacity: 0;
+        translate: -50px;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+#os-logo path:nth-of-type(2) {
+    animation: enterFromBottom 1.3s 0.8s ease-out forwards;
+}
+
+@keyframes enterFromBottom {
+    from {
+        opacity: 0;
+        translate: 0 50px;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+#os-logo path:nth-of-type(3) {
+    animation: enterFromTop 1.3s 0.8s ease-out forwards;
+}
+
+@keyframes enterFromTop {
+    from {
+        opacity: 0;
+        translate: 0 -50px;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+form {
+    position: relative;
+    top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 60%;
+    height: 100%;
+    transition: opacity 0.3s;
+}
+
+*[hidden] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+*[hidden] * {
+    pointer-events: none;
+}
+
+form fieldset {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    border: 0;
+    margin: 0;
+    margin-bottom: 2rem;
+}
+
+form input,
+form button {
+    padding: 0.8rem;
+    font-size: 1.2rem;
+    border: 0;
+    font-family: "JetBrains";
+}
+
+form input:disabled {
+    text-align: center;
+    border: 0 !important;
+}
+
+form input:is([type="text"], [type="password"]) {
+    background: transparent;
+    border-bottom: 1px solid white;
+    color: white;
+}
+
+form input:is([type="text"], [type="password"]):focus {
+    outline: transparent;
+    border-width: 2px;
+}
+
+input[type="submit"] {
+    position: fixed !important;
+    bottom: 2rem;
+    width: fit-content;
+    border-radius: 5px;
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+form input[type="submit"]:hover {
+    outline: 1px solid white;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+form input[type="submit"]:active {
+    cursor: default;
+    scale: 0.9;
+}
+
+#profile-pic {
+    display: block;
+    width: min(60%, 13rem);
+    border: 3px solid white;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+    opacity: 0;
+    pointer-events: none;
+    translate: 100px;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+#profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.exit-animation {
+    animation: exit 0.5s forwards;
+}
+
+@keyframes exit {
+    from {
+        translate: 0;
+        opacity: 1;
+        pointer-events: all;
+    }
+    to {
+        translate: -100px;
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+.enter-animation {
+    animation: enter 0.5s forwards;
+}
+
+@keyframes enter {
+    from {
+        translate: 100px;
+        opacity: 0;
+        pointer-events: none;
+    }
+    to {
+        translate: 0;
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+h1 {
+    width: 100%;
+    text-align: center;
+    font-family: "JetBrains";
+    font-weight: 200;
+    color: white;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 2s;
+}
+
+#user-profile {
+    width: min(45%, 250px);
+    border-radius: 50%;
+    border: 4px solid white;
+    aspect-ratio: 1/1;
+}

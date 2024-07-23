@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+        <link rel="stylesheet" href="./login.css" />
+    </head>
+    <script type="module">
+        const resolution = localStorage.getItem("resolution") || "16px";
+        const root = document.querySelector(":root");
+        root.style.setProperty("--resolution", resolution);
+    </script>
+    <body>
+        <main>
+            <svg
+                id="os-logo"
+                draggable="false"
+                width="303"
+                height="299"
+                viewBox="0 0 303 299"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+                <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M64.8701 67.8545C40.9314 43.9158 6.10352e-05 60.8702 6.10352e-05 94.7246V285.085C6.10352e-05 285.158 0.0291392 285.228 0.0808987 285.28V285.28C0.188684 285.387 0.36344 285.387 0.471227 285.28L114.513 171.238C129.353 156.398 129.353 132.337 114.513 117.497L64.8701 67.8545Z"
+                    fill="white"
+                />
+                <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M236.742 238.618C258.791 260.667 243.175 298.367 211.993 298.367H14.3904C14.3172 298.367 14.247 298.338 14.1952 298.286V298.286C14.0874 298.178 14.0874 298.004 14.1952 297.896L84.5538 227.537L130.359 181.733C144.027 168.064 166.188 168.064 179.856 181.733L236.742 238.618Z"
+                    fill="white"
+                />
+                <path
+                    d="M253.426 15.7595C267.846 17.1862 279.353 28.4113 281.138 42.7907L300.376 197.802C303.986 226.889 268.947 244.277 247.966 223.811L73.2865 53.4186C52.3054 32.9525 68.818 -2.5078 97.9854 0.378345L253.426 15.7595Z"
+                    fill="white"
+                />
+            </svg>
+            <h1 class="center">Welcome</h1>
+            <form hidden class="center">
+                <img id="user-profile" src="" alt="user picture" hidden />
+                <fieldset>
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Enter username"
+                        required
+                        pattern="[a-zA-Z0-9 ]{4,12}"
+                    />
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Enter password"
+                        required
+                    />
+                </fieldset>
+                <label id="profile-pic" for="profile" class="center">
+                    <img
+                        src="/media/default-profile-pic.png"
+                        alt="profile picture"
+                    />
+
+                    <input
+                        type="file"
+                        name="profile"
+                        id="profile"
+                        accept="image/*"
+                        hidden
+                    />
+                </label>
+                <input type="submit" value="Next" />
+            </form>
+        </main>
+    </body>
+    <script type="module">
+        let userInfo = JSON.parse(localStorage.getItem("user-info") || "false");
+
+        const logo = document.querySelector("#os-logo");
+        const submitButton = document.querySelector("input[type=submit]");
+
+        const form = document.querySelector("form");
+        form.addEventListener("submit", onSubmit);
+
+        document
+            .querySelector("#profile")
+            .addEventListener("change", handleProfileChange);
+
+        // Sequences
+        setTimeout(() => {
+            //logo.style.transform = "translate(0, -40vh)";
+            logo.style.scale = "0.3";
+            logo.style.top = "10vh";
+
+            setTimeout(() => {
+                if (localStorage.getItem("user-info")) {
+                    const userProfile = document.querySelector("#user-profile");
+                    userProfile.removeAttribute("hidden");
+                    userProfile.src =
+                        userInfo.profilePic || "/media/default-profile-pic.png";
+
+                    const usernameInput =
+                        document.querySelector("[name=username]");
+                    usernameInput.disabled = true;
+                    usernameInput.value = userInfo.username;
+
+                    const submitButton =
+                        document.querySelector("input[type=submit]");
+                    submitButton.value = "Sign in";
+
+                    form.removeAttribute("hidden");
+                } else form.removeAttribute("hidden");
+            }, 1000);
+        }, 2400);
+
+        // Form
+        let profilePicDataURL;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            profilePicDataURL = reader.result;
+        };
+
+        function handleProfileChange(event) {
+            const file = event.target.files[0];
+            if (!file) return alert("error durring file selection!");
+
+            const img = document.querySelector("#profile-pic img");
+
+            if (img.src.includes("blob")) {
+                URL.revokeObjectURL(img.src);
+            }
+
+            const url = URL.createObjectURL(file);
+            img.src = url;
+
+            reader.readAsDataURL(file);
+        }
+
+        let phase = "required";
+
+        async function onSubmit(e) {
+            e.preventDefault();
+            const data = new FormData(form);
+
+            if (userInfo) {
+                if (hash(data.get("password")) !== userInfo.passwordHash) {
+                    alert("wrong password!");
+                    return;
+                }
+
+                return continueToDesktop();
+            }
+
+            if (phase === "required") {
+                phase = "optional";
+
+                const fieldset = document.querySelector("fieldset");
+                fieldset.classList.add("exit-animation");
+
+                const profilePic = document.querySelector("#profile-pic");
+                profilePic.classList.add("enter-animation");
+
+                submitButton.value = "Finish";
+            } else {
+                // Save data
+                const profilePic = data.get("profile");
+
+                userInfo = {
+                    username: data.get("username"),
+                    passwordHash: hash(data.get("password")),
+                    profilePic: profilePicDataURL,
+                };
+
+                localStorage.setItem("user-info", JSON.stringify(userInfo));
+
+                continueToDesktop();
+            }
+        }
+
+        // Dummy hashing
+        function hash(str) {
+            const encoder = new TextEncoder();
+            const encodedPassword = encoder.encode(str);
+
+            encodedPassword.forEach((value, index) => {
+                encodedPassword[index] = (value ^ (value >>> value)) << value;
+            });
+
+            const decoder = new TextDecoder();
+
+            return decoder.decode(encodedPassword);
+        }
+
+        function continueToDesktop() {
+            form.hidden = true;
+
+            setTimeout(() => {
+                const h1 = document.querySelector("h1");
+                h1.innerHTML += ` ${userInfo.username}`;
+                h1.style.opacity = 1;
+
+                setTimeout(() => {
+                    h1.style.opacity = 0;
+                    logo.style.transition = "0.7s 1.2s ease-out";
+                    logo.style.width = "clamp(11.063rem, 20%, 15.5rem)";
+                    logo.style.top = "50%";
+                    logo.style.scale = "1";
+
+                    setTimeout(() => {
+                        // Redirect To Desktop
+                        localStorage.setItem("from-boot", "true");
+                        window.location.replace("desktop/index.html");
+                    }, 2000);
+                }, 2000);
+            }, 1000);
+        }
+    </script>
+</html>
