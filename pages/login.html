@@ -73,6 +73,8 @@
                 </label>
                 <input type="submit" value="Next" />
             </form>
+            <progress id="reset-bar" max="100" value="0"></progress>
+            <span id="reset-message">Hold F10 to RESET</span>
         </main>
     </body>
     <script type="module">
@@ -149,7 +151,7 @@
             if (userInfo) {
                 if (hash(data.get("password")) !== userInfo.passwordHash) {
                     passwordInput.classList.add("error-animation");
-                    
+
                     setTimeout(() => {
                         passwordInput.classList.remove("error-animation");
                     }, 600);
@@ -222,5 +224,32 @@
                 }, 2000);
             }, 1000);
         }
+
+        // Reset
+        const resetBar = document.querySelector("#reset-bar");
+        window.onkeydown = (e) => {
+            if (e.key === "F10") {
+                if(resetBar.value >= 100) {
+                    resetBar.remove();
+                    form.remove();
+                    logo.remove();
+                    document.querySelector("#reset-message").remove();
+                
+                    localStorage.removeItem("user-info");
+                    
+                    setTimeout(() => {
+                        window.location.replace("boot.html");
+                    }, 1500);
+                }
+
+                resetBar.value += 1.5;
+            }
+        };
+
+        window.onkeyup = (e) => {
+            if (e.key === "F10" && resetBar.value < 100) {
+                resetBar.value = 0;
+            }
+        };
     </script>
 </html>
