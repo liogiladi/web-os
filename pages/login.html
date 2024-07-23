@@ -84,6 +84,8 @@
         const form = document.querySelector("form");
         form.addEventListener("submit", onSubmit);
 
+        const passwordInput = document.querySelector("input[type=password]");
+
         document
             .querySelector("#profile")
             .addEventListener("change", handleProfileChange);
@@ -146,7 +148,11 @@
 
             if (userInfo) {
                 if (hash(data.get("password")) !== userInfo.passwordHash) {
-                    alert("wrong password!");
+                    passwordInput.classList.add("error-animation");
+                    
+                    setTimeout(() => {
+                        passwordInput.classList.remove("error-animation");
+                    }, 600);
                     return;
                 }
 
