@@ -115,6 +115,7 @@ export default class Taskbar extends HTMLElement {
 
         const powerOffButton = document.createElement("button");
         powerOffButton.style.backgroundImage = `url("/media/off-button.png")`;
+        powerOffButton.onclick = this.#powerOff.bind(this);
 
         const closeButton = document.createElement("button");
         closeButton.style.backgroundImage = `url("/media/close-button.png")`;
@@ -128,7 +129,9 @@ export default class Taskbar extends HTMLElement {
             setTimeout(() => {
                 this.container.dataset.settingsOpen = false;
                 this.settings.classList.remove("settings-unload-animation");
-                this.settingsButtons.classList.remove("settings-unload-animation");
+                this.settingsButtons.classList.remove(
+                    "settings-unload-animation"
+                );
 
                 this.tasksWrapper.style.opacity = 1;
                 this.tasksWrapper.style.pointerEvents = "all";
@@ -187,17 +190,42 @@ export default class Taskbar extends HTMLElement {
         transitionLayer.style.opacity = 1;
         transitionLayer.style.pointerEvents = "all";
         localStorage.setItem("logout", "true");
-        localStorage.setItem("logo-width-from-login", getComputedStyle(document.querySelector("#transition-layer img")).width);
+        localStorage.setItem(
+            "logo-width-from-login",
+            getComputedStyle(document.querySelector("#transition-layer img"))
+                .width
+        );
         localStorage.removeItem("logged");
-        
+
         setTimeout(() => {
-            window.location.replace("../login.html")
+            window.location.replace("../login.html");
         }, 1000);
     }
 
+    #powerOff() {
+        if (
+            window.confirm(
+                "Shutting down the machine will delete usaved data. Capiche?"
+            )
+        ) {
+            const transitionLayer = document.querySelector("#transition-layer");
+            transitionLayer.querySelector("img").remove();
+            transitionLayer.style.opacity = 1;
+            transitionLayer.style.pointerEvents = "all";
+            transitionLayer.style.background = "black";
+
+            localStorage.removeItem("logged");
+
+            setTimeout(() => {
+                window.location.replace("../index.html");
+            }, 1000);
+        }
+    }
+
     static getHeight() {
-        if(!this.instance.height) {
-            this.instance.height  = this.instance.taskbarContent.getBoundingClientRect().height;
+        if (!this.instance.height) {
+            this.instance.height =
+                this.instance.taskbarContent.getBoundingClientRect().height;
             return this.instance.height;
         }
 

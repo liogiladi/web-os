@@ -20,6 +20,25 @@ main {
     height: 100cqh;
 }
 
+main::after {
+    content: "";
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-color: black;
+    animation: fade-out 1s 0.2s forwards;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
 #video-wrapper {
     position: relative;
 }
