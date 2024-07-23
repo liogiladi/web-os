@@ -19,7 +19,8 @@
             h1.innerHTML = "Welcome to WebOs ^_^";
 
             // Determine by saved theme
-            h1.style.color = "purple";
+            const theme = JSON.parse(localStorage.getItem("theme") || "false");
+            h1.style.color = theme?.plainColor || "fuchsia";
 
             let i = 0;
 
