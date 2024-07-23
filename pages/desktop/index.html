@@ -133,6 +133,7 @@
         if(transitionWidth) {
             localStorage.removeItem("logo-width-from-login");
             transitionLogo.style.width = transitionWidth;
+            document.querySelector("#os-logo").style.width = transitionWidth;
         }
 
         function hideTransitionLayer() {
