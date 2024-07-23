@@ -65,7 +65,7 @@
 
                     <input
                         type="file"
-                        name="profile"
+                        name="profilePicture"
                         id="profile"
                         accept="image/*"
                         hidden
@@ -78,6 +78,9 @@
         </main>
     </body>
     <script type="module">
+        import convertFileToBase64 from "/utils/convertFileToBase64.js";
+        import hash from "/utils/hash.js";
+
         const logo = document.querySelector("#os-logo");
 
         const fromLogout = localStorage.getItem("logout");
@@ -100,7 +103,6 @@
 
         localStorage.setItem("logged", "");
 
-
         let userInfo = JSON.parse(localStorage.getItem("user-info") || "false");
 
         const submitButton = document.querySelector("input[type=submit]");
@@ -117,7 +119,6 @@
         // Sequences
         setTimeout(
             () => {
-                //logo.style.transform = "translate(0, -40vh)";
                 logo.style.scale = "0.2";
                 logo.style.top = "10vh";
 
@@ -149,12 +150,6 @@
         );
 
         // Form
-        let profilePicDataURL;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            profilePicDataURL = reader.result;
-        };
-
         function handleProfileChange(event) {
             const file = event.target.files[0];
             if (!file) return alert("error durring file selection!");
@@ -167,8 +162,6 @@
 
             const url = URL.createObjectURL(file);
             img.src = url;
-
-            reader.readAsDataURL(file);
         }
 
         let phase = "required";
@@ -204,32 +197,16 @@
                 submitButton.value = "Finish";
             } else {
                 // Save data
-                const profilePic = data.get("profile");
-
                 userInfo = {
                     username: data.get("username"),
                     passwordHash: hash(data.get("password")),
-                    profilePic: profilePicDataURL,
+                    profilePic: await convertFileToBase64(data.get("profilePicture")),
                 };
 
                 localStorage.setItem("user-info", JSON.stringify(userInfo));
 
                 continueToDesktop();
             }
-        }
-
-        // Dummy hashing
-        function hash(str) {
-            const encoder = new TextEncoder();
-            const encodedPassword = encoder.encode(str);
-
-            encodedPassword.forEach((value, index) => {
-                encodedPassword[index] = (value ^ (value >>> value)) << value;
-            });
-
-            const decoder = new TextDecoder();
-
-            return decoder.decode(encodedPassword);
         }
 
         function continueToDesktop() {

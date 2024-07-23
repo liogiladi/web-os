@@ -128,8 +128,10 @@ desktop-settings {
 #account-settings #profile-img-wrapper img {
     width: 100%;
     border-radius: 50%;
+    aspect-ratio: 1 / 1;
     scale: 0.94;
     pointer-events: none;
+    object-fit: cover;
 }
 
 #account-settings form #inputs {

@@ -1,5 +1,7 @@
 import readFileContents from "../utils/readFileContents.js";
 import Taskbar from "./taskbar/taskbar.mjs";
+import convertFileToBase64 from "../utils/convertFileToBase64.js";
+import hash from "../utils/hash.js";
 
 /**
  * @typedef {object} Theme
@@ -19,7 +21,7 @@ export const THEMES_FILTERS = Object.freeze({
             rgba(209, 90, 207, 0.8) 0%,
             rgba(250, 167, 249, 0.8) 100%
         )`,
-        plainColor: "#ff3fff"
+        plainColor: "#ff3fff",
     },
     blue: {
         filter: "hue-rotate(264deg)",
@@ -28,7 +30,7 @@ export const THEMES_FILTERS = Object.freeze({
             rgb(90 154 209 / 80%) 0%,
             rgb(167 194 250 / 80%) 100%
         )`,
-        plainColor: "#1f8bff"
+        plainColor: "#1f8bff",
     },
     red: {
         filter: "hue-rotate(50deg)",
@@ -37,7 +39,7 @@ export const THEMES_FILTERS = Object.freeze({
             rgb(209 90 102 / 80%) 0%,
             rgb(250 167 188 / 80%) 100%
         )`,
-        plainColor: "#ff2e54"
+        plainColor: "#ff2e54",
     },
     yellow: {
         filter: "hue-rotate(111deg) brightness(1.5)",
@@ -45,17 +47,30 @@ export const THEMES_FILTERS = Object.freeze({
             0deg, rgb(209 195 90 / 80%) 0%,
             rgb(250 227 167 / 80%) 100%
         )`,
-        plainColor: "#ffe055"
+        plainColor: "#ffe055",
     },
 });
 
 export default class Settings extends HTMLElement {
+    /** @type {Settings} */
+    static instance;
+
     /** @type {HTMLImageElement} */
     #profileImg;
+
+    /** @type {HTMLInputElement} */
+    #nameInput;
+
+    /** @type {HTMLInputElement} */
+    #passInput;
+
+    /** @type {HTMLInputElement} */
+    #submitButton;
 
     constructor() {
         super();
         this.initialized = false;
+        Settings.instance = this;
     }
 
     async connectedCallback() {
@@ -108,14 +123,16 @@ export default class Settings extends HTMLElement {
         accountTitle.innerHTML = "Account";
 
         const form = document.createElement("form");
-        form.onsubmit = this.#onAccountInfoSubmit.bind(this);
+        form.onsubmit = this.#handleAccountInfoSubmit.bind(this);
 
         //Profile
         const profilePictureInput = document.createElement("input");
         Object.assign(profilePictureInput, {
             type: "file",
-            onchange: this.#onProfilePictureChange.bind(this),
+            name: "profilePicture",
+            onchange: this.#handleProfilePictureChange.bind(this),
             hidden: true,
+            accept: "image/*",
         });
 
         const profileImgWrapper = document.createElement("div");
@@ -127,32 +144,33 @@ export default class Settings extends HTMLElement {
         profileImgWrapper.append(this.#profileImg);
 
         // Fields
-        const nameInput = document.createElement("input");
-        Object.assign(nameInput, {
+        this.#nameInput = document.createElement("input");
+        Object.assign(this.#nameInput, {
             type: "text",
-            name: "name",
+            name: "username",
             placeholder: "Enter a name...",
         });
 
-        const passInput = document.createElement("input");
-        Object.assign(passInput, {
+        this.#passInput = document.createElement("input");
+        Object.assign(this.#passInput, {
             type: "password",
-            name: "name",
+            name: "password",
             placeholder: "Enter a password...",
+            onfocus: (e) => (e.target.value = ""),
         });
 
         const inputs = document.createElement("div");
         inputs.id = "inputs";
-        inputs.append(nameInput, passInput);
+        inputs.append(this.#nameInput, this.#passInput);
 
         if (accountInfo) {
             this.#profileImg.src = accountInfo.profilePicSrc;
-            nameInput.value = accountInfo.name;
-            passInput.value = "password";
+            this.#nameInput.value = accountInfo.name;
+            this.#passInput.value = "password";
         }
 
-        const submitButton = document.createElement("input");
-        Object.assign(submitButton, {
+        this.#submitButton = document.createElement("input");
+        Object.assign(this.#submitButton, {
             type: "submit",
             value: "save",
         });
@@ -161,10 +179,13 @@ export default class Settings extends HTMLElement {
             profilePictureInput,
             profileImgWrapper,
             inputs,
-            submitButton
+            this.#submitButton
         );
 
         accountSettings.append(accountTitle, form);
+
+        // Account info
+        this.updateDefaultUserInfo();
 
         // Resolution
         const resoultionSettings = document.createElement("section");
@@ -181,7 +202,7 @@ export default class Settings extends HTMLElement {
             type: "range",
             min: 20,
             max: 60,
-            value: resolution ? (50/16) * Number.parseFloat(resolution) : 40,
+            value: resolution ? (50 / 16) * Number.parseFloat(resolution) : 40,
             step: 9.9,
             oninput: ((e) => this.#changeResolution(e.target.value)).bind(this),
         });
@@ -222,16 +243,71 @@ export default class Settings extends HTMLElement {
         Taskbar.instance.height = Taskbar.getHeight();
     }
 
-    #onProfilePictureChange(e) {
-        //TODO: update img by file select
+    /**
+     * @param {Event} e
+     * @returns
+     */
+    #handleProfilePictureChange(e) {
+        const file = e.target.files[0];
+        if (!file) return alert("error durring file selection!");
+
+        const url = URL.createObjectURL(file);
+        this.#profileImg.src = url;
     }
 
     /**
      *
      * @param {Event} e
      */
-    #onAccountInfoSubmit(e) {
-        //TODO: account submit
+    async #handleAccountInfoSubmit(e) {
         e.preventDefault();
+
+        const currentUserInfo = JSON.parse(
+            localStorage.getItem("user-info") || "false"
+        );
+
+        const data = new FormData(e.target);
+        const givenPassword = data.get("password");
+        const givenProfilePicture = data.get("profilePicture");
+
+        const sameHash =
+            givenPassword ===
+            JSON.parse(localStorage.getItem("user-info") || "false")
+                .passwordHash;
+
+        const userInfo = {
+            username: data.get("username"),
+            passwordHash: sameHash
+                ? currentUserInfo?.passwordHash
+                : hash(givenPassword),
+            profilePic:
+                givenProfilePicture?.size === 0
+                    ? currentUserInfo?.profilePic
+                    : await convertFileToBase64(givenProfilePicture),
+        };
+
+        localStorage.setItem("user-info", JSON.stringify(userInfo));
+
+        this.#submitButton.style.transition = "unset";
+        this.#submitButton.style.color = "white";
+        this.#submitButton.style.backgroundColor = "#9dc728";
+
+        setTimeout(() => {
+            this.#submitButton.style.transition = "0.3s";
+            this.#submitButton.style.color = "black";
+            this.#submitButton.style.backgroundColor = "white";
+        }, 300);
+    }
+
+    updateDefaultUserInfo() {
+        const userInfo = JSON.parse(
+            localStorage.getItem("user-info") || "false"
+        );
+        if (userInfo) {
+            this.#profileImg.src =
+                userInfo.profilePic || "/media/default-profile-pic.png";
+            this.#nameInput.value = userInfo.username;
+            this.#passInput.value = userInfo.passwordHash;
+        }
     }
 }

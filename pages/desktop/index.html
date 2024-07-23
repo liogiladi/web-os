@@ -17,7 +17,7 @@
         import { FileStorage } from "/utils/fileStorage.js";
         import { createPictureShortcut } from "/utils/createFromFileStorage.js";
         import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
-        import { THEMES_FILTERS } from "/custom-elements/settings.mjs";
+        import Settings, { THEMES_FILTERS } from "/custom-elements/settings.mjs";
 
         const theme =
             JSON.parse(String(localStorage.getItem("theme"))) ||
@@ -41,6 +41,7 @@
             Taskbar.instance.container.dataset.settingsOpen = true;
             Taskbar.instance.tasksWrapper.style.opacity = 0;
             Taskbar.instance.tasksWrapper.style.pointerEvents = "none";
+            Settings.instance.updateDefaultUserInfo();
 
             setTimeout(() => {
                 Taskbar.instance.settings.classList.add(
