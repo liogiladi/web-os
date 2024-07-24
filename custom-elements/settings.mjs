@@ -187,34 +187,34 @@ export default class Settings extends HTMLElement {
         // Account info
         this.updateDefaultUserInfo();
 
-        // Resolution
-        const resoultionSettings = document.createElement("section");
-        resoultionSettings.className = "settings";
-        resoultionSettings.id = "resolution-settings";
+        // scale
+        const scaleSettings = document.createElement("section");
+        scaleSettings.className = "settings";
+        scaleSettings.id = "scale-settings";
 
         const resolutionTitle = document.createElement("h2");
-        resolutionTitle.innerHTML = "Resolution";
+        resolutionTitle.innerHTML = "scale";
 
-        const resolution = localStorage.getItem("resolution");
+        const scale = localStorage.getItem("scale");
 
         const slider = document.createElement("input");
         Object.assign(slider, {
             type: "range",
             min: 20,
             max: 60,
-            value: resolution ? (50 / 16) * Number.parseFloat(resolution) : 40,
+            value: scale ? (50 / 16) * Number.parseFloat(scale) : 40,
             step: 9.9,
             oninput: ((e) => this.#changeResolution(e.target.value)).bind(this),
         });
 
-        resoultionSettings.append(resolutionTitle, slider);
+        scaleSettings.append(resolutionTitle, slider);
 
         const style = document.createElement("style");
         style.innerHTML = await readFileContents(
             "/custom-elements/settings.css"
         );
 
-        this.append(style, themeSettings, accountSettings, resoultionSettings);
+        this.append(style, themeSettings, accountSettings, scaleSettings);
     }
 
     /**
@@ -233,11 +233,11 @@ export default class Settings extends HTMLElement {
     }
 
     #changeResolution(value) {
-        const resolution = `${value * (16 / 50)}px`;
-        localStorage.setItem("resolution", resolution);
+        const scale = `${value * (16 / 50)}px`;
+        localStorage.setItem("scale", scale);
 
         const root = document.querySelector(":root");
-        root.style.setProperty("--resolution", resolution);
+        root.style.setProperty("--scale", scale);
 
         Taskbar.instance.height = undefined;
         Taskbar.instance.height = Taskbar.getHeight();

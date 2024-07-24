@@ -7,9 +7,9 @@
         <link rel="stylesheet" href="./login.css" />
     </head>
     <script>
-        const resolution = localStorage.getItem("resolution") || "16px";
+        const scale = localStorage.getItem("scale") || "16px";
         const root = document.querySelector(":root");
-        root.style.setProperty("--resolution", resolution);
+        root.style.setProperty("--scale", scale);
 
         var fromLogout = localStorage.getItem("logout");
         root.style.setProperty("--initial-opacity", fromLogout ? 1 : 0);

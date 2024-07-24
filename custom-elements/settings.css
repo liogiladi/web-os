@@ -165,11 +165,11 @@ desktop-settings {
     filter: var(--theme-filter);
 }
 
-#resolution-settings {
+#scale-settings {
     padding-bottom: 0.5rem;
 }
 
-#resolution-settings input {
+#scale-settings input {
     appearance: none;
     position: relative;
     width: 95%;

@@ -29,8 +29,8 @@
         root.style.setProperty("--theme-filter", theme.filter);
         root.style.setProperty("--window-bg", theme.windowBg);
 
-        const resolution = localStorage.getItem("resolution") || "16px";
-        root.style.setProperty("--resolution", resolution);
+        const scale = localStorage.getItem("scale") || "16px";
+        root.style.setProperty("--scale", scale);
 
         FileStorage.init();
 

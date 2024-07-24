@@ -5,7 +5,7 @@
 }
 
 :root {
-	font-size: var(--resolution);
+	font-size: var(--scale);
 }
 
 * {
