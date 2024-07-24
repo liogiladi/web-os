@@ -220,7 +220,7 @@ export default class Taskbar extends HTMLElement {
 
         setTimeout(() => {
             window.location.replace("../login.html");
-        }, 1500);
+        }, 1600);
     }
 
     #powerOff() {
@@ -245,7 +245,7 @@ export default class Taskbar extends HTMLElement {
 
                 setTimeout(() => {
                     window.location.replace("../index.html");
-                }, 1500);
+                }, 1600);
             }
         );
     }
