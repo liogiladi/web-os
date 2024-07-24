@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="./login.css" />
     </head>
     <script>
-        const scale = localStorage.getItem("scale") || "16px";
+        const scale = localStorage.getItem("scale") || "13px";
         const root = document.querySelector(":root");
         root.style.setProperty("--scale", scale);
 
@@ -77,7 +77,7 @@
                 <input type="submit" value="Next" />
             </form>
             <progress id="reset-bar" max="100" value="0"></progress>
-            <span id="reset-message">Hold F10 to RESET</span>
+            <span id="reset-message">Hold Esc to RESET</span>
         </main>
     </body>
     <script type="module">
@@ -264,14 +264,14 @@
             resetMessage.remove();
         } else {
             window.onkeydown = (e) => {
-                if (e.key === "F10") {
+                if (e.key === "Escape") {
                     if (resetBar.value >= 100) {
                         resetBar.remove();
                         form.remove();
                         logo.remove();
                         resetMessage.remove();
 
-                        localStorage.removeItem("user-info");
+                        localStorage.clear();
 
                         setTimeout(() => {
                             window.location.replace("boot.html");
@@ -283,7 +283,7 @@
             };
 
             window.onkeyup = (e) => {
-                if (e.key === "F10" && resetBar.value < 100) {
+                if (e.key === "Escape" && resetBar.value < 100) {
                     resetBar.value = 0;
                 }
             };

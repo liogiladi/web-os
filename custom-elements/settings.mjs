@@ -192,8 +192,8 @@ export default class Settings extends HTMLElement {
         scaleSettings.className = "settings";
         scaleSettings.id = "scale-settings";
 
-        const resolutionTitle = document.createElement("h2");
-        resolutionTitle.innerHTML = "scale";
+        const scaleTitle = document.createElement("h2");
+        scaleTitle.innerHTML = "scale";
 
         const scale = localStorage.getItem("scale");
 
@@ -204,10 +204,10 @@ export default class Settings extends HTMLElement {
             max: 60,
             value: scale ? (50 / 16) * Number.parseFloat(scale) : 40,
             step: 9.9,
-            oninput: ((e) => this.#changeResolution(e.target.value)).bind(this),
+            oninput: ((e) => this.#changeScale(e.target.value)).bind(this),
         });
 
-        scaleSettings.append(resolutionTitle, slider);
+        scaleSettings.append(scaleTitle, slider);
 
         const style = document.createElement("style");
         style.innerHTML = await readFileContents(
@@ -232,7 +232,7 @@ export default class Settings extends HTMLElement {
         root.style.setProperty("--window-bg", theme.windowBg);
     }
 
-    #changeResolution(value) {
+    #changeScale(value) {
         const scale = `${value * (16 / 50)}px`;
         localStorage.setItem("scale", scale);
 
@@ -241,6 +241,10 @@ export default class Settings extends HTMLElement {
 
         Taskbar.instance.height = undefined;
         Taskbar.instance.height = Taskbar.getHeight();
+
+        
+        document.querySelector("#transition-layer img").removeAttribute("style");
+        document.querySelector("#os-logo img").removeAttribute("style");
     }
 
     /**
