@@ -24,8 +24,17 @@ export default class Shortcut extends HTMLElement {
     /** @type {HTMLTextAreaElement} */
     textarea;
 
+    /** @type {HTMLButtonElement} */
+    #deleteButton;
+
     /** @type {object} */
     intermediateData;
+
+    /** @type {boolean} */
+    deletetable;
+
+    /** @type {() => void} */
+    delete;
 
     constructor() {
         super();
@@ -66,12 +75,29 @@ export default class Shortcut extends HTMLElement {
         this.textarea = document.createElement("textarea");
         this.textarea.onblur = this.deselectInput.bind(this);
 
+        this.#deleteButton = document.createElement("button");
+        this.#deleteButton.className = "delete-button";
+        this.#deleteButton.innerHTML = "x";
+        
+        if (!this.deletetable) {
+            this.#deleteButton.disabled = true;
+            this.#deleteButton.title = "This core item cannot be deleted";
+        } else {
+            this.#deleteButton.onclick = this.delete;
+        }
+
         const style = document.createElement("style");
         style.innerHTML = await readFileContents(
             "/custom-elements/shortcut.css"
         );
 
-        template.append(style, img, this.span, this.textarea);
+        template.append(
+            style,
+            img,
+            this.span,
+            this.textarea,
+            this.#deleteButton
+        );
         for (const attribute of Shortcut.observedAttributes) {
             template.setAttribute(attribute, this[attribute]);
         }
@@ -92,6 +118,11 @@ export default class Shortcut extends HTMLElement {
 
         this.onfocus = this.focus;
         this.onblur = this.blur;
+        this.oncontextmenu = (e) => {
+            e.stopPropagation();
+            this.#deleteButton.style.display = "block";
+            return false;
+        };
     }
 
     attributeChangedCallback(_name, _oldValue, newValue) {
@@ -112,8 +143,10 @@ export default class Shortcut extends HTMLElement {
         this.textarea.style.display = "unset";
         this.textarea.focus();
         this.textarea.scrollTop = 0;
-        this.textarea.style.bottom = target.innerHTML.length < 8 ? "calc(1.25rem - 1rem)" : "-1rem";
-        this.textarea.style.height = target.innerHTML.length > 8 ? "unset" : "1.25rem";
+        this.textarea.style.bottom =
+            target.innerHTML.length < 8 ? "calc(1.25rem - 1rem)" : "-1rem";
+        this.textarea.style.height =
+            target.innerHTML.length > 8 ? "unset" : "1.25rem";
     }
 
     deselectInput({ target }) {
@@ -132,6 +165,7 @@ export default class Shortcut extends HTMLElement {
 
     blur() {
         this.span.style.pointerEvents = "none";
+        this.#deleteButton.style.display = "none";
     }
 
     dblClick() {

@@ -11,6 +11,7 @@ export const FileStorage = {
     init,
     addPicture,
     getPictures,
+    deletePicture
 };
 
 function init() {
@@ -56,6 +57,22 @@ function addPicture(src) {
     );
 
     return data;
+}
+
+function deletePicture(id) {
+    const currentPicturesArray = JSON.parse(
+        localStorage.getItem(VARIABLES.PICTURES)
+    );
+
+    /** @type {Map<string, Picture>} */
+    const currentPicturesMap = new Map(currentPicturesArray);
+
+    currentPicturesMap.delete(id);
+
+    localStorage.setItem(
+        VARIABLES.PICTURES,
+        JSON.stringify(currentPicturesMap.entries().toArray())
+    );
 }
 
 /**

@@ -1,6 +1,8 @@
+import { FileStorage } from "../utils/fileStorage.js";
+
 /**
- * 
- * @param {import("../utils/fileStorage.js").Picture} info 
+ *
+ * @param {import("../utils/fileStorage.js").Picture} info
  */
 export function createPictureShortcut(info) {
     /** @type {import("../custom-elements/shortcut.mjs").Shortcut} */
@@ -8,10 +10,17 @@ export function createPictureShortcut(info) {
     shortcut.id = info.id;
     shortcut.name = `picture-${info.dateISOString}.jpg`;
     shortcut.wcTagName = "desktop-gallery";
-    shortcut.iconSrc = "/media/gallery-icon.png"; 
+    shortcut.iconSrc = "/media/gallery-icon.png";
     shortcut.uniqueIconSrc = info.src;
     shortcut.intermediateData = {
-        imgSrc: info.src
+        imgSrc: info.src,
+    };
+    shortcut.deletetable = true;
+    shortcut.delete = () => {
+        if (confirm("This item will be permanently deleted")) {
+            FileStorage.deletePicture(info.id);
+            shortcut.remove();
+        }
     };
 
     const shortcutsParent = document.getElementById("shortcuts");

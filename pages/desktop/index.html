@@ -62,7 +62,7 @@
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
     <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
 
-    <body>
+    <body oncontextmenu="return false;">
         <div id="transition-layer">
             <img
                 class="center-logo"
@@ -163,7 +163,7 @@
             hideTransitionLayer();
         }
 
-        var main = document.querySelector("main");
+        window.oncontextmenu(e => false);
 
         window.L = L;
     </script>

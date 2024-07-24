@@ -61,3 +61,31 @@
 .shortcut textarea::-webkit-scrollbar {
     display: none;
 }
+
+.delete-button {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+	display: none;
+    width: 1.8rem;
+    height: 1.8rem;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+	outline-color: transparent;
+    aspect-ratio: 1 / 1;
+    font-weight: bold;
+    background-color: #e21111;
+    color: white;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.delete-button:not(:disabled):hover {
+	background-color: #b00707;
+}
+
+.delete-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
