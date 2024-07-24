@@ -147,11 +147,11 @@ export default class Taskbar extends HTMLElement {
             }, 300);
         };
 
-        const signOutButton = document.createElement("button");
-        signOutButton.style.backgroundImage = `url("/media/out-button.png")`;
-        signOutButton.onclick = this.#logout.bind(this);
+        const lockButton = document.createElement("button");
+        lockButton.style.backgroundImage = `url("/media/lock-button.png")`;
+        lockButton.onclick = this.#lockUser.bind(this);
 
-        this.settingsButtons.append(powerOffButton, closeButton, signOutButton);
+        this.settingsButtons.append(powerOffButton, closeButton, lockButton);
         this.taskbarContent.append(this.settingsButtons);
 
         // Tasks
@@ -204,11 +204,11 @@ export default class Taskbar extends HTMLElement {
         e.target.setAttribute("muted", !audioDisabled);
     }
 
-    #logout() {
+    #lockUser() {
         const transitionLayer = document.querySelector("#transition-layer");
         transitionLayer.style.opacity = 1;
         transitionLayer.style.pointerEvents = "all";
-        localStorage.setItem("logout", "true");
+        localStorage.setItem("lockUser", "true");
         localStorage.setItem(
             "logo-width-from-login",
             getComputedStyle(document.querySelector("#transition-layer img"))
@@ -216,7 +216,7 @@ export default class Taskbar extends HTMLElement {
         );
         localStorage.removeItem("logged");
 
-        playAudioSnapshot("/media/audio/logout.mp3");
+        playAudioSnapshot("/media/audio/lock-user.mp3");
 
         setTimeout(() => {
             window.location.replace("../login.html");

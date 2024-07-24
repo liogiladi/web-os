@@ -12,7 +12,7 @@
         const root = document.querySelector(":root");
         root.style.setProperty("--scale", scale);
 
-        var fromLogout = localStorage.getItem("logout");
+        var fromLogout = localStorage.getItem("lockUser");
         root.style.setProperty("--initial-opacity", fromLogout ? 1 : 0);
     </script>
     <body>
@@ -99,7 +99,7 @@
         const logo = document.querySelector("#os-logo");
 
         if (fromLogout) {
-            localStorage.removeItem("logout");
+            localStorage.removeItem("lockUser");
 
             const transitionWidth = localStorage.getItem(
                 "logo-width-from-login"
