@@ -1,4 +1,5 @@
 import { FileStorage } from "../utils/fileStorage.js";
+import playAudioSnapshot from "./playAudioSnapshot.js";
 
 /**
  *
@@ -19,6 +20,8 @@ export function createPictureShortcut(info) {
     shortcut.delete = () => {
         if (confirm("This item will be permanently deleted")) {
             FileStorage.deletePicture(info.id);
+
+            playAudioSnapshot("/media/audio/delete.mp3          ");
             shortcut.remove();
         }
     };
