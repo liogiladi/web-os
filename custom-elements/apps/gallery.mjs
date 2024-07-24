@@ -26,6 +26,7 @@ export default class Gallery extends Window {
         
         const img = document.createElement("img");
         img.src = this.#imgSrc;
+        img.oncontextmenu = (e) => e.stopPropagation(); 
 
         const style = document.createElement("style");
         style.innerHTML = await readFileContents("/custom-elements/apps/gallery.css");
