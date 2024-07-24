@@ -179,6 +179,7 @@ export default class Shortcut extends HTMLElement {
         const window = document.createElement(this.wcTagName);
         window.headerTitle = this.name;
         window.iconSrc = this.iconSrc;
+        window.dataset.shortcutId = this.id;
 
         if (this.intermediateData) {
             window.intermediateData = this.intermediateData;

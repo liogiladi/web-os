@@ -31,6 +31,9 @@ export function createPictureShortcut(info) {
 
                 playAudioSnapshot("/media/audio/delete.mp3          ");
                 shortcut.remove();
+
+                const relatedWindows = document.querySelectorAll(`desktop-gallery[data-shortcut-id='${info.id}']`);
+                relatedWindows.forEach((el) => el.remove());
             }
         );
     };
