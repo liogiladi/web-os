@@ -1,6 +1,7 @@
 import readFileContents from "/utils/readFileContents.js";
 import TasksData from "/utils/tasksData.js";
 import playAudioSnapshot from "/utils/playAudioSnapshot.js";
+import AlertDialog from "../alertDialog.mjs";
 
 /**
  * @typedef TaskInfo
@@ -223,25 +224,30 @@ export default class Taskbar extends HTMLElement {
     }
 
     #powerOff() {
-        if (
-            window.confirm(
-                "Shutting down the machine will delete usaved data. Capiche?"
-            )
-        ) {
-            const transitionLayer = document.querySelector("#transition-layer");
-            transitionLayer.querySelector("img").remove();
-            transitionLayer.style.opacity = 1;
-            transitionLayer.style.pointerEvents = "all";
-            transitionLayer.style.background = "black";
+        AlertDialog.showModal(
+            "Warning!",
+            "Shutting down the machine will delete usaved data.\n\nContinue?",
+            {
+                positive: "Yes",
+                negative: "No"
+            },
+            () => {
+                const transitionLayer =
+                    document.querySelector("#transition-layer");
+                transitionLayer.querySelector("img").remove();
+                transitionLayer.style.opacity = 1;
+                transitionLayer.style.pointerEvents = "all";
+                transitionLayer.style.background = "black";
 
-            localStorage.removeItem("logged");
+                localStorage.removeItem("logged");
 
-            playAudioSnapshot("/media/audio/poweroff.mp3");
+                playAudioSnapshot("/media/audio/poweroff.mp3");
 
-            setTimeout(() => {
-                window.location.replace("../index.html");
-            }, 1500);
-        }
+                setTimeout(() => {
+                    window.location.replace("../index.html");
+                }, 1500);
+            }
+        );
     }
 
     static getHeight() {

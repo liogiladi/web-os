@@ -1,5 +1,6 @@
 import { FileStorage } from "../utils/fileStorage.js";
 import playAudioSnapshot from "./playAudioSnapshot.js";
+import AlertDialog from "../custom-elements/alertDialog.mjs";
 
 /**
  *
@@ -18,12 +19,20 @@ export function createPictureShortcut(info) {
     };
     shortcut.deletetable = true;
     shortcut.delete = () => {
-        if (confirm("This item will be permanently deleted")) {
-            FileStorage.deletePicture(info.id);
+        AlertDialog.showModal(
+            "Warning!",
+            "This item will be permanently deleted.",
+            {
+                positive: "Delete",
+                negative: "Cancel",
+            },
+            () => {
+                FileStorage.deletePicture(info.id);
 
-            playAudioSnapshot("/media/audio/delete.mp3          ");
-            shortcut.remove();
-        }
+                playAudioSnapshot("/media/audio/delete.mp3          ");
+                shortcut.remove();
+            }
+        );
     };
 
     const shortcutsParent = document.getElementById("shortcuts");

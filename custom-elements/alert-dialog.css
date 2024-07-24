@@ -1,0 +1,60 @@
+dialog[is=desktop-alert-dialog][open] {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 1rem;
+    width: min(80%, 42rem);
+    border: 0;
+    border-radius: 0.3rem;
+    opacity: 1;
+}
+
+dialog[is=desktop-alert-dialog]::backdrop {
+    background-color: #000000a9;
+}
+
+dialog[is=desktop-alert-dialog] h2 {
+    margin: 0;
+}
+
+dialog[is=desktop-alert-dialog] .dialog-message {
+    padding-bottom: 2rem;
+    font-size: 1.3rem;
+    font-weight: 200;
+    white-space: break-spaces;
+}
+
+dialog[is=desktop-alert-dialog] .dialog-buttons {
+    display: flex;
+    justify-content: right;
+    gap: 1rem;
+}
+
+dialog[is=desktop-alert-dialog] .dialog-buttons button {
+    width: 7rem;
+    padding-block: 0.7rem;
+    font-size: 1.2rem;
+    background: none;
+    border: 0;
+    color: rgb(97, 97, 97);
+    border-radius: 0.3rem;
+    cursor: pointer;
+    transition: background-color 0.1s, scale 0.1s;
+}
+
+dialog[is=desktop-alert-dialog] .dialog-buttons button:focus {
+    outline-color: transparent;
+}
+
+dialog[is=desktop-alert-dialog] .dialog-buttons button:hover {
+    background-color: rgb(235, 235, 235);
+}
+
+dialog[is=desktop-alert-dialog] .dialog-buttons button:nth-of-type(2) {
+    font-weight: 700;
+    background-color: rgb(185, 36, 36);
+    color: white;
+}
+
+dialog[is=desktop-alert-dialog] .dialog-buttons button:nth-of-type(2):hover {
+    background-color: rgb(162, 34, 34);
+}
