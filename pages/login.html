@@ -52,7 +52,9 @@
                         name="username"
                         placeholder="Enter username"
                         required
-                        pattern="^[a-zA-Z]*[\d\s]*$"
+                        pattern="^(?:[\d\s]*)[a-zA-Z]+(?:[\d\s]*)$"
+                        min="4"
+                        max="12"
                         oninvalid="this.setCustomValidity('Username should consist of:\n* 4-12 letters\n* English letters\n- (optional) 0-9\n- (optional) spaces')"
                         oninput="this.setCustomValidity('');"
                     />
