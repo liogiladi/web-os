@@ -84,6 +84,13 @@
         import convertFileToBase64 from "/utils/convertFileToBase64.js";
         import hash from "/utils/hash.js";
 
+        const audio = new Audio("../media/audio/startup.mp3");
+        const audioDisabled = localStorage.getItem("disable-audio");
+
+        if (!audioDisabled) {
+            audio.volume = 0.7;
+        }
+
         const logo = document.querySelector("#os-logo");
 
         if (fromLogout) {
@@ -102,6 +109,12 @@
         } else {
             logo.style.opacity = 1;
             logo.dataset.animate = "true";
+
+            if (!audioDisabled) {
+                setTimeout(() => {
+                    Promise.resolve(audio.play());
+                }, 1000);
+            }
         }
 
         localStorage.setItem("logged", "");
@@ -203,7 +216,9 @@
                 userInfo = {
                     username: data.get("username"),
                     passwordHash: hash(data.get("password")),
-                    profilePic: await convertFileToBase64(data.get("profilePicture")),
+                    profilePic: await convertFileToBase64(
+                        data.get("profilePicture")
+                    ),
                 };
 
                 localStorage.setItem("user-info", JSON.stringify(userInfo));

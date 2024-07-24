@@ -1,5 +1,6 @@
 import Window from "../window.mjs";
 import readFileContents from "/utils/readFileContents.js";
+import playAudioSnapshot from "/utils/playAudioSnapshot.js";
 
 const OPERATORS = Object.freeze(["+", "-", "×", "÷"]);
 
@@ -264,6 +265,8 @@ export default class Calculator extends Window {
         if (this.#currentInputType !== "number") {
             this.#currentInputType = "number";
         }
+
+        playAudioSnapshot("/media/audio/calcs/numbers.wav");
     }
 
     /**
@@ -377,6 +380,8 @@ export default class Calculator extends Window {
         this.#currentInputType = "function";
 
         this.#updateBottomOutput(this.#currentInput, true);
+
+        playAudioSnapshot("/media/audio/calcs/functions.wav");
     }
 
     /**
@@ -423,6 +428,8 @@ export default class Calculator extends Window {
                 currentOutputText.slice(0, -1) + this.#currentInput
             );
         }
+
+        playAudioSnapshot("/media/audio/calcs/operators.wav");
     }
 
     #handleDecimalPointClick() {
@@ -440,6 +447,8 @@ export default class Calculator extends Window {
 
         this.#currentInput += ".";
         this.#updateBottomOutput(".", true);
+
+        playAudioSnapshot("/media/audio/calcs/other.wav");
     }
 
     #handleDeleteClick() {
@@ -528,6 +537,8 @@ export default class Calculator extends Window {
         this.#currentInput = "";
 
         this.#updateBottomOutput("", true);
+
+        playAudioSnapshot("/media/audio/calcs/other.wav");
     }
 
     #handleOpenParenthesesClick() {
@@ -550,6 +561,8 @@ export default class Calculator extends Window {
         this.#currentInputType = "openingParentheses";
 
         this.#updateBottomOutput(this.#currentInput, true);
+
+        playAudioSnapshot("/media/audio/calcs/other.wav");
     }
 
     /**
@@ -580,6 +593,8 @@ export default class Calculator extends Window {
         this.#currentInput = "";
 
         this.#currentInputType = "closingParentheses";
+
+        playAudioSnapshot("/media/audio/calcs/other.wav");
     }
 
     #handleEqualClick() {
@@ -650,10 +665,14 @@ export default class Calculator extends Window {
             this.#outputString = "";
             this.#currentInput = "";
             this.#currentInputType = undefined;
+
+            playAudioSnapshot("/media/audio/calcs/answer.wav");
         } else {
             this.#outputTop.innerHTML = "Error";
             this.#outputTop.dataset.error = "";
             this.#answer = undefined;
+
+            playAudioSnapshot("/media/audio/error.wav");
         }
     }
 

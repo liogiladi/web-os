@@ -18,6 +18,11 @@
         const video = document.querySelector("video");
         const startButton = document.querySelector("button");
 
+        const audioDisabled = localStorage.getItem("disable-audio");
+        if(audioDisabled) {
+            video.muted = true;
+        }
+
         startButton.onclick = async() => {
             startButton.style.pointerEvents = "none";
             await video.play();

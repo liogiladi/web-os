@@ -2,6 +2,7 @@ import readFileContents from "../../utils/readFileContents.js";
 import { FileStorage } from "../../utils/fileStorage.js";
 import Window from "../window.mjs";
 import { createPictureShortcut } from "../../utils/createFromFileStorage.js";
+import playAudioSnapshot from "../../utils/playAudioSnapshot.js";
 
 const MODES = Object.freeze({
     pic: Symbol("PIC"),
@@ -203,6 +204,8 @@ export default class Recorder extends Window {
         if (MODES.mic === MODES[mode]) {
             this.#visualize();
         }
+
+        playAudioSnapshot("/media/audio/recorder/recorder-mode-select.wav");
     }
 
     async #record() {
@@ -228,6 +231,8 @@ export default class Recorder extends Window {
                 this.#outputAudio.style.display = "none";
                 this.#outputCanvas.style.display = "unset";
                 this.#outputDialog.show();
+
+                playAudioSnapshot("/media/audio/recorder/camera.wav");
 
                 break;
             }
@@ -269,6 +274,8 @@ export default class Recorder extends Window {
                 };
 
                 this.#mediaRecorder.start();
+
+                playAudioSnapshot("/media/audio/recorder/record-video.wav");
 
                 break;
             }
@@ -317,6 +324,8 @@ export default class Recorder extends Window {
                 };
 
                 this.#mediaRecorder.start();
+
+                playAudioSnapshot("/media/audio/recorder/record-audio.wav");
             }
         }
     }

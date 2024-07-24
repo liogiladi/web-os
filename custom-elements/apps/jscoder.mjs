@@ -1,5 +1,6 @@
 import Window from "../window.mjs";
 import readFileContents from "/utils/readFileContents.js";
+import playAudioSnapshot from "../../utils/playAudioSnapshot.js";
 
 const purpleKeywords = [
 	"export",
@@ -124,9 +125,13 @@ export default class JSCoder extends Window {
 				const result = new Function([preConditions, editor.textContent, returnStatement].join(" "))();
 				output.innerText = result;
 				output.dataset.error = "false";
+
+				playAudioSnapshot("/media/audio/jscoder/run.wav");
 			} catch (error) {
 				output.dataset.error = "true";
 				output.innerText = `${error.name}: ${error.message}`;
+
+				playAudioSnapshot("/media/audio/error.wav");
 			}
 		};
 

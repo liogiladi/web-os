@@ -17,7 +17,9 @@
         import { FileStorage } from "/utils/fileStorage.js";
         import { createPictureShortcut } from "/utils/createFromFileStorage.js";
         import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
-        import Settings, { THEMES_FILTERS } from "/custom-elements/settings.mjs";
+        import Settings, {
+            THEMES_FILTERS,
+        } from "/custom-elements/settings.mjs";
 
         const theme =
             JSON.parse(String(localStorage.getItem("theme"))) ||
@@ -122,15 +124,19 @@
     </body>
 
     <script>
-        if(!localStorage.getItem("logged")) {
-            window.location.replace("../login.html");   
-        };
+        window.audio = new Audio();
+
+        const audioDisabled = localStorage.getItem("disable-audio");
+
+        if (!localStorage.getItem("logged")) {
+            window.location.replace("../login.html");
+        }
 
         const transitionLayer = document.querySelector("#transition-layer");
         const transitionLogo = transitionLayer.querySelector("img");
-        
+
         const transitionWidth = localStorage.getItem("logo-width-from-login");
-        if(transitionWidth) {
+        if (transitionWidth) {
             localStorage.removeItem("logo-width-from-login");
             transitionLogo.style.width = transitionWidth;
             document.querySelector("#os-logo").style.width = transitionWidth;
@@ -144,31 +150,20 @@
         }
 
         if (localStorage.getItem("from-boot")) {
-            setTimeout(() => {
+            setTimeout(async () => {
                 localStorage.removeItem("from-boot");
                 hideTransitionLayer();
+
+                if (!audioDisabled) {
+                    window.audio.src = "/media/audio/logged-in.mp3";
+                    await window.audio.play();
+                }
             }, 200);
         } else {
             hideTransitionLayer();
         }
 
         var main = document.querySelector("main");
-        /* var menu = document.querySelector("#context-menu");
-        menu.style.display = "none";
-
-        window.addEventListener("contextmenu", (event) => {
-            if (event.target !== main) return;
-            event.preventDefault();
-
-            menu.focus();
-            menu.style.display = "unset";
-            menu.style.left = event.x;
-            menu.style.top = event.y;
-        });
-
-        menu.onblur = (event) => {
-            menu.style.display = "none";
-        }; */
 
         window.L = L;
     </script>

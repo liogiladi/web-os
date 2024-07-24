@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="stylesheet" href="./boot.css">
+        <link rel="stylesheet" href="./boot.css" />
         <title>Document</title>
     </head>
     <body>
@@ -14,9 +14,25 @@
 
         const h1 = document.querySelector("h1");
 
+        const audioDisabled = localStorage.getItem("disable-audio");
+        const audio = new Audio("../media/audio/beep.wav");
+        if (audioDisabled) {
+            audio.muted = true;
+        }
+
+        let beepInterval = setInterval(async () => {
+            try {
+                await audio.play();
+            } catch (error) {
+                // User has not interacted with page first
+            }
+        }, 600);
+
         setTimeout(() => {
             h1.dataset.start = false;
             h1.innerHTML = "Welcome to WebOs ^_^";
+
+            clearInterval(beepInterval);
 
             // Determine by saved theme
             const theme = JSON.parse(localStorage.getItem("theme") || "false");
@@ -24,8 +40,15 @@
 
             let i = 0;
 
-            setTimeout(() => {
+            setTimeout(async () => {
                 // Log all lines
+                audio.loop = true;
+                try {
+                    await audio.play();
+                } catch (error) {
+                    // User has not interacted with page first
+                }
+                
                 let intervalId = setInterval(() => {
                     if (i >= bootLines.length) {
                         clearInterval(intervalId);
@@ -36,7 +59,7 @@
                         document.body.append(binariesWrapper);
 
                         i = 0;
-                        intervalId = setInterval(() => {
+                        intervalId = setInterval(async () => {
                             if (i >= binaries.length) {
                                 clearInterval(intervalId);
 
@@ -50,6 +73,8 @@
 
                                     return;
                                 }, 800);
+
+                                audio.pause();
 
                                 return;
                             }

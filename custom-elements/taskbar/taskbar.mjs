@@ -1,5 +1,6 @@
 import readFileContents from "/utils/readFileContents.js";
 import TasksData from "/utils/tasksData.js";
+import playAudioSnapshot from "/utils/playAudioSnapshot.js";
 
 /**
  * @typedef TaskInfo
@@ -80,6 +81,13 @@ export default class Taskbar extends HTMLElement {
             const notification = document.createElement("img");
             notification.src = src;
             notification.className = "notification";
+
+            if (src.includes("audio")) {
+                const audioDisabled = localStorage.getItem("disable-audio");
+                notification.setAttribute("muted", audioDisabled);
+                notification.onclick = this.#toggleAudio.bind(this);
+            }
+
             notifications.append(notification);
         }
 
@@ -185,6 +193,16 @@ export default class Taskbar extends HTMLElement {
         clearInterval(this.#timeIntervalId);
     }
 
+    /**
+     * @param {MouseEvent} e
+     */
+    #toggleAudio(e) {
+        const audioDisabled = localStorage.getItem("disable-audio");
+        if (audioDisabled) localStorage.removeItem("disable-audio");
+        else localStorage.setItem("disable-audio", "true");
+        e.target.setAttribute("muted", !audioDisabled);
+    }
+
     #logout() {
         const transitionLayer = document.querySelector("#transition-layer");
         transitionLayer.style.opacity = 1;
@@ -197,9 +215,11 @@ export default class Taskbar extends HTMLElement {
         );
         localStorage.removeItem("logged");
 
+        playAudioSnapshot("/media/audio/logout.mp3");
+
         setTimeout(() => {
             window.location.replace("../login.html");
-        }, 1000);
+        }, 1500);
     }
 
     #powerOff() {
@@ -216,9 +236,11 @@ export default class Taskbar extends HTMLElement {
 
             localStorage.removeItem("logged");
 
+            playAudioSnapshot("/media/audio/poweroff.mp3");
+
             setTimeout(() => {
                 window.location.replace("../index.html");
-            }, 1000);
+            }, 1500);
         }
     }
 
