@@ -3,6 +3,7 @@ import { FileStorage } from "../../utils/fileStorage.js";
 import Window from "../window.mjs";
 import { createPictureShortcut } from "../../utils/createFromFileStorage.js";
 import playAudioSnapshot from "../../utils/playAudioSnapshot.js";
+import downloadFromHref from "../../utils/downloadFromHref.js";
 
 const MODES = Object.freeze({
     pic: Symbol("PIC"),
@@ -225,7 +226,7 @@ export default class Recorder extends Window {
                     this.#outputCanvas.height
                 );
 
-                this.#saveOutputButton.innerHTML = "Save";
+                this.#saveOutputButton.innerHTML = globalThis.isMobile ? "Download" : "Save";
 
                 this.#outputVideo.style.display = "none";
                 this.#outputAudio.style.display = "none";
@@ -334,9 +335,16 @@ export default class Recorder extends Window {
         switch (this.#mode) {
             case MODES.pic: {
                 const src = this.#outputCanvas.toDataURL("image/jpeg");
-                const pictureInfo = FileStorage.addPicture(src);
 
-                createPictureShortcut(pictureInfo);
+                if (globalThis.isMobile) {
+                    downloadFromHref(
+                        src,
+                        `picture-${new Date().toISOString()}.jpeg`
+                    );
+                } else {
+                    const pictureInfo = FileStorage.addPicture(src);
+                    createPictureShortcut(pictureInfo);
+                }
 
                 this.#saveOutputButton.style.color = "greenyellow";
 
@@ -354,19 +362,17 @@ export default class Recorder extends Window {
                 break;
             }
             case MODES.vid: {
-                const a = document.createElement("a");
-                a.href = this.#outputVideo.src;
-                a.download = `video-${new Date().toISOString()}.webm`;
-                a.file;
-                a.click();
+                downloadFromHref(
+                    this.#outputVideo.src,
+                    `video-${new Date().toISOString()}.webm`
+                );
                 break;
             }
             case MODES.mic: {
-                const a = document.createElement("a");
-                a.href = this.#outputAudioSource.src;
-                a.download = `audio-${new Date().toISOString()}.ogg`;
-                a.file;
-                a.click();
+                downloadFromHref(
+                    this.#outputAudioSource.src,
+                    `audio-${new Date().toISOString()}.ogg`
+                );
             }
         }
     }
