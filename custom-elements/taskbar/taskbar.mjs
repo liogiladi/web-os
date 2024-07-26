@@ -152,7 +152,9 @@ export default class Taskbar extends HTMLElement {
 
             if (globalThis.isMobile) {
                 const windowsWrapper = document.querySelector("#windows");
-                windowsWrapper.style.filter = "opacity(1)";
+                windowsWrapper.style.filter = "unset";
+                windowsWrapper.style.overflowX = "hidden";
+                windowsWrapper.style.pointerEvents = "all";
             }
         };
 
@@ -346,13 +348,10 @@ export default class Taskbar extends HTMLElement {
 
         const windowsWrapper = document.querySelector("#windows");
         windowsWrapper.dataset.navOpen = false;
-
-        if (windowsWrapper.children.length > 1) {
-            windowsWrapper.style.overflowX = "hidden";
-        }
+        windowsWrapper.style.overflowX = "hidden";
 
         document
             .querySelector("[data-viewed-window]")
             ?.removeAttribute("data-viewed-window");
-        }
+    }
 }

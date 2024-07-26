@@ -68,11 +68,12 @@
                 logo.style.pointerEvents = "none";
 
                 // Close navigation if it's open
-                Taskbar.instance.dataset.navOpen = false;
+                Taskbar.instance.container.dataset.navOpen = false;
 
                 const windowsWrapper = document.querySelector("#windows");
                 windowsWrapper.dataset.navOpen = false;
                 windowsWrapper.style.filter = "opacity(0)";
+                windowsWrapper.style.pointerEvents = "none";
             }
         }
     </script>

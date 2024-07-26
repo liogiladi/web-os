@@ -251,6 +251,15 @@ desktop-settings {
         grid-template-columns: 1fr;
     }
 
+    #themes {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #themes button[data-selected] {
+        border: 1px solid white;
+    }
+
     #scale-settings {
         grid-row: 2;
     }
