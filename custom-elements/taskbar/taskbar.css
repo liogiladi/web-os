@@ -18,21 +18,21 @@
     backdrop-filter: blur(0.563rem);
 }
 
-#taskbar:is([data-nav-open=true], [data-settings-open=true]) {
+#taskbar:is([data-nav-open="true"], [data-settings-open="true"]) {
     height: 100%;
 }
 
-#taskbar:is([data-nav-open=true], [data-settings-open=true])::before {
+#taskbar:is([data-nav-open="true"], [data-settings-open="true"])::before {
     background: #00000069;
-	backdrop-filter: blur(1.563rem);
+    backdrop-filter: blur(1.563rem);
 }
 
 #taskbar #settings-buttons {
-	display: none;
+    display: none;
 }
 
-#taskbar[data-settings-open=true] #settings-buttons {
-	position: absolute;
+#taskbar[data-settings-open="true"] #settings-buttons {
+    position: absolute;
     left: 50%;
     top: 50%;
     translate: -50% -50%;
@@ -41,28 +41,26 @@
     align-items: center;
     gap: 1rem;
     opacity: 0;
-
 }
 
 #settings-buttons button {
-	display: block;
+    display: block;
     width: 2.813rem;
     height: 2.813rem;
-	background-size: cover;
+    background-size: cover;
     border: 0;
     background-color: transparent;
-	cursor: pointer;
-	transition: 0.1s;
+    cursor: pointer;
+    transition: 0.1s;
 }
 
 #settings-buttons button:hover {
-	filter: brightness(0.9);
+    filter: brightness(0.9);
 }
 
 #settings-buttons button:active {
-	scale: 0.9;
+    scale: 0.9;
 }
-
 
 #taskbar-content {
     position: absolute;
@@ -134,7 +132,7 @@
     transition: opacity 0.3s;
 }
 
-#taskbar[data-settings-open=true] #taskbar-tasks {
+#taskbar[data-settings-open="true"] #taskbar-tasks {
     opacity: 0;
     pointer-events: none;
 }
@@ -168,7 +166,7 @@
     aspect-ratio: 1/1;
 }
 
-img[muted=true] {
+img[muted="true"] {
     opacity: 0.4;
 }
 
@@ -186,32 +184,59 @@ img[muted=true] {
 
 /* --------------- Mobile --------------- */
 
-#taskbar-content[data-mobile=true] {
+#taskbar-content[data-mobile="true"] {
     justify-content: space-around;
+}
+
+#home-button,
+#navigate-button {
+    position: relative;
+    background: none;
+    border: 2px solid white;
+    transition: opacity 0.3s;
+}
+
+#home-button::before,
+#navigate-button::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    scale: 4;
+}
+
+#home-button:active,
+#navigate-button:active {
+    animation: press 0.2s;
+}
+
+@keyframes press {
+    0% {
+        scale: 1;
+    }
+    50% {
+        scale: 0.8;
+    }
+    100% {
+        scale: 1;
+    }
 }
 
 #home-button {
     padding: 0.5rem;
-    background: none;
-    border: 2px solid white;
     border-radius: 50%;
-    transition: opacity 0.3s;
-}
-
-#home-button:active, #navigate-button:active {
-    animation: press 0.2s forwards
 }
 
 #navigate-button {
     padding: 0.45rem;
-    background: none;
-    border: 2px solid white;
     border-radius: 3px;
-    transition: opacity 0.3s;
 }
 
-#taskbar[data-settings-open=true] #navigate-button,
-#taskbar[data-settings-open=true] #home-button {
+#taskbar[data-settings-open="true"] #navigate-button,
+#taskbar[data-settings-open="true"] #home-button {
     opacity: 0;
     pointer-events: none;
 }
