@@ -70,7 +70,10 @@ export default class Shortcut extends HTMLElement {
         this.span = document.createElement("span");
         this.span.innerText = this.name;
         this.span.style.pointerEvents = "none";
-        this.span.onclick = this.selectInput.bind(this);
+
+        if (!globalThis.isMobile) {
+            this.span.onclick = this.selectInput.bind(this);
+        }
 
         this.textarea = document.createElement("textarea");
         this.textarea.onblur = this.deselectInput.bind(this);
@@ -78,7 +81,7 @@ export default class Shortcut extends HTMLElement {
         this.#deleteButton = document.createElement("button");
         this.#deleteButton.className = "delete-button";
         this.#deleteButton.innerHTML = "x";
-        
+
         if (!this.deletetable) {
             this.#deleteButton.disabled = true;
             this.#deleteButton.title = "This core item cannot be deleted";
@@ -102,27 +105,34 @@ export default class Shortcut extends HTMLElement {
             template.setAttribute(attribute, this[attribute]);
         }
 
-        this.ondblclick = this.dblClick.bind(this);
+        if (globalThis.isMobile) {
+            this.onclick = this.dblClick.bind(this);
+        } else {
+            this.ondblclick = this.dblClick.bind(this);
+        }
 
         this.ondragstart = () => false;
 
         shadowRoot.append(template);
 
-        makeDraggable(this, template, {
-            customStyles: { position: "relative" },
-            bubbleThroughController: true,
-            preventDrag: (event) => event.target === this.textarea,
-        });
+        if (!globalThis.isMobile) {
+            makeDraggable(this, template, {
+                customStyles: { position: "relative" },
+                bubbleThroughController: true,
+                preventDrag: (event) => event.target === this.textarea,
+            });
+
+            this.onfocus = this.focus;
+            this.onblur = this.blur;
+            this.oncontextmenu = (e) => {
+                e.stopPropagation();
+                this.#deleteButton.style.display = "block";
+                return false;
+            };
+        }
 
         this.style.userSelect = "none";
-
-        this.onfocus = this.focus;
-        this.onblur = this.blur;
-        this.oncontextmenu = (e) => {
-            e.stopPropagation();
-            this.#deleteButton.style.display = "block";
-            return false;
-        };
+        this.isMobile = globalThis.isMobile;
     }
 
     attributeChangedCallback(_name, _oldValue, newValue) {
@@ -169,17 +179,28 @@ export default class Shortcut extends HTMLElement {
     }
 
     dblClick() {
-        Taskbar.tasks.add({
-            name: this.wcTagName,
-            iconSrc: this.iconSrc,
-            count: 1,
-        });
-
         const windowsContainer = document.getElementById("windows");
         const window = document.createElement(this.wcTagName);
         window.headerTitle = this.name;
         window.iconSrc = this.iconSrc;
         window.dataset.shortcutId = this.id;
+
+        if (this.isMobile) {
+            document
+                .querySelector("[data-viewed-window]")
+                ?.removeAttribute("data-viewed-window");
+            window.dataset.viewedWindow = "";
+            windowsContainer.style.overflowX = "hidden";
+
+            Taskbar.instance.container.dataset.settingsOpen = false;
+            Taskbar.instance.container.dataset.navOpen = false;
+        } else {
+            Taskbar.tasks.add({
+                name: this.wcTagName,
+                iconSrc: this.iconSrc,
+                count: 1,
+            });
+        }
 
         if (this.intermediateData) {
             window.intermediateData = this.intermediateData;

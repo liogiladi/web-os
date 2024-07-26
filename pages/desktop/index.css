@@ -1,162 +1,248 @@
 @font-face {
-	font-family: "JetBrains";
-	src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
-	font-weight: 100 900;
+    font-family: "JetBrains";
+    src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
+    font-weight: 100 900;
 }
 
 :root {
-	font-size: var(--scale);
+    font-size: var(--scale);
 }
 
 * {
-	font-family: "JetBrains";
+    font-family: "JetBrains";
 }
 
-body {
-	margin: 0 auto;
-	overflow: hidden;
+body,
+main {
+    margin: 0 auto;
+    overflow: hidden;
 }
 
 body::before {
-	content: "";
-	position: fixed;
-	width: 100vw;
-	height: 100vh;
-	background-image: url("/media/bg.svg");
-	background-size: cover;
-	filter: saturate(1.2) var(--theme-filter);
+    content: "";
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    background-image: url("/media/bg.svg");
+    background-size: cover;
+    filter: saturate(1.2) var(--theme-filter);
 }
 
 .cursor-override * {
-	cursor: inherit !important;
-	pointer-events: none !important;
+    cursor: inherit !important;
+    pointer-events: none !important;
 }
 
 #transition-layer {
-	position: fixed;
-	z-index: 10000;
-	width: 100%;
-	height: 100%;
-	background: linear-gradient(black, #101010);
-	transition: 1s;
+    position: fixed;
+    z-index: 10000;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(black, #101010);
+    transition: 1s;
 }
 
 #transition-logo {
-	cursor: default !important;
+    cursor: default !important;
 }
 
 main {
-	position: relative;
-	width: 100vw;
-	height: calc(100vh - 4.375rem);
-	padding: 1rem;
-	box-sizing: border-box;
-}	
+    position: relative;
+    width: 100vw;
+    height: calc(100vh - 4.375rem);
+    padding: 1rem;
+    box-sizing: border-box;
+}
 
 main[data-preview-window] #windows > *:not([data-window-to-preview]) {
-	display: none !important;
+    display: none !important;
 }
 
 .center-logo {
-	position: fixed;
+    position: fixed;
     left: 50%;
     top: 50%;
-	width: clamp(11.063rem, 20%, 15.5rem);
+    width: clamp(11.063rem, 20%, 15.5rem);
     transform: translate(-50%, -50%);
-	transition: transform 0.2s;
-	cursor: pointer;
-	filter: var(--theme-filter) drop-shadow(0 0.25rem 15px #00000001);
+    transition: transform 0.2s;
+    cursor: pointer;
+    filter: var(--theme-filter) drop-shadow(0 0.25rem 15px #00000001);
 }
 
 body:not(.cursor-override) #os-logo:hover {
-	transform: translate(-50%, -50%) scale(1.1);
+    transform: translate(-50%, -50%) scale(1.1);
 }
 
 body:not(.cursor-override) #os-logo:active {
-	transform: translate(-50%, -50%) scale(0.9);
+    transform: translate(-50%, -50%) scale(0.9);
 }
 
 #shortcuts {
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	height: 100%;
-	gap: 1.25rem;
-	width: fit-content;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 100%;
+    gap: 1.25rem;
+    width: fit-content;
 }
 
 #theme-button {
-	position: absolute;
-	left: 1.25rem;
-	bottom: 1.25rem;
-	border: 0;
-	border-radius: 0.313rem;
-	padding: 0.625rem 30px;
-	font-size: 13px;
-	background: linear-gradient(0deg, rgba(209, 90, 207, 0.8) 0%, rgba(250, 167, 249, 0.8) 100%);
-	box-shadow: -1px 0.313rem 0.938rem -6px rgba(0, 0, 0, 0.459);
-	color: black;
-	font-weight: 800;
-	transition: background-color 0.1s;
-	cursor: pointer;
-	transition: filter 0.3s, transform 0.1s;
-	filter: var(--theme-filter)
+    position: absolute;
+    left: 1.25rem;
+    bottom: 1.25rem;
+    border: 0;
+    border-radius: 0.313rem;
+    padding: 0.625rem 30px;
+    font-size: 13px;
+    background: linear-gradient(
+        0deg,
+        rgba(209, 90, 207, 0.8) 0%,
+        rgba(250, 167, 249, 0.8) 100%
+    );
+    box-shadow: -1px 0.313rem 0.938rem -6px rgba(0, 0, 0, 0.459);
+    color: black;
+    font-weight: 800;
+    transition: background-color 0.1s;
+    cursor: pointer;
+    transition: filter 0.3s, transform 0.1s;
+    filter: var(--theme-filter);
 }
 
 #theme-button:hover {
-	filter: brightness(0.8);
+    filter: brightness(0.8);
 }
 
 #theme-button:active {
-	transform: scale(0.9);
+    transform: scale(0.9);
 }
 
 #context-menu {
-	position: absolute;
-	z-index: 10000;
-	width: fit-content;
-	display: flex;
-	justify-content: center;
-	border-radius: 0.25rem;
-	text-align: center;
-	padding: 0;
-	width: 200px;
-	margin: 0;
-	background-color: white;
-	box-shadow: -1px 0.313rem 0.938rem -6px rgba(0, 0, 0, 0.459);
-	list-style-type: none;
+    position: absolute;
+    z-index: 10000;
+    width: fit-content;
+    display: flex;
+    justify-content: center;
+    border-radius: 0.25rem;
+    text-align: center;
+    padding: 0;
+    width: 200px;
+    margin: 0;
+    background-color: white;
+    box-shadow: -1px 0.313rem 0.938rem -6px rgba(0, 0, 0, 0.459);
+    list-style-type: none;
 }
 
 #context-menu li {
-	font-size: 0.875;
-	width: 100%;
+    font-size: 0.875;
+    width: 100%;
 }
 
 #context-menu li button {
-	box-sizing: border-box;
-	padding: 0.313rem;
-	padding-right: 0.938rem;
-	width: 100%;
-	height: 100%;
-	background: transparent;
-	border: 0;
-	border-radius: 0.25rem;
-	text-align: right;
-	cursor: pointer;
+    box-sizing: border-box;
+    padding: 0.313rem;
+    padding-right: 0.938rem;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: 0;
+    border-radius: 0.25rem;
+    text-align: right;
+    cursor: pointer;
 }
 
 #context-menu li button::before {
-	content: "*";
-	position: absolute;
-	left: 0.625rem;
-	font-weight: bolder;
+    content: "*";
+    position: absolute;
+    left: 0.625rem;
+    font-weight: bolder;
 }
 
 #context-menu li button:hover {
-	width: 100%;
-	height: 100%;
-	background-color: rgba(0, 0, 0, 0.067);
-	border: 0;
-	border-radius: 0.25rem;
-	cursor: pointer;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.067);
+    border: 0;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+/* --------------- Mobile --------------- */
+
+body[data-mobile] #shortcuts {
+    box-sizing: border-box;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap-reverse;
+    height: 50%;
+    width: 100%;
+    padding: 1rem;
+}
+
+body[data-mobile] #shortcuts desktop-shortcut {
+    height: fit-content;
+}
+
+body[data-mobile] #windows {
+    z-index: 10000;
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    gap: 2rem;
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+    pointer-events: none;
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+
+body[data-mobile] #windows:has([data-viewed-window]) {
+    opacity: 1;
+	pointer-events: all;
+}
+
+body[data-mobile] #windows > * {
+    width: 100%;
+    transition: scale 0.3s ease-in-out;
+}
+
+body[data-mobile] #windows[data-nav-open="true"] {
+    pointer-events: all;
+    scroll-snap-type: x mandatory;
+    opacity: 1;
+}
+
+body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar-track {
+    background-color: #0000004e;
+}
+
+body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar-thumb {
+	border: 4px solid rgba(0, 0, 0, 0);
+}
+
+body[data-mobile] #windows[data-nav-open="true"] > * {
+    scale: 0.8;
+    scroll-snap-align: center;
+}
+
+/* Prevents interactions with a window's content when navigating */
+body[data-mobile] #windows[data-nav-open="true"] > *::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
 }

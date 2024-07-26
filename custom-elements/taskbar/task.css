@@ -135,7 +135,6 @@
     top: 50% !important;
     left: 50% !important;
     translate: -50% -50%;
-    pointer-events: none;
 }
 
 .preview .task-close-button {

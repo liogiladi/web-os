@@ -244,3 +244,23 @@ desktop-settings {
         font-size: clamp(0.9rem, 1.5vw, 1.2rem);
     }
 }
+
+@media screen and (max-width: 600px) {
+    #taskbar[data-settings-open="true"] desktop-settings {
+        grid-template-rows: 0.8fr auto 1fr;
+        grid-template-columns: 1fr;
+    }
+
+    #scale-settings {
+        grid-row: 2;
+    }
+
+    #account-settings form {
+        display: ruby;
+        overflow: auto;
+    }
+
+    #account-settings form > * {
+        margin-bottom:  1rem;
+    }
+}

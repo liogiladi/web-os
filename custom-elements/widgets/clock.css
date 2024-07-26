@@ -7,6 +7,12 @@ desktop-clock {
     transform: translate(-1.5rem, 1.5rem);
 }
 
+body[data-mobile] desktop-clock {
+    left: 50%;
+    top: 15%;
+    transform: translate(-50%, -15%);
+}
+
 desktop-clock::before {
     content: "";
     position: absolute;

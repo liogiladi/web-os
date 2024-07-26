@@ -244,7 +244,7 @@ export default class Settings extends HTMLElement {
 
         
         document.querySelector("#transition-layer img").removeAttribute("style");
-        document.querySelector("#os-logo img").removeAttribute("style");
+        (document.querySelector("#os-logo img") || Taskbar.instance.shadowRoot.querySelector("#os-logo img")).removeAttribute("style");
     }
 
     /**

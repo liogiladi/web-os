@@ -79,6 +79,7 @@ export default class Window extends HTMLElement {
             border: "1px solid #ffffff69",
         };
 
+        this.style.display = "block";
         this.style.zIndex = 1000;
         this.style.borderRadius = "0.25rem";
         this.style.minWidth = this._defaultWindowSize.width;
@@ -190,7 +191,7 @@ export default class Window extends HTMLElement {
 
         if (this.childNodes.length === 0) this.appendChild(template);
 
-        if (!this.temporary) {
+        if (!this.temporary && !globalThis.isMobile) {
             makeDraggable(this, header, {
                 customStyles: { position: "absolute", ...this.windowedStyles },
                 preventDrag: () => this._fullscreen,
@@ -198,9 +199,7 @@ export default class Window extends HTMLElement {
 
             this.addEventListener("focusin", (e) => {
                 // We don't wan't to reorder if pressed on any of these buttons
-                if (
-                    [closeButton, minimizeButton].includes(e.target)
-                ) {
+                if ([closeButton, minimizeButton].includes(e.target)) {
                     return;
                 }
 
@@ -214,10 +213,28 @@ export default class Window extends HTMLElement {
             reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
 
             this.ondragstart = () => false;
+
+            if (this.transformCallback) {
+                this.transformCallback(this);
+            }
         }
 
-        if (this.transformCallback) {
-            this.transformCallback(this);
+        if (globalThis.isMobile) {
+            Object.assign(this.windowedStyles, {
+                width: "100%",
+                height: "100%",
+            });
+
+            this.style.minWidth = "100%";
+            this.style.minHeight = "100%";
+            this.style.boxSizing = "border-box";
+
+            sizeButton.remove();
+            closeButton.remove();
+            minimizeButton.remove();
+            resizerElements.forEach((el) => el.remove());
+
+            this.scrollIntoView();
         }
     }
 

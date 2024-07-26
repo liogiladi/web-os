@@ -126,6 +126,8 @@ export default class Taskbar extends HTMLElement {
         powerOffButton.style.backgroundImage = `url("/media/off-button.png")`;
         powerOffButton.onclick = this.#powerOff.bind(this);
 
+        const logo = document.querySelector("#os-logo");
+
         const closeButton = document.createElement("button");
         closeButton.style.backgroundImage = `url("/media/close-button.png")`;
         closeButton.onclick = () => {
@@ -142,9 +144,16 @@ export default class Taskbar extends HTMLElement {
                     "settings-unload-animation"
                 );
 
-                this.tasksWrapper.style.opacity = 1;
-                this.tasksWrapper.style.pointerEvents = "all";
+                if (globalThis.isMobile) {
+                    logo.style.opacity = 1;
+                    logo.style.pointerEvents = "all";
+                }
             }, 300);
+
+            if (globalThis.isMobile) {
+                const windowsWrapper = document.querySelector("#windows");
+                windowsWrapper.style.filter = "opacity(1)";
+            }
         };
 
         const lockButton = document.createElement("button");
@@ -158,6 +167,26 @@ export default class Taskbar extends HTMLElement {
         this.tasksWrapper = document.createElement("div");
         this.tasksWrapper.id = "taskbar-tasks";
         this.taskbarContent.append(this.tasksWrapper);
+
+        // Mobile adjustments
+        if (globalThis.isMobile) {
+            this.taskbarContent.dataset.mobile = true;
+
+            this.tasksWrapper.remove();
+            notifications.remove();
+            socialLinks.remove();
+
+            const homeButton = document.createElement("button");
+            homeButton.id = "home-button";
+            homeButton.onclick = this.#goHome.bind(this);
+
+            const navigateButton = document.createElement("button");
+            navigateButton.id = "navigate-button";
+
+            navigateButton.onclick = this.#navigate.bind(this);
+
+            this.taskbarContent.append(logo, homeButton, navigateButton);
+        }
 
         this.append(this.container);
 
@@ -229,7 +258,7 @@ export default class Taskbar extends HTMLElement {
             "Shutting down the machine will delete usaved data.\n\nContinue?",
             {
                 positive: "Yes",
-                negative: "No"
+                negative: "No",
             },
             () => {
                 const transitionLayer =
@@ -259,4 +288,71 @@ export default class Taskbar extends HTMLElement {
 
         return this.instance.height;
     }
+
+    /** ----------------- Mobile ----------------- */
+
+    #navigate() {
+        const windowsWrapper = document.querySelector("#windows");
+
+        if (JSON.parse(this.container.dataset.navOpen || "false")) {
+            windowsWrapper.childNodes.forEach((node) =>
+                node.removeEventListener("click", this.#goToWindow.bind(this))
+            );
+
+            this.container.dataset.navOpen = false;
+            windowsWrapper.dataset.navOpen = false;
+
+            if (windowsWrapper.children.length > 1) {
+                windowsWrapper.style.overflowX = "hidden";
+            }
+        } else {
+            windowsWrapper.childNodes.forEach((node) =>
+                node.addEventListener("click", this.#goToWindow.bind(this))
+            );
+
+            this.container.dataset.navOpen = true;
+            windowsWrapper.dataset.navOpen = true;
+
+            if (windowsWrapper.children.length > 1) {
+                windowsWrapper.style.overflowX = "auto";
+            }
+        }
+    }
+
+    /**
+     * @param {MouseEvent} e
+     */
+    #goToWindow(e) {
+        // Make sure the window is locked in center for smooth transition
+        e.target.scrollIntoView();
+
+        this.container.dataset.navOpen = false;
+
+        const windowsWrapper = document.querySelector("#windows");
+        windowsWrapper.dataset.navOpen = false;
+
+        if (windowsWrapper.children.length > 1) {
+            windowsWrapper.style.overflowX = "hidden";
+        }
+
+        document
+            .querySelector("[data-viewed-window]")
+            ?.removeAttribute("data-viewed-window");
+        e.target.dataset.viewedWindow = "";
+    }
+
+    #goHome() {
+        this.container.dataset.navOpen = false;
+
+        const windowsWrapper = document.querySelector("#windows");
+        windowsWrapper.dataset.navOpen = false;
+
+        if (windowsWrapper.children.length > 1) {
+            windowsWrapper.style.overflowX = "hidden";
+        }
+
+        document
+            .querySelector("[data-viewed-window]")
+            ?.removeAttribute("data-viewed-window");
+        }
 }

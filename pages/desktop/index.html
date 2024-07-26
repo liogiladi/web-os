@@ -3,7 +3,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Web OS - Desktop</title>
-        <link rel="icon" href="/media/favicon.png" type="image/png">
+        <link rel="icon" href="/media/favicon.png" type="image/png" />
         <link rel="stylesheet" href="/pages/desktop/index.css" />
         <link
             rel="stylesheet"
@@ -21,6 +21,13 @@
         import Settings, {
             THEMES_FILTERS,
         } from "/custom-elements/settings.mjs";
+        import isMobile from "/utils/isMobile.js";
+
+        globalThis.isMobile = isMobile();
+
+        if (globalThis.isMobile) {
+            document.body.dataset.mobile = "true";
+        }
 
         const theme =
             JSON.parse(String(localStorage.getItem("theme"))) ||
@@ -40,10 +47,11 @@
             createPictureShortcut(info);
         }
 
+        const logo = document.querySelector("#os-logo");
+        logo.addEventListener("click", openSettings);
+
         function openSettings(event) {
             Taskbar.instance.container.dataset.settingsOpen = true;
-            Taskbar.instance.tasksWrapper.style.opacity = 0;
-            Taskbar.instance.tasksWrapper.style.pointerEvents = "none";
             Settings.instance.updateDefaultUserInfo();
 
             setTimeout(() => {
@@ -54,11 +62,19 @@
                     "settings-load-animation"
                 );
             }, 500);
-        }
 
-        document
-            .querySelector("#os-logo")
-            .addEventListener("click", openSettings);
+            if (globalThis.isMobile) {
+                logo.style.opacity = 0;
+                logo.style.pointerEvents = "none";
+
+                // Close navigation if it's open
+                Taskbar.instance.dataset.navOpen = false;
+
+                const windowsWrapper = document.querySelector("#windows");
+                windowsWrapper.dataset.navOpen = false;
+                windowsWrapper.style.filter = "opacity(0)";
+            }
+        }
     </script>
     <script src="https://unpkg.com/@ungap/custom-elements-builtin"></script>
     <script type="module" src="https://unpkg.com/x-frame-bypass"></script>
@@ -72,7 +88,7 @@
                 draggable="false"
             />
         </div>
-        <dialog is="desktop-alert-dialog"></dialog >
+        <dialog is="desktop-alert-dialog"></dialog>
         <main>
             <!-- <settings-menu></settings-menu> -->
             <img
@@ -164,8 +180,6 @@
         } else {
             hideTransitionLayer();
         }
-
-        //window.oncontextmenu(e => false);
 
         window.L = L;
     </script>

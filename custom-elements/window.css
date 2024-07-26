@@ -1,6 +1,7 @@
 /* ------------------ Window ------------------- */
 
 .window {
+    position: relative;
     font-size: 1rem;
     z-index: 101;
     cursor: default;
