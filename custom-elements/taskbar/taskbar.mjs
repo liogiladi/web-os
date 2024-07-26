@@ -293,10 +293,13 @@ export default class Taskbar extends HTMLElement {
 
     /** ----------------- Mobile ----------------- */
 
+    #emptyMessage = "No open activites";
+
     #navigate() {
         const windowsWrapper = document.querySelector("#windows");
 
         if (JSON.parse(this.container.dataset.navOpen || "false")) {
+            // Close
             windowsWrapper.childNodes.forEach((node) =>
                 node.removeEventListener("click", this.#goToWindow.bind(this))
             );
@@ -304,10 +307,13 @@ export default class Taskbar extends HTMLElement {
             this.container.dataset.navOpen = false;
             windowsWrapper.dataset.navOpen = false;
 
-            if (windowsWrapper.children.length > 1) {
+            if (windowsWrapper.textContent === this.#emptyMessage) {
+                windowsWrapper.innerHTML = "";
+            } else {
                 windowsWrapper.style.overflowX = "hidden";
             }
         } else {
+            // Open
             windowsWrapper.childNodes.forEach((node) =>
                 node.addEventListener("click", this.#goToWindow.bind(this))
             );
@@ -317,6 +323,9 @@ export default class Taskbar extends HTMLElement {
 
             if (windowsWrapper.children.length > 1) {
                 windowsWrapper.style.overflowX = "auto";
+            } else if (windowsWrapper.children.length === 0) {
+                windowsWrapper.innerHTML =
+                    `<span id='empty-windows-message'>${this.#emptyMessage}</span>`;
             }
         }
     }

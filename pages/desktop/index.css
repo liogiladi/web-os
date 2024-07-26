@@ -246,3 +246,14 @@ body[data-mobile] #windows[data-nav-open="true"] > *::before {
     height: 100%;
     z-index: 1000;
 }
+
+body[data-mobile] #windows #empty-windows-message {
+    position: absolute;
+    width: fit-content;
+    left: 50%;
+    top: 50%;
+    translate: -50% -50%;
+    font-size: clamp(1rem, 7vw, 2rem);
+    text-wrap: nowrap;
+    color: #ffffff40;
+}
