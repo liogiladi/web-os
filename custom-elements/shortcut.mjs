@@ -80,7 +80,7 @@ export default class Shortcut extends HTMLElement {
 
         this.#deleteButton = document.createElement("button");
         this.#deleteButton.className = "delete-button";
-        this.#deleteButton.innerHTML = "x";
+        this.#deleteButton.innerHTML = `<img src='/media/x.svg'></img>`;
 
         if (!this.deletetable) {
             this.#deleteButton.disabled = true;

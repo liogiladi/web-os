@@ -150,6 +150,10 @@
     cursor: pointer;
 }
 
+.preview .task-close-button img {
+    width: 0.6em;
+}
+
 .preview .task-close-button:hover {
     background: rgb(174, 36, 36);
 }

@@ -258,6 +258,14 @@ img[muted="true"] {
     pointer-events: none;
 }
 
+#close-all-windows-button:active {
+    scale: 0.9;
+}
+
+#close-all-windows-button img {
+    width: 0.7em;
+}
+
 #taskbar[data-nav-open=true][data-multiple-windows=true] #close-all-windows-button  {
     opacity: 1;
     pointer-events: all;

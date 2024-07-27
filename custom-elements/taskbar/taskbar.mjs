@@ -190,7 +190,7 @@ export default class Taskbar extends HTMLElement {
 
             const closeAllWindowsButton = document.createElement("button");
             closeAllWindowsButton.id = "close-all-windows-button";
-            closeAllWindowsButton.innerHTML = "x";
+            closeAllWindowsButton.innerHTML = `<img src='/media/x.svg'></img>`;
             closeAllWindowsButton.onclick = this.#closeAllWindows.bind(this);
 
             windowsWrapper.append(closeAllWindowsButton);

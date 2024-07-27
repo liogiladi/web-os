@@ -81,6 +81,10 @@
     cursor: pointer;
 }
 
+.delete-button img {
+	width: 0.7em;	
+}
+
 .delete-button:not(:disabled):hover {
 	background-color: #b00707;
 }

@@ -109,7 +109,7 @@ export default class Task extends HTMLElement {
         };
 
         this.onblur = (e) => {
-             if (e.relatedTarget?.className === "task-close-button") return;
+            if (e.relatedTarget?.className === "task-close-button") return;
             delete this.container.dataset.focused;
             this.previews.replaceChildren();
         };
@@ -159,7 +159,7 @@ export default class Task extends HTMLElement {
 
         const closeButton = document.createElement("button");
         closeButton.className = "task-close-button";
-        closeButton.innerHTML = "x";
+        closeButton.innerHTML = `<img src='/media/x.svg'></img>`;
         closeButton.onclick = this.closeWindow(window.id);
 
         header.append(infoWrapper, closeButton);
