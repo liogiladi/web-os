@@ -155,6 +155,7 @@ export default class Taskbar extends HTMLElement {
                 windowsWrapper.style.filter = "unset";
                 windowsWrapper.style.overflowX = "hidden";
                 windowsWrapper.style.pointerEvents = "all";
+                this.#closeNavigation.call(this);
             }
         };
 
