@@ -62,15 +62,20 @@
     aspect-ratio: 1/1;
     width: 2.5rem;
     padding: 0.625rem 0.688rem;
-    transition: background-color 0.1s;
+    transition: background-color 0.1s,  color 0.1s;
 }
 
 .window header .buttons button:hover {
     background-color: rgba(0, 0, 0, 0.102);
 }
 
+.window header .buttons button:first-of-type {
+    border-top-right-radius: 3px;
+}
+
 .window header .buttons button:first-of-type:hover {
     background-color: rgb(255, 42, 42);
+    color: white;
 }
 
 /* ------------------ Content ------------------- */
