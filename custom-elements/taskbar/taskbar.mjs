@@ -314,6 +314,15 @@ export default class Taskbar extends HTMLElement {
                 "touchcancel",
                 this.#handleWindowNavigateTouchCancel.bind(this)
             );
+            node.addEventListener(
+                "touchmove",
+                this.#handleWindowNavigateTouchMove.bind(this)
+            );
+
+            node.addEventListener(
+                "touchend",
+                this.#handleWindowNavigateTouchEnd.bind(this)
+            );
         });
 
         this.container.dataset.navOpen = true;
@@ -337,6 +346,15 @@ export default class Taskbar extends HTMLElement {
                 "touchstart",
                 this.#handleWindowNavigateTouchStart.bind(this)
             );
+            node.removeEventListener(
+                "touchmove",
+                this.#handleWindowNavigateTouchMove.bind(this)
+            );
+
+            node.removeEventListener(
+                "touchend",
+                this.#handleWindowNavigateTouchEnd.bind(this)
+            );
         });
 
         this.container.dataset.navOpen = false;
@@ -359,16 +377,6 @@ export default class Taskbar extends HTMLElement {
     #handleWindowNavigateTouchStart(e) {
         if (e.touches.length === 1) {
             this.#previousTouch = e.targetTouches[0];
-
-            e.target.addEventListener(
-                "touchmove",
-                this.#handleWindowNavigateTouchMove.bind(this)
-            );
-
-            e.target.addEventListener(
-                "touchend",
-                this.#handleWindowNavigateTouchEnd.bind(this)
-            );
         }
     }
 
@@ -377,6 +385,10 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchMove(e) {
+        console.log("asd", this.#previousTouch);
+
+        if (!this.#previousTouch) return;
+
         const touch = e.targetTouches[0];
 
         const diffX = touch.clientX - this.#previousTouch.clientX;
@@ -401,6 +413,8 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchEnd(e) {
+        if (!this.#previousTouch) return;
+
         e.target.removeEventListener(
             "touchmove",
             this.#handleWindowNavigateTouchMove.bind(this)
@@ -417,7 +431,17 @@ export default class Taskbar extends HTMLElement {
 
         const direction = Math.sign(currentYTranslate);
 
-        if(direction === 0) {
+        const SWIPE_THERSHOLD = 60;
+
+        if (
+            Math.abs(currentYTranslate) > 0 &&
+            Math.abs(currentYTranslate) < SWIPE_THERSHOLD
+        ) {
+            this.#handleWindowNavigateTouchCancel.call(this, e);
+            return;
+        }
+
+        if (direction === 0) {
             this.#goToWindow.call(this, e);
             return;
         }
@@ -442,15 +466,7 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchCancel(e) {
-        e.target.removeEventListener(
-            "touchmove",
-            this.#handleWindowNavigateTouchMove.bind(this)
-        );
-        e.target.removeEventListener(
-            "touchend",
-            this.#handleWindowNavigateTouchEnd.bind(this)
-        );
-
+        if (!this.#previousTouch) return;
         e.target.style.transform = `translateY(0)`;
     }
 
