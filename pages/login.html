@@ -13,7 +13,10 @@
         document.documentElement.style.setProperty("--scale", scale);
 
         var fromLogout = localStorage.getItem("lockUser");
-        document.documentElement.style.setProperty("--initial-opacity", fromLogout ? 1 : 0);
+        document.documentElement.style.setProperty(
+            "--initial-opacity",
+            fromLogout ? 1 : 0
+        );
     </script>
     <body>
         <main>
@@ -88,6 +91,7 @@
     <script type="module">
         import convertFileToBase64 from "/utils/convertFileToBase64.js";
         import hash from "/utils/hash.js";
+        import isMobile from "/utils/isMobile.js";
 
         const audio = new Audio("../media/audio/startup.mp3");
         const audioDisabled = localStorage.getItem("disable-audio");
@@ -268,30 +272,37 @@
             resetBar.remove();
             resetMessage.remove();
         } else {
-            window.onkeydown = (e) => {
-                if (e.key === "Escape") {
-                    if (resetBar.value >= 100) {
-                        resetBar.remove();
-                        form.remove();
-                        logo.remove();
-                        resetMessage.remove();
+            if (isMobile()) {
+                resetMessage.innerHTML = "Touch & Hold Logo to RESET";
+                logo.ontouchstart = windResetBar;
+                logo.ontouchend = cancelResetBar;
+            } else {
+                window.onkeydown = windResetBar;
+                window.onkeyup = cancelResetBar;
+            }
+        }
 
-                        localStorage.clear();
+        function windResetBar() {
+            if (resetBar.value >= 100) {
+                resetBar.remove();
+                form.remove();
+                logo.remove();
+                resetMessage.remove();
 
-                        setTimeout(() => {
-                            window.location.replace("boot.html");
-                        }, 1500);
-                    }
+                localStorage.clear();
 
-                    resetBar.value += 1.5;
-                }
-            };
+                setTimeout(() => {
+                    window.location.replace("boot.html");
+                }, 1500);
+            }
 
-            window.onkeyup = (e) => {
-                if (e.key === "Escape" && resetBar.value < 100) {
-                    resetBar.value = 0;
-                }
-            };
+            resetBar.value += 1.5;
+        }
+
+        function cancelResetBar() {
+            if (resetBar.value < 100) {
+                resetBar.value = 0;
+            }
         }
     </script>
 </html>

@@ -31,6 +31,7 @@ main {
 
 #os-logo {
     position: fixed;
+    z-index: 1;
     left: 50%;
     top: 50%;
     width: clamp(11.063rem, 20%, 15.5rem);
