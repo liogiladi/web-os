@@ -296,38 +296,159 @@ export default class Taskbar extends HTMLElement {
     #emptyMessage = "No open activites";
 
     #navigate() {
+        if (JSON.parse(this.container.dataset.navOpen || "false")) {
+            this.#closeNavigation.call(this);
+        } else {
+            this.#openNavigation.call(this);
+        }
+    }
+
+    #openNavigation() {
         const windowsWrapper = document.querySelector("#windows");
 
-        if (JSON.parse(this.container.dataset.navOpen || "false")) {
-            // Close
-            windowsWrapper.childNodes.forEach((node) =>
-                node.removeEventListener("click", this.#goToWindow.bind(this))
+        windowsWrapper.childNodes.forEach((node) => {
+            node.addEventListener("click", this.#goToWindow.bind(this));
+            node.addEventListener(
+                "touchstart",
+                this.#handleWindowNavigateTouchStart.bind(this)
             );
-
-            this.container.dataset.navOpen = false;
-            windowsWrapper.dataset.navOpen = false;
-
-            if (windowsWrapper.textContent === this.#emptyMessage) {
-                windowsWrapper.innerHTML = "";
-            } else {
-                windowsWrapper.style.overflowX = "hidden";
-            }
-        } else {
-            // Open
-            windowsWrapper.childNodes.forEach((node) =>
-                node.addEventListener("click", this.#goToWindow.bind(this))
+            node.addEventListener(
+                "touchcancel",
+                this.#handleWindowNavigateTouchCancel.bind(this)
             );
+        });
 
-            this.container.dataset.navOpen = true;
-            windowsWrapper.dataset.navOpen = true;
+        this.container.dataset.navOpen = true;
+        windowsWrapper.dataset.navOpen = true;
 
-            if (windowsWrapper.children.length > 1) {
-                windowsWrapper.style.overflowX = "auto";
-            } else if (windowsWrapper.children.length === 0) {
-                windowsWrapper.innerHTML =
-                    `<span id='empty-windows-message'>${this.#emptyMessage}</span>`;
-            }
+        if (windowsWrapper.children.length > 1) {
+            windowsWrapper.style.overflowX = "auto";
+        } else if (windowsWrapper.children.length === 0) {
+            windowsWrapper.innerHTML = `<span id='empty-windows-message'>${
+                this.#emptyMessage
+            }</span>`;
         }
+    }
+
+    #closeNavigation() {
+        const windowsWrapper = document.querySelector("#windows");
+
+        windowsWrapper.childNodes.forEach((node) => {
+            node.removeEventListener("click", this.#goToWindow.bind(this));
+            node.removeEventListener(
+                "touchstart",
+                this.#handleWindowNavigateTouchStart.bind(this)
+            );
+        });
+
+        this.container.dataset.navOpen = false;
+        windowsWrapper.dataset.navOpen = false;
+
+        if (windowsWrapper.textContent === this.#emptyMessage) {
+            windowsWrapper.innerHTML = "";
+        } else {
+            windowsWrapper.style.overflowX = "hidden";
+        }
+    }
+
+    /** @type {Touch} */
+    #previousTouch;
+
+    /**
+     *
+     * @param {TouchEvent} e
+     */
+    #handleWindowNavigateTouchStart(e) {
+        if (e.touches.length === 1) {
+            this.#previousTouch = e.targetTouches[0];
+
+            e.target.addEventListener(
+                "touchmove",
+                this.#handleWindowNavigateTouchMove.bind(this)
+            );
+
+            e.target.addEventListener(
+                "touchend",
+                this.#handleWindowNavigateTouchEnd.bind(this)
+            );
+        }
+    }
+
+    /**
+     *
+     * @param {TouchEvent} e
+     */
+    #handleWindowNavigateTouchMove(e) {
+        const touch = e.targetTouches[0];
+
+        const diffX = touch.clientX - this.#previousTouch.clientX;
+        const diffY = touch.clientY - this.#previousTouch.clientY;
+
+        if (Math.abs(diffX) > Math.abs(diffY) || diffY === 0) return;
+
+        const currentTransformMatrix = new DOMMatrix(
+            getComputedStyle(e.target).transform
+        );
+        const currentYTranslate = Number.parseFloat(currentTransformMatrix.m42);
+
+        const newYTranslate = currentYTranslate + diffY;
+
+        e.target.style.transform = `translateY(${newYTranslate}px)`;
+
+        this.#previousTouch = touch;
+    }
+
+    /**
+     *
+     * @param {TouchEvent} e
+     */
+    #handleWindowNavigateTouchEnd(e) {
+        e.target.removeEventListener(
+            "touchmove",
+            this.#handleWindowNavigateTouchMove.bind(this)
+        );
+        e.target.removeEventListener(
+            "touchend",
+            this.#handleWindowNavigateTouchEnd.bind(this)
+        );
+
+        const currentTransformMatrix = new DOMMatrix(
+            getComputedStyle(e.target).transform
+        );
+        const currentYTranslate = Number.parseFloat(currentTransformMatrix.m42);
+
+        const direction = Math.sign(currentYTranslate);
+
+        e.target.style.transition = "transform 0.3s";
+        e.target.style.transform = `translateY(${direction * 120}vh)`;
+
+        setTimeout(() => {
+            e.target.style.transition = "unset";
+            e.target.remove();
+
+            const windowsWrapper = document.querySelector("#windows");
+
+            if (windowsWrapper.children.length === 0) {
+                this.#closeNavigation.call(this);
+            }
+        }, 300);
+    }
+
+    /**
+     *
+     * @param {TouchEvent} e
+     */
+    #handleWindowNavigateTouchCancel(e) {
+        e.target.removeEventListener(
+            "touchmove",
+            this.#handleWindowNavigateTouchMove.bind(this)
+        );
+        e.target.removeEventListener(
+            "touchend",
+            this.#handleWindowNavigateTouchEnd.bind(this)
+        );
+
+        e.target.style.transform = `translateY(0)`;
     }
 
     /**

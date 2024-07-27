@@ -335,7 +335,7 @@ export default class Window extends HTMLElement {
     }
 
     remove() {
-        if (!this.temporary) {
+        if (!globalThis.isMobile && !this.temporary) {
             Taskbar.tasks.remove(this.tagName.toLowerCase());
             Window.orderedWindowIds.removeFirstFromEnd(this.id);
         }

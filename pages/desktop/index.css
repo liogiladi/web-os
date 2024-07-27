@@ -234,6 +234,7 @@ body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar-thumb {
 body[data-mobile] #windows[data-nav-open="true"] > * {
     scale: 0.8;
     scroll-snap-align: center;
+    transform: translateY(0);
 }
 
 /* Prevents interactions with a window's content when navigating */
