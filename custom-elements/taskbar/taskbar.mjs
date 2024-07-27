@@ -506,7 +506,11 @@ export default class Taskbar extends HTMLElement {
         this.container.dataset.navOpen = false;
 
         const windowsWrapper = document.querySelector("#windows");
-        windowsWrapper.dataset.navOpen = false;
+
+        // Prevent click on window blocker from passing to its contents
+        setTimeout(() => {
+            windowsWrapper.dataset.navOpen = false;
+        }, 0);
 
         if (windowsWrapper.children.length > 1) {
             windowsWrapper.style.overflowX = "hidden";
