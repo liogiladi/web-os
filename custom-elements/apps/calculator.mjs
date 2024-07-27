@@ -87,8 +87,8 @@ export default class Calculator extends Window {
     constructor() {
         super();
         this._defaultWindowSize = {
-            width: "500px",
-            height: "460px",
+            width: "31.25rem",
+            height: "28.75rem",
         };
         this.#on = false;
         this.#currentInput = "";

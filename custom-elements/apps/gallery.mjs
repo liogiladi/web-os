@@ -12,8 +12,8 @@ export default class Gallery extends Window {
     constructor() {
         super();
         this._defaultWindowSize = {
-            width: "560px",
-            height: "560px",
+            width: "35rem",
+            height: "35rem",
         };
     }
 

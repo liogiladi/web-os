@@ -500,9 +500,11 @@ export default class Window extends HTMLElement {
             }
         }
 
+        const oneRemInPixels = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+
         if (
             newDimensions.width >=
-                Number.parseFloat(this._defaultWindowSize.width) &&
+                Number.parseFloat(this._defaultWindowSize.width) * oneRemInPixels &&
             e.clientX <= window.innerWidth - 11 &&
             e.clientX >= 0
         ) {
@@ -514,7 +516,7 @@ export default class Window extends HTMLElement {
 
         if (
             newDimensions.height >=
-                Number.parseFloat(this._defaultWindowSize.height) &&
+                Number.parseFloat(this._defaultWindowSize.height) * oneRemInPixels    &&
             e.clientY <= window.innerHeight - taskbarHeight - 10 &&
             e.clientY >= 0
         ) {

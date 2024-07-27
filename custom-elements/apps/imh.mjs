@@ -8,8 +8,8 @@ export default class IMH extends Window {
     constructor() {
         super();
         this._defaultWindowSize = {
-            width: "500px",
-            height: "380px"
+            width: "31.25rem",
+            height: "23.75rem"
         }
     }
 
