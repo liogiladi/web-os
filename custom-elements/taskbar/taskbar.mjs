@@ -385,8 +385,6 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchMove(e) {
-        console.log("asd", this.#previousTouch);
-
         if (!this.#previousTouch) return;
 
         const touch = e.targetTouches[0];
