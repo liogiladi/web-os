@@ -321,6 +321,7 @@ export default class Taskbar extends HTMLElement {
         const windowsWrapper = document.querySelector("#windows");
 
         windowsWrapper.childNodes.forEach((node) => {
+            node.onclick = this.#goToWindow.bind(this);
             node.ontouchstart = this.#handleWindowNavigateTouchStart.bind(this);
             node.ontouchcancel =
                 this.#handleWindowNavigateTouchCancel.bind(this);
