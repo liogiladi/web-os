@@ -57,13 +57,15 @@ export default class Browser extends Window {
         this.#forwardButton.onclick = this.#forward.bind(this);
         this.#forwardButton.setAttribute("disabled", "");
 
+        const searchBarForm = document.createElement("form");
         this.#searchBar = document.createElement("input");
         this.#searchBar.value = `http://www.browser.com`;
-        this.#searchBar.onkeydown = this.#onSearchBarKeyDown.bind(this);
+        searchBarForm.onsubmit = this.#onSearchBarSubmit.bind(this);
+        searchBarForm.append(this.#searchBar);
 
         const topBar = document.createElement("div");
         topBar.className = "top-bar";
-        topBar.append(this.#backButton, this.#forwardButton, this.#searchBar);
+        topBar.append(this.#backButton, this.#forwardButton, searchBarForm);
 
         this.#iframe = this.#createIframe();
 
@@ -87,36 +89,36 @@ export default class Browser extends Window {
     }
 
     /**
-     * @param {KeyboardEvent} e
+     * @param {Event} e
      */
-    async #onSearchBarKeyDown(e) {
-        if (e.key !== "Enter") return;
+    async #onSearchBarSubmit(e) {
+        e.preventDefault();
 
         let src;
         let errorCode = "404";
 
-        if (e.target.value.startsWith("http://")) {
-            if (e.target.value === "http://www.browser.com") {
+        if (this.#searchBar.value.startsWith("http://")) {
+            if (this.#searchBar.value === "http://www.browser.com") {
                 src = `http://${window.location.hostname}${
                     isDev ? ":3000" : ""
                 }/pages/desktop/browser.html`;
             } else if (
-                e.target.value.startsWith("http://www.browser.com/search?q")
+                this.#searchBar.value.startsWith("http://www.browser.com/search?q")
             ) {
                 src = `http://${window.location.hostname}${
                     isDev ? ":3000" : ""
-                }/pages/desktop/search.html?q=${e.target.value.split(/\?q=(.*)/s)[1]}`;
-            } else if (e.target.value.startsWith("http://www.site.com/")) {
+                }/pages/desktop/search.html?q=${this.#searchBar.value.split(/\?q=(.*)/s)[1]}`;
+            } else if (this.#searchBar.value.startsWith("http://www.site.com/")) {
                 errorCode = "403";
             }
-        } else if (e.target.value.includes("/")) {
+        } else if (this.#searchBar.value.includes("/")) {
             src = `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/desktop/browserError.html?url=${e.target.value}`;
+            }/pages/desktop/browserError.html?url=${this.#searchBar.value}`;
         } else {
             src = `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/desktop/search.html?q=${e.target.value}`;
+            }/pages/desktop/search.html?q=${this.#searchBar.value}`;
         }
 
         const urlExists = await checkURL(src);
@@ -124,7 +126,7 @@ export default class Browser extends Window {
         if (!urlExists) {
             src = `http://${window.location.hostname}${
                 isDev ? ":3000" : ""
-            }/pages/desktop/browserError.html?url=${e.target.value}&code=${errorCode}`;
+            }/pages/desktop/browserError.html?url=${this.#searchBar.value}&code=${errorCode}`;
         }
 
         this.#iframe.src = src;
