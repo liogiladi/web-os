@@ -13,11 +13,6 @@
     font-size: var(--scale);
 }
 
-/* For enabling touch & hold of logo for reseting */
-body[data-mobile=true] * {
-    user-select: none;
-}
-
 html,
 body,
 main {
@@ -300,4 +295,20 @@ h1 {
 
 progress[value]::-webkit-progress-value {
     transition: 0.3s;
+}
+
+dialog[open] {
+    border: 1px solid white !important;
+    font-family: "Boot";
+    background: black;
+    color: white;
+}
+
+dialog[open] button {
+    font-family: "Boot";
+    background: none !important;
+}
+
+dialog[open] button:nth-of-type(2) {
+    color: rgb(185, 36, 36) !important;
 }

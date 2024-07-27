@@ -7,6 +7,7 @@
         <link rel="icon" href="/media/favicon.png" type="image/png" />
         <link rel="stylesheet" href="./login.css" />
     </head>
+    <script type="module" src="/custom-elements/define.mjs"></script>
     <script>
         const scale = localStorage.getItem("scale") || "13px";
 
@@ -19,6 +20,7 @@
         );
     </script>
     <body oncontextmenu="return false;">
+        <dialog is="desktop-alert-dialog"></dialog>
         <main>
             <svg
                 id="os-logo"
@@ -92,6 +94,7 @@
         import convertFileToBase64 from "/utils/convertFileToBase64.js";
         import hash from "/utils/hash.js";
         import isMobile from "/utils/isMobile.js";
+        import AlertDialog from "/custom-elements/alertDialog.mjs";
 
         const audio = new Audio("../media/audio/startup.mp3");
         const audioDisabled = localStorage.getItem("disable-audio");
@@ -273,9 +276,18 @@
             resetMessage.remove();
         } else {
             if (isMobile()) {
-                resetMessage.innerHTML = "Touch & Hold Logo to RESET";
-                logo.ontouchstart = windResetBar;
-                logo.ontouchend = cancelResetBar;
+                resetMessage.innerHTML = "Tap Logo to RESET";
+                logo.onclick = () => {
+                    AlertDialog.showModal(
+                        "Warning!",
+                        "Reseting the machine will permanently erase all data.\nContinue?",
+                        {
+                            positive: "Yes",
+                            negative: "No",
+                        },
+                        reset
+                    );
+                };
             } else {
                 window.onkeydown = windResetBar;
                 window.onkeyup = cancelResetBar;
@@ -284,19 +296,23 @@
 
         function windResetBar() {
             if (resetBar.value >= 100) {
-                resetBar.remove();
-                form.remove();
-                logo.remove();
-                resetMessage.remove();
-
-                localStorage.clear();
-
-                setTimeout(() => {
-                    window.location.replace("boot.html");
-                }, 1500);
+                reset();
             }
 
             resetBar.value += 1.5;
+        }
+
+        function reset() {
+            resetBar.remove();
+            form.remove();
+            logo.remove();
+            resetMessage.remove();
+
+            localStorage.clear();
+
+            setTimeout(() => {
+                window.location.replace("boot.html");
+            }, 1500);
         }
 
         function cancelResetBar() {
