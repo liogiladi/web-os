@@ -72,7 +72,8 @@ export default class Window extends HTMLElement {
 
         this.windowedStyles = {
             width: `min(${this._defaultWindowSize.width}, 100vw)`,
-            height: `min(${this._defaultWindowSize.height}, calc(100vh - ${taskbarHeight}px))`,
+            height: "50vh",
+            //height: `min(${this._defaultWindowSize.height}, calc(100vh - ${taskbarHeight}px))`,
             transform: `translate(0,0)`,
             left: 0,
             top: 0,
