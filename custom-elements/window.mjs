@@ -213,10 +213,6 @@ export default class Window extends HTMLElement {
             reorderedDraggableElements(Window.orderedWindowIds, this.id, 1000);
 
             this.ondragstart = () => false;
-
-            if (this.transformCallback) {
-                this.transformCallback(this);
-            }
         }
 
         if (globalThis.isMobile) {
@@ -236,6 +232,8 @@ export default class Window extends HTMLElement {
 
             this.scrollIntoView();
         }
+
+        this.transformCallback?.(this);
     }
 
     disconnectedCallback() {
