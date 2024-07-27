@@ -115,7 +115,7 @@ export default class Recorder extends Window {
 
         this.#startStopButton = document.createElement("button");
         this.#startStopButton.className = "start-stop-button";
-        this.#startStopButton.innerHTML = "record";
+        this.#startStopButton.innerHTML = "capture";
         this.#startStopButton.onclick = this.#record.bind(this);
 
         buttonsWrapper.append(modeButtonsWrapper, this.#startStopButton);
@@ -202,8 +202,15 @@ export default class Recorder extends Window {
         this._content.dataset.mode = mode;
         this.#mode = MODES[mode];
 
-        if (MODES.mic === MODES[mode]) {
+        if (MODES[mode] === MODES.mic) {
             this.#visualize();
+        } 
+        
+        if (MODES[mode] === MODES.pic) {
+            this.#startStopButton.innerHTML = "capture";
+        } else {
+            this.#startStopButton.innerHTML = "record";
+            
         }
 
         playAudioSnapshot("/media/audio/recorder/recorder-mode-select.wav");
@@ -226,7 +233,9 @@ export default class Recorder extends Window {
                     this.#outputCanvas.height
                 );
 
-                this.#saveOutputButton.innerHTML = globalThis.isMobile ? "Download" : "Save";
+                this.#saveOutputButton.innerHTML = globalThis.isMobile
+                    ? "Download"
+                    : "Save";
 
                 this.#outputVideo.style.display = "none";
                 this.#outputAudio.style.display = "none";
