@@ -13,6 +13,11 @@
     font-size: var(--scale);
 }
 
+/* For enabling touch & hold of logo for reseting */
+body[data-mobile=true] * {
+    user-select: none;
+}
+
 html,
 body,
 main {
