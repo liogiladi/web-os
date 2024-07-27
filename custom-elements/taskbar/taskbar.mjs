@@ -288,7 +288,7 @@ export default class Taskbar extends HTMLElement {
                 playAudioSnapshot("/media/audio/poweroff.mp3");
 
                 setTimeout(() => {
-                    window.location.replace("../index.html");
+                    window.location.replace("../../index.html");
                 }, 1600);
             }
         );
