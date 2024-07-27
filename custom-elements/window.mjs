@@ -99,7 +99,7 @@ export default class Window extends HTMLElement {
 
         const minimizeButton = document.createElement("button");
         minimizeButton.textContent = "_";
-        minimizeButton.onclick = () => this.minimize.bind(this)(false);
+        minimizeButton.onclick = () => this.minimize(false);
 
         buttons.append(closeButton, sizeButton, minimizeButton);
 
@@ -114,8 +114,7 @@ export default class Window extends HTMLElement {
                 document.body.style.cursor = resizer;
                 this.style.pointerEvents = "none";
 
-                window.onmousemove = (e) =>
-                    this.#resize.bind(this)(e, resizerElement);
+                window.onmousemove = (e) => this.#resize(e, resizerElement);
                 window.onmouseup = () => {
                     document.body.classList.remove("cursor-override");
                     document.body.style.cursor = "unset";
@@ -147,7 +146,7 @@ export default class Window extends HTMLElement {
         header.append(title, buttons);
         header.ondblclick = (event) => {
             if (event.target !== header) return;
-            this.toggleFullscreen.bind(this)();
+            this.toggleFullscreen();
         };
 
         /* ------------ content ------------- */
@@ -500,11 +499,14 @@ export default class Window extends HTMLElement {
             }
         }
 
-        const oneRemInPixels = Number.parseFloat(getComputedStyle(document.documentElement).fontSize);
+        const oneRemInPixels = Number.parseFloat(
+            getComputedStyle(document.documentElement).fontSize
+        );
 
         if (
             newDimensions.width >=
-                Number.parseFloat(this._defaultWindowSize.width) * oneRemInPixels &&
+                Number.parseFloat(this._defaultWindowSize.width) *
+                    oneRemInPixels &&
             e.clientX <= window.innerWidth - 11 &&
             e.clientX >= 0
         ) {
@@ -516,7 +518,8 @@ export default class Window extends HTMLElement {
 
         if (
             newDimensions.height >=
-                Number.parseFloat(this._defaultWindowSize.height) * oneRemInPixels    &&
+                Number.parseFloat(this._defaultWindowSize.height) *
+                    oneRemInPixels &&
             e.clientY <= window.innerHeight - taskbarHeight - 10 &&
             e.clientY >= 0
         ) {

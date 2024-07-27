@@ -37,7 +37,7 @@ export default class IMH extends Window {
         `;
 
         if (navigator.geolocation) {
-            this.#showMap.bind(this)();
+            this.#showMap();
         } else {
             alert("Geolocation is not supported by this browser.");
         }

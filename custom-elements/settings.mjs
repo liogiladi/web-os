@@ -104,7 +104,7 @@ export default class Settings extends HTMLElement {
 
             themeButton.append(bg);
             themeButton.onclick = () =>
-                this.#changeTheme.bind(this)(key, theme);
+                this.#changeTheme.call(this, key, theme);
 
             if (key === currentTheme) themeButton.dataset.selected = "";
             themes.append(themeButton);
@@ -204,7 +204,7 @@ export default class Settings extends HTMLElement {
             max: 60,
             value: scale ? (50 / 16) * Number.parseFloat(scale) : 40,
             step: 9.9,
-            oninput: ((e) => this.#changeScale(e.target.value)).bind(this),
+            oninput: (e) => this.#changeScale(e.target.value),
         });
 
         scaleSettings.append(scaleTitle, slider);
@@ -227,8 +227,14 @@ export default class Settings extends HTMLElement {
         this.querySelector(`#${key}-theme`).dataset.selected = "";
 
         localStorage.setItem("theme", JSON.stringify({ name: key, ...theme }));
-        document.documentElement.style.setProperty("--theme-filter", theme.filter);
-        document.documentElement.style.setProperty("--window-bg", theme.windowBg);
+        document.documentElement.style.setProperty(
+            "--theme-filter",
+            theme.filter
+        );
+        document.documentElement.style.setProperty(
+            "--window-bg",
+            theme.windowBg
+        );
     }
 
     #changeScale(value) {
@@ -240,9 +246,13 @@ export default class Settings extends HTMLElement {
         Taskbar.instance.height = undefined;
         Taskbar.instance.height = Taskbar.getHeight();
 
-        
-        document.querySelector("#transition-layer img").removeAttribute("style");
-        (document.querySelector("#os-logo img") || Taskbar.instance.shadowRoot.querySelector("#os-logo img")).removeAttribute("style");
+        document
+            .querySelector("#transition-layer img")
+            .removeAttribute("style");
+        (
+            document.querySelector("#os-logo") ||
+            Taskbar.instance.shadowRoot.querySelector("#os-logo")
+        ).removeAttribute("style");
     }
 
     /**

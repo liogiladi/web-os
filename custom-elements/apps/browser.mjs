@@ -65,7 +65,7 @@ export default class Browser extends Window {
         topBar.className = "top-bar";
         topBar.append(this.#backButton, this.#forwardButton, this.#searchBar);
 
-        this.#iframe = this.#createIframe.bind(this)();
+        this.#iframe = this.#createIframe();
 
         const style = document.createElement("style");
         style.innerHTML = await readFileContents(

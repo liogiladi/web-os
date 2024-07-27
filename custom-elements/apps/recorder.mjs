@@ -104,7 +104,7 @@ export default class Recorder extends Window {
             label.htmlFor = modeRadio.id;
             label.innerHTML = mode;
             label.append(modeRadio);
-            label.onclick = () => this.#changeMode.bind(this)(mode);
+            label.onclick = () => this.#changeMode(mode);
 
             modeButtons.push(label);
 
@@ -418,7 +418,7 @@ export default class Recorder extends Window {
         let animationId = -1;
         const ctx = this.#microphonePreview.getContext("2d");
 
-        draw.bind(this)();
+        draw.call(this);
 
         function draw() {
             const WIDTH = this.#microphonePreview.width;
