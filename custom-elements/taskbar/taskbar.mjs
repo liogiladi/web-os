@@ -320,23 +320,11 @@ export default class Taskbar extends HTMLElement {
         const windowsWrapper = document.querySelector("#windows");
 
         windowsWrapper.childNodes.forEach((node) => {
-            node.addEventListener(
-                "touchstart",
-                this.#handleWindowNavigateTouchStart.bind(this)
-            );
-            node.addEventListener(
-                "touchcancel",
-                this.#handleWindowNavigateTouchCancel.bind(this)
-            );
-            node.addEventListener(
-                "touchmove",
-                this.#handleWindowNavigateTouchMove.bind(this)
-            );
-
-            node.addEventListener(
-                "touchend",
-                this.#handleWindowNavigateTouchEnd.bind(this)
-            );
+            node.ontouchstart = this.#handleWindowNavigateTouchStart.bind(this);
+            node.ontouchcancel =
+                this.#handleWindowNavigateTouchCancel.bind(this);
+            node.ontouchmove = this.#handleWindowNavigateTouchMove.bind(this);
+            node.ontouchend = this.#handleWindowNavigateTouchEnd.bind(this);
         });
 
         this.container.dataset.navOpen = true;
@@ -360,22 +348,10 @@ export default class Taskbar extends HTMLElement {
         const windowsWrapper = document.querySelector("#windows");
 
         windowsWrapper.childNodes.forEach((node) => {
-            node.removeEventListener(
-                "touchstart",
-                this.#handleWindowNavigateTouchStart.bind(this)
-            );
-            node.removeEventListener(
-                "touchcancel",
-                this.#handleWindowNavigateTouchCancel.bind(this)
-            );
-            node.removeEventListener(
-                "touchmove",
-                this.#handleWindowNavigateTouchMove.bind(this)
-            );
-            node.removeEventListener(
-                "touchend",
-                this.#handleWindowNavigateTouchEnd.bind(this)
-            );
+            node.ontouchstart = null;
+            node.ontouchcancel = null;
+            node.ontouchmove = null;
+            node.ontouchend = null;
         });
 
         this.container.dataset.navOpen = false;
