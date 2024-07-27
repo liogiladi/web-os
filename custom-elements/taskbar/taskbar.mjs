@@ -444,8 +444,9 @@ export default class Taskbar extends HTMLElement {
             return;
         }
 
-        e.target.style.transition = "transform 0.3s";
+        e.target.style.transition = "0.3s";
         e.target.style.transform = `translateY(${direction * 120}vh)`;
+        e.target.style.opacity = 0;
 
         setTimeout(() => {
             e.target.style.transition = "unset";
