@@ -227,17 +227,15 @@ export default class Settings extends HTMLElement {
         this.querySelector(`#${key}-theme`).dataset.selected = "";
 
         localStorage.setItem("theme", JSON.stringify({ name: key, ...theme }));
-        const root = document.querySelector(":root");
-        root.style.setProperty("--theme-filter", theme.filter);
-        root.style.setProperty("--window-bg", theme.windowBg);
+        document.documentElement.style.setProperty("--theme-filter", theme.filter);
+        document.documentElement.style.setProperty("--window-bg", theme.windowBg);
     }
 
     #changeScale(value) {
         const scale = `${value * (16 / 50)}px`;
         localStorage.setItem("scale", scale);
 
-        const root = document.querySelector(":root");
-        root.style.setProperty("--scale", scale);
+        document.documentElement.style.setProperty("--scale", scale);
 
         Taskbar.instance.height = undefined;
         Taskbar.instance.height = Taskbar.getHeight();

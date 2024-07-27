@@ -9,11 +9,11 @@
     </head>
     <script>
         const scale = localStorage.getItem("scale") || "13px";
-        const root = document.querySelector(":root");
-        root.style.setProperty("--scale", scale);
+
+        document.documentElement.style.setProperty("--scale", scale);
 
         var fromLogout = localStorage.getItem("lockUser");
-        root.style.setProperty("--initial-opacity", fromLogout ? 1 : 0);
+        document.documentElement.style.setProperty("--initial-opacity", fromLogout ? 1 : 0);
     </script>
     <body>
         <main>
