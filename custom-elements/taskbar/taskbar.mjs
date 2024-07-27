@@ -154,7 +154,6 @@ export default class Taskbar extends HTMLElement {
                 const windowsWrapper = document.querySelector("#windows");
                 windowsWrapper.style.filter = "unset";
                 windowsWrapper.style.overflowX = "hidden";
-                windowsWrapper.style.pointerEvents = "all";
             }
         };
 
@@ -307,7 +306,6 @@ export default class Taskbar extends HTMLElement {
         const windowsWrapper = document.querySelector("#windows");
 
         windowsWrapper.childNodes.forEach((node) => {
-            node.addEventListener("click", this.#goToWindow.bind(this));
             node.addEventListener(
                 "touchstart",
                 this.#handleWindowNavigateTouchStart.bind(this)
@@ -418,6 +416,11 @@ export default class Taskbar extends HTMLElement {
         const currentYTranslate = Number.parseFloat(currentTransformMatrix.m42);
 
         const direction = Math.sign(currentYTranslate);
+
+        if(direction === 0) {
+            this.#goToWindow.call(this, e);
+            return;
+        }
 
         e.target.style.transition = "transform 0.3s";
         e.target.style.transform = `translateY(${direction * 120}vh)`;
