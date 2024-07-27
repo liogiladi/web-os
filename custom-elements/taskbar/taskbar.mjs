@@ -186,7 +186,21 @@ export default class Taskbar extends HTMLElement {
 
             navigateButton.onclick = this.#navigate.bind(this);
 
-            this.taskbarContent.append(logo, homeButton, navigateButton);
+            const windowsWrapper = document.querySelector("#windows");
+
+            const closeAllWindowsButton = document.createElement("button");
+            closeAllWindowsButton.id = "close-all-windows-button";
+            closeAllWindowsButton.innerHTML = "x";
+            closeAllWindowsButton.onclick = this.#closeAllWindows.bind(this);
+
+            windowsWrapper.append(closeAllWindowsButton);
+
+            this.taskbarContent.append(
+                logo,
+                homeButton,
+                navigateButton,
+                closeAllWindowsButton
+            );
         }
 
         this.append(this.container);
@@ -330,10 +344,15 @@ export default class Taskbar extends HTMLElement {
 
         if (windowsWrapper.children.length > 1) {
             windowsWrapper.style.overflowX = "auto";
+            windowsWrapper.dataset.multipleWindows = true;
+            this.container.dataset.multipleWindows = true;
         } else if (windowsWrapper.children.length === 0) {
+            windowsWrapper.dataset.multipleWindows = false;
             windowsWrapper.innerHTML = `<span id='empty-windows-message'>${
                 this.#emptyMessage
             }</span>`;
+
+            this.container.dataset.multipleWindows = false;
         }
     }
 
@@ -347,10 +366,13 @@ export default class Taskbar extends HTMLElement {
                 this.#handleWindowNavigateTouchStart.bind(this)
             );
             node.removeEventListener(
+                "touchcancel",
+                this.#handleWindowNavigateTouchCancel.bind(this)
+            );
+            node.removeEventListener(
                 "touchmove",
                 this.#handleWindowNavigateTouchMove.bind(this)
             );
-
             node.removeEventListener(
                 "touchend",
                 this.#handleWindowNavigateTouchEnd.bind(this)
@@ -454,6 +476,11 @@ export default class Taskbar extends HTMLElement {
 
             const windowsWrapper = document.querySelector("#windows");
 
+            if (windowsWrapper.children.length <= 1) {
+                windowsWrapper.dataset.multipleWindows = false;
+                this.container.dataset.multipleWindows = false;
+            }
+
             if (windowsWrapper.children.length === 0) {
                 this.#closeNavigation.call(this);
             }
@@ -501,5 +528,37 @@ export default class Taskbar extends HTMLElement {
         document
             .querySelector("[data-viewed-window]")
             ?.removeAttribute("data-viewed-window");
+    }
+
+    #closeAllWindows() {
+        const transitionDurationMS = 600;
+
+        const windowsWrapper = document.querySelector("#windows");
+
+        // Flex direction 'reverse' negates scrollLeft value
+        const scrollRatio =
+            -windowsWrapper.scrollLeft / windowsWrapper.scrollWidth;
+
+        const transitionDirection = scrollRatio > 0.5 ? -1 : 1;
+
+        windowsWrapper.style.overflowX = "hidden";
+
+        const windowsCount = windowsWrapper.children.length;
+
+        for (let i = windowsCount - 1, count = 0; i >= 0; i--, count++) {
+            const window = windowsWrapper.children[i];
+
+            window.style.transition = `${transitionDurationMS}ms`;
+            window.style.transitionDelay = `${count * 0.1}s`;
+            window.style.translate = `${
+                transitionDirection * 100 * (count + 1)
+            }vw`;
+            window.style.opacity = 0;
+        }
+
+        setTimeout(() => {
+            windowsWrapper.innerHTML = "";
+            this.#closeNavigation.call(this);
+        }, windowsCount * 200);
     }
 }

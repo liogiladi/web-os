@@ -192,6 +192,7 @@ body[data-mobile] #windows {
     left: 0;
     top: 0;
     display: flex;
+    flex-direction: row-reverse;
     width: 100%;
     height: 100%;
     gap: 2rem;
@@ -204,12 +205,13 @@ body[data-mobile] #windows {
 
 body[data-mobile] #windows:has([data-viewed-window]) {
     opacity: 1;
-	pointer-events: all;
+    pointer-events: all;
 }
 
 body[data-mobile] #windows > * {
     width: 100%;
-    transition: scale 0.3s ease-in-out;
+    translate: 0;
+    transition: scale 0.3s ease-in-out, translate 0.3s ease-in-out;
 }
 
 body[data-mobile] #windows[data-nav-open="true"] {
@@ -228,13 +230,17 @@ body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar-track {
 }
 
 body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar-thumb {
-	border: 4px solid rgba(0, 0, 0, 0);
+    border: 4px solid rgba(0, 0, 0, 0);
 }
 
 body[data-mobile] #windows[data-nav-open="true"] > * {
     scale: 0.8;
     scroll-snap-align: center;
     transform: translateY(0);
+}
+
+body[data-mobile] #windows[data-nav-open="true"][data-multiple-windows=true] > * {
+    translate: 0 -1.5rem;
 }
 
 /* Prevents interactions with a window's content when navigating */
