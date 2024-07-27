@@ -246,13 +246,15 @@ export default class Settings extends HTMLElement {
         Taskbar.instance.height = undefined;
         Taskbar.instance.height = Taskbar.getHeight();
 
-        document
-            .querySelector("#transition-layer img")
-            .removeAttribute("style");
-        (
-            document.querySelector("#os-logo") ||
-            Taskbar.instance.shadowRoot.querySelector("#os-logo")
-        ).removeAttribute("style");
+        if (!window.isMobile) {
+            document
+                .querySelector("#transition-layer img")
+                .removeAttribute("style");
+            (
+                document.querySelector("#os-logo") ||
+                Taskbar.instance.shadowRoot.querySelector("#os-logo")
+            ).removeAttribute("style");
+        }
     }
 
     /**
