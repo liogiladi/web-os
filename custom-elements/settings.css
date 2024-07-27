@@ -236,7 +236,7 @@ desktop-settings {
     object-fit: cover;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 56.25rem) {
     #account-settings form input {
         width: 100%;
         font-size: 1.2rem !important;
@@ -245,7 +245,7 @@ desktop-settings {
     }
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 37.5rem) {
     #taskbar[data-settings-open="true"] desktop-settings {
         grid-template-rows: 0.8fr auto 1fr;
         grid-template-columns: 1fr;

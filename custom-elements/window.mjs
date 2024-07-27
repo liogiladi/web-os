@@ -50,7 +50,7 @@ export default class Window extends HTMLElement {
         this._content = null;
         this._fullscreen = false;
         this.minimized = false;
-        this._defaultWindowSize = { width: "500px", height: "200px" };
+        this._defaultWindowSize = { width: "31.25rem", height: "12.5rem" };
     }
 
     async connectedCallback() {

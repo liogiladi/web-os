@@ -562,6 +562,7 @@ export default class Taskbar extends HTMLElement {
 
         setTimeout(() => {
             windowsWrapper.innerHTML = "";
+            windowsWrapper.dataset.multipleWindows = false;
             this.#closeNavigation.call(this);
         }, windowsCount * 200);
     }

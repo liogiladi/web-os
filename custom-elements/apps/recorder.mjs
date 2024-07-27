@@ -54,8 +54,8 @@ export default class Recorder extends Window {
     constructor() {
         super();
         this._defaultWindowSize = {
-            width: "500px",
-            height: "460px",
+            width: "31.25rem",
+            height: "28.75rem",
         };
         this.#mode = MODES.pic;
     }
