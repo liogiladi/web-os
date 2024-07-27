@@ -480,7 +480,7 @@ export default class Taskbar extends HTMLElement {
         // Prevent click on window blocker from passing to its contents
         setTimeout(() => {
             windowsWrapper.dataset.navOpen = false;
-        }, 0);
+        }, 100);
 
         if (windowsWrapper.children.length > 1) {
             windowsWrapper.style.overflowX = "hidden";
