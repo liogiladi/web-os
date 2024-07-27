@@ -18,11 +18,14 @@ main {
     overflow: hidden;
 }
 
+body {
+    display: grid;
+    grid-template-rows: 1fr 4.188rem;   
+}
+
 body::before {
     content: "";
     position: fixed;
-    display: grid;
-    grid-template-rows: 1fr 4.188rem;   
     width: 100vw;
     height: 100vh;
     background-image: url("/media/bg.svg");
