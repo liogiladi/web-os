@@ -421,7 +421,7 @@ export default class Taskbar extends HTMLElement {
         const SWIPE_THERSHOLD = 60;
 
         if (
-            Math.abs(currentYTranslate) > 0 &&
+            Math.abs(currentYTranslate) >= 0 &&
             Math.abs(currentYTranslate) < SWIPE_THERSHOLD
         ) {
             this.#handleWindowNavigateTouchCancel.call(this, e);
