@@ -87,6 +87,7 @@ export default class JSCoder extends Window {
         const runButton = document.createElement("button");
         runButton.className = "run-button";
         runButton.textContent = "▶";
+		runButton.title = "run script";
 
         const output = document.createElement("span");
         output.className = "output";
