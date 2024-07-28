@@ -500,6 +500,7 @@ export default class Taskbar extends HTMLElement {
         const windowsWrapper = document.querySelector("#windows");
         windowsWrapper.dataset.navOpen = false;
         windowsWrapper.style.overflowX = "hidden";
+        windowsWrapper.style.pointerEvents = "none";
 
         document
             .querySelector("[data-viewed-window]")
