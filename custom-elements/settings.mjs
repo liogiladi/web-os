@@ -100,7 +100,7 @@ export default class Settings extends HTMLElement {
             themeButton.id = `${key}-theme`;
 
             const bg = document.createElement("img");
-            bg.src = `/media/${key}-theme.png`;
+            bg.src = `/media/images/themes/${key}.png`;
 
             themeButton.append(bg);
             themeButton.onclick = () =>

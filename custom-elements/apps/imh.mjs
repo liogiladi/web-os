@@ -14,7 +14,7 @@ export default class IMH extends Window {
     }
 
     async connectedCallback() {
-        this.iconSrc = "/media/imh-icon.png";
+        this.iconSrc = "/media/images/app-icons/imh.png";
 
         await super.connectedCallback();
 

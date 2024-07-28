@@ -11,8 +11,8 @@ import AlertDialog from "../alertDialog.mjs";
  */
 
 const notificationsIconsSrcs = [
-    "/media/audio-icon.svg",
-    "/media/wifi-icon.svg",
+    "/media/svgs/audio-icon.svg",
+    "/media/svgs/wifi-icon.svg",
 ];
 
 export default class Taskbar extends HTMLElement {
@@ -100,14 +100,14 @@ export default class Taskbar extends HTMLElement {
 
         const github = document.createElement("a");
         const githubIcon = document.createElement("img");
-        githubIcon.src = "/media/github-icon.svg";
+        githubIcon.src = "/media/svgs/github-icon.svg";
         github.href = "https://github.com/liogiladi";
         github.target = "_blank";
         github.append(githubIcon);
 
         const linkedIn = document.createElement("a");
         const linkedInIcon = document.createElement("img");
-        linkedInIcon.src = "/media/linkedin-icon.svg";
+        linkedInIcon.src = "/media/svgs/linkedin-icon.svg";
         linkedIn.href = "https://www.linkedin.com/in/lio-giladi/";
         linkedIn.target = "_blank";
         linkedIn.append(linkedInIcon);
@@ -123,13 +123,13 @@ export default class Taskbar extends HTMLElement {
         this.settingsButtons.id = "settings-buttons";
 
         const powerOffButton = document.createElement("button");
-        powerOffButton.style.backgroundImage = `url("/media/off-button.png")`;
+        powerOffButton.style.backgroundImage = `url("/media/images/off-button.png")`;
         powerOffButton.onclick = this.#powerOff.bind(this);
 
         const logo = document.querySelector("#os-logo");
 
         const closeButton = document.createElement("button");
-        closeButton.style.backgroundImage = `url("/media/close-button.png")`;
+        closeButton.style.backgroundImage = `url("/media/images/close-button.png")`;
         closeButton.onclick = () => {
             this.settings.classList.remove("settings-load-animation");
             this.settings.classList.add("settings-unload-animation");
@@ -160,7 +160,7 @@ export default class Taskbar extends HTMLElement {
         };
 
         const lockButton = document.createElement("button");
-        lockButton.style.backgroundImage = `url("/media/lock-button.png")`;
+        lockButton.style.backgroundImage = `url("/media/images/lock-button.png")`;
         lockButton.onclick = this.#lockUser.bind(this);
 
         this.settingsButtons.append(powerOffButton, closeButton, lockButton);
@@ -192,7 +192,7 @@ export default class Taskbar extends HTMLElement {
 
             const closeAllWindowsButton = document.createElement("button");
             closeAllWindowsButton.id = "close-all-windows-button";
-            closeAllWindowsButton.innerHTML = `<img src='/media/x.svg'></img>`;
+            closeAllWindowsButton.innerHTML = `<img src='/media/svgs/x.svg'></img>`;
             closeAllWindowsButton.onclick = this.#closeAllWindows.bind(this);
 
             windowsWrapper.append(closeAllWindowsButton);

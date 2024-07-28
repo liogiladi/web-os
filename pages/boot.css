@@ -8,7 +8,7 @@ body {
 
 @font-face {
     font-family: "Boot";
-    src: url(/media/boot.ttf);
+    src: url(/fonts/Boot.ttf);
 }
 
 * {

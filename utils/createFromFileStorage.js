@@ -12,7 +12,7 @@ export function createPictureShortcut(info) {
     shortcut.id = info.id;
     shortcut.name = `picture-${info.dateISOString}.jpg`;
     shortcut.wcTagName = "desktop-gallery";
-    shortcut.iconSrc = "/media/gallery-icon.png";
+    shortcut.iconSrc = "/media/images/app-icons/gallery.png";
     shortcut.uniqueIconSrc = info.src;
     shortcut.intermediateData = {
         imgSrc: info.src,
@@ -29,7 +29,7 @@ export function createPictureShortcut(info) {
             () => {
                 FileStorage.deletePicture(info.id);
 
-                playAudioSnapshot("/media/audio/delete.mp3          ");
+                playAudioSnapshot("/media/audio/delete.mp3");
                 shortcut.remove();
 
                 const relatedWindows = document.querySelectorAll(`desktop-gallery[data-shortcut-id='${info.id}']`);

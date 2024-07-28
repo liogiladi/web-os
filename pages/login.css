@@ -1,12 +1,12 @@
 @font-face {
     font-family: "JetBrains";
-    src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
+    src: url("/fonts/JetBrains.ttf");
     font-weight: 100 900;
 }
 
 @font-face {
     font-family: "Boot";
-    src: url(/media/boot.ttf);
+    src: url(/fonts/Boot.ttf);
 }
 
 :root {

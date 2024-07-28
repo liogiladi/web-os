@@ -41,7 +41,7 @@ export default class Browser extends Window {
 
     async connectedCallback() {
         this.headerTitle = "Browser";
-		this.setAttribute("icon-src", "/media/browser-icon.png");
+		this.setAttribute("icon-src", "/media/images/app-icons/browser.png");
 
         await super.connectedCallback();
 

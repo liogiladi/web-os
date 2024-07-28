@@ -63,7 +63,7 @@ export default class Shortcut extends HTMLElement {
         template.tabIndex = 0;
 
         const img = document.createElement("img");
-        img.src = this.uniqueIconSrc || this.iconSrc || "/media/folder.svg";
+        img.src = this.uniqueIconSrc || this.iconSrc || "/media/svgs/folder.svg";
         img.alt = "shortcut icon";
         img.draggable = false;
 
@@ -80,7 +80,7 @@ export default class Shortcut extends HTMLElement {
 
         this.#deleteButton = document.createElement("button");
         this.#deleteButton.className = "delete-button";
-        this.#deleteButton.innerHTML = `<img src='/media/x.svg'></img>`;
+        this.#deleteButton.innerHTML = `<img src='/media/svgs/x.svg'></img>`;
 
         if (!this.deletetable) {
             this.#deleteButton.disabled = true;

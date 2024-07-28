@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Logging in...</title>
-        <link rel="icon" href="/media/favicon.png" type="image/png" />
+        <link rel="icon" href="/media/images/favicon.png" type="image/png" />
         <link rel="stylesheet" href="./login.css" />
     </head>
     <script type="module" src="/custom-elements/define.mjs"></script>
@@ -72,7 +72,7 @@
                 </fieldset>
                 <label id="profile-pic" for="profile" class="center">
                     <img
-                        src="/media/default-profile-pic.png"
+                        src="/media/images/default-profile-pic.png"
                         alt="profile picture"
                     />
 
@@ -160,7 +160,7 @@
                 const userProfile = document.querySelector("#user-profile");
                 userProfile.removeAttribute("hidden");
                 userProfile.src =
-                    userInfo.profilePic || "/media/default-profile-pic.png";
+                    userInfo.profilePic || "/media/images/default-profile-pic.png";
 
                 const usernameInput = document.querySelector("[name=username]");
                 usernameInput.disabled = true;

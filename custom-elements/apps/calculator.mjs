@@ -98,7 +98,7 @@ export default class Calculator extends Window {
 
     async connectedCallback() {
         this.headerTitle = "Calcs";
-        this.setAttribute("icon-src", "/media/calcs-icon.png");
+        this.setAttribute("icon-src", "/media/images/app-icons/calcs.png");
 
         await super.connectedCallback();
 

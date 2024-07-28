@@ -159,7 +159,7 @@ export default class Task extends HTMLElement {
 
         const closeButton = document.createElement("button");
         closeButton.className = "task-close-button";
-        closeButton.innerHTML = `<img src='/media/x.svg'></img>`;
+        closeButton.innerHTML = `<img src='/media/svgs/x.svg'></img>`;
         closeButton.onclick = this.closeWindow(window.id);
 
         header.append(infoWrapper, closeButton);

@@ -1,6 +1,6 @@
 @font-face {
     font-family: "JetBrains";
-    src: url("/fonts/JetBrainsMono-VariableFont_wght.ttf");
+    src: url("/fonts/JetBrains.ttf");
     font-weight: 100 900;
 }
 
@@ -28,7 +28,7 @@ body::before {
     position: fixed;
     width: 100vw;
     height: 100vh;
-    background-image: url("/media/bg.svg");
+    background-image: url("/media/svgs/bg.svg");
     background-size: cover;
     filter: saturate(1.2) var(--theme-filter);
 }

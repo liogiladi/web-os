@@ -60,7 +60,7 @@ export default class JSCoder extends Window {
 
 	async connectedCallback() {
 		this.setAttribute("header-title", "JSCoder");
-		this.setAttribute("icon-src", "/media/editor-icon.svg");
+		this.setAttribute("icon-src", "/media/images/app-icons/editor.png");
 		await super.connectedCallback();
 
 		this._content.className += " jscoder-content";
