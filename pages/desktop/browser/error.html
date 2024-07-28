@@ -19,7 +19,7 @@
         const info = document.querySelector("main p");
 
         const params = new URL(window.location.href).searchParams;
-console.log(params.get("code"));
+
         if (params.get("code") === "403") {
             document.querySelector("h1").innerHTML = "403";
             info.innerHTML = "Access Denied!";

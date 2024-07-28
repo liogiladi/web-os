@@ -4,6 +4,8 @@ main {
     background: linear-gradient(black, #101010);
 }
 
+/* ----- Entrance Logo ----- */
+
 #os-logo {
     position: fixed;
     z-index: 1;
@@ -26,46 +28,15 @@ main {
     animation: enterFromLeft 1.3s 0.8s ease-out forwards;
 }
 
-@keyframes enterFromLeft {
-    from {
-        opacity: 0;
-        translate: -50px;
-    }
-    to {
-        opacity: 1;
-        translate: 0;
-    }
-}
-
 #os-logo[data-animate] path:nth-of-type(2) {
     animation: enterFromBottom 1.3s 0.8s ease-out forwards;
-}
-
-@keyframes enterFromBottom {
-    from {
-        opacity: 0;
-        translate: 0 50px;
-    }
-    to {
-        opacity: 1;
-        translate: 0;
-    }
 }
 
 #os-logo[data-animate] path:nth-of-type(3) {
     animation: enterFromTop 1.3s 0.8s ease-out forwards;
 }
 
-@keyframes enterFromTop {
-    from {
-        opacity: 0;
-        translate: 0 -50px;
-    }
-    to {
-        opacity: 1;
-        translate: 0;
-    }
-}
+/* ----- Login/Signup form ----- */
 
 form {
     position: relative;
@@ -176,34 +147,8 @@ form input[type="submit"]:active {
     animation: exit 0.5s forwards;
 }
 
-@keyframes exit {
-    from {
-        translate: 0;
-        opacity: 1;
-        pointer-events: all;
-    }
-    to {
-        translate: -100px;
-        opacity: 0;
-        pointer-events: none;
-    }
-}
-
 .enter-animation {
     animation: enter 0.5s forwards;
-}
-
-@keyframes enter {
-    from {
-        translate: 100px;
-        opacity: 0;
-        pointer-events: none;
-    }
-    to {
-        translate: 0;
-        opacity: 1;
-        pointer-events: all;
-    }
 }
 
 h1 {
@@ -229,16 +174,7 @@ h1 {
     animation: error 0.6s;
 }
 
-@keyframes error {
-    from {
-        border-color: red;
-        color: red;
-    }
-    to {
-        border-color: white;
-        color: white;
-    }
-}
+/* ----- Reset ----- */
 
 #reset-bar {
     position: fixed;
@@ -286,4 +222,77 @@ dialog[open] button {
 
 dialog[open] button:nth-of-type(2) {
     color: rgb(185, 36, 36) !important;
+}
+
+/* ------ Animations ------ */
+
+@keyframes enterFromLeft {
+    from {
+        opacity: 0;
+        translate: -50px;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+@keyframes enterFromBottom {
+    from {
+        opacity: 0;
+        translate: 0 50px;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+
+@keyframes enterFromTop {
+    from {
+        opacity: 0;
+        translate: 0 -50px;
+    }
+    to {
+        opacity: 1;
+        translate: 0;
+    }
+}
+
+@keyframes exit {
+    from {
+        translate: 0;
+        opacity: 1;
+        pointer-events: all;
+    }
+    to {
+        translate: -100px;
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+@keyframes enter {
+    from {
+        translate: 100px;
+        opacity: 0;
+        pointer-events: none;
+    }
+    to {
+        translate: 0;
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+@keyframes error {
+    from {
+        border-color: red;
+        color: red;
+    }
+    to {
+        border-color: white;
+        color: white;
+    }
 }
