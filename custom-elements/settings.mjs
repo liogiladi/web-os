@@ -246,7 +246,7 @@ export default class Settings extends HTMLElement {
         Taskbar.instance.height = undefined;
         Taskbar.instance.height = Taskbar.getHeight();
 
-        if (!window.isMobile) {
+        if (!globalThis.isMobile) {
             document
                 .querySelector("#transition-layer img")
                 .removeAttribute("style");

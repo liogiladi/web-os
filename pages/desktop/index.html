@@ -15,7 +15,9 @@
     </head>
     <script type="module" src="/custom-elements/define.mjs"></script>
     <script type="module">
-        import PictureStorage, { createPictureShortcut } from "/utils/pictureStorage.js";
+        import PictureStorage, {
+            createPictureShortcut,
+        } from "/utils/pictureStorage.js";
         import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
         import Settings, {
             THEMES_FILTERS,
@@ -26,14 +28,21 @@
 
         if (globalThis.isMobile) {
             document.body.dataset.mobile = "true";
+            localStorage.setItem("mobile", true);
         }
 
         const theme =
             JSON.parse(String(localStorage.getItem("theme"))) ||
             THEMES_FILTERS.purple;
 
-        document.documentElement.style.setProperty("--theme-filter", theme.filter);
-        document.documentElement.style.setProperty("--window-bg", theme.windowBg);
+        document.documentElement.style.setProperty(
+            "--theme-filter",
+            theme.filter
+        );
+        document.documentElement.style.setProperty(
+            "--window-bg",
+            theme.windowBg
+        );
 
         const scale = localStorage.getItem("scale") || "13px";
         document.documentElement.style.setProperty("--scale", scale);
@@ -156,7 +165,13 @@
         if (transitionWidth) {
             localStorage.removeItem("logo-width-from-login");
             transitionLogo.style.width = transitionWidth;
-            document.querySelector("#os-logo").style.width = transitionWidth;
+
+            if (localStorage.getItem("mobile")) {
+                localStorage.removeItem("mobile");
+            } else {
+                document.querySelector("#os-logo").style.width =
+                    transitionWidth;
+            }
         }
 
         function hideTransitionLayer() {
