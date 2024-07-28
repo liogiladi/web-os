@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Logging in...</title>
         <link rel="icon" href="/media/images/favicon.png" type="image/png" />
-        <link rel="stylesheet" href="/global.css">
+        <link rel="stylesheet" href="/global.css" />
         <link rel="stylesheet" href="./login.css" />
     </head>
     <script type="module" src="/custom-elements/define.mjs"></script>
@@ -20,7 +20,7 @@
             fromLogout ? 1 : 0
         );
     </script>
-    <body oncontextmenu="return false;">
+    <body>
         <dialog is="desktop-alert-dialog"></dialog>
         <main>
             <svg
@@ -91,6 +91,7 @@
             <span id="reset-message">Hold Esc to RESET</span>
         </main>
     </body>
+
     <script type="module">
         import convertFileToBase64 from "/utils/convertFileToBase64.js";
         import hash from "/utils/hash.js";
@@ -133,7 +134,9 @@
 
         localStorage.setItem("logged", "");
 
-        let userInfo = JSON.parse(localStorage.getItem("user-info") || "false");
+        const userInfo = JSON.parse(
+            localStorage.getItem("user-info") || "false"
+        );
 
         const submitButton = document.querySelector("input[type=submit]");
 
@@ -229,15 +232,16 @@
                 submitButton.value = "Finish";
             } else {
                 // Save data
-                userInfo = {
-                    username: data.get("username"),
-                    passwordHash: hash(data.get("password")),
-                    profilePic: await convertFileToBase64(
-                        data.get("profilePicture")
-                    ),
-                };
-
-                localStorage.setItem("user-info", JSON.stringify(userInfo));
+                localStorage.setItem(
+                    "user-info",
+                    JSON.stringify({
+                        username: data.get("username"),
+                        passwordHash: hash(data.get("password")),
+                        profilePic: await convertFileToBase64(
+                            data.get("profilePicture")
+                        ),
+                    })
+                );
 
                 await continueToDesktop();
             }
@@ -275,10 +279,12 @@
         const resetBar = document.querySelector("#reset-bar");
         const resetMessage = document.querySelector("#reset-message");
 
+        // User should be able to reset only if he's already regitered
         if (!userInfo) {
             resetBar.remove();
             resetMessage.remove();
         } else {
+            // Adjust reset to mobile
             if (isMobile()) {
                 resetMessage.innerHTML = "Tap Logo to RESET";
                 logo.onclick = () => {

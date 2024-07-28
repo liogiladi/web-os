@@ -149,6 +149,15 @@ export default class Settings extends HTMLElement {
             type: "text",
             name: "username",
             placeholder: "Enter a name...",
+            required: true,
+            pattern: "^(?:[a-zA-Zds]*)[a-zA-Z]+(?:[a-zA-Zds]*)$",
+            minLength: 4,
+            maxLength: 12,
+            oninvalid: (e) =>
+                e.target.setCustomValidity(
+                    "Username should consist of:\n* 4-12 letters\n* English letters\n- (optional) 0-9\n- (optional) spaces"
+                ),
+            oninput: (e) => e.target.setCustomValidity(""),
         });
 
         this.#passInput = document.createElement("input");
