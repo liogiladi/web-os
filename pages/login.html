@@ -197,6 +197,7 @@
         async function onSubmit(e) {
             e.preventDefault();
             document.querySelector("input[type=password]").blur();
+            logo.onclick = null;
 
             const data = new FormData(form);
 
