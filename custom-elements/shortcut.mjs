@@ -190,6 +190,7 @@ export default class Shortcut extends HTMLElement {
                 .querySelector("[data-viewed-window]")
                 ?.removeAttribute("data-viewed-window");
             window.dataset.viewedWindow = "";
+            windowsContainer.removeAttribute("style");
             windowsContainer.style.overflowX = "hidden";
 
             Taskbar.instance.container.dataset.settingsOpen = false;
