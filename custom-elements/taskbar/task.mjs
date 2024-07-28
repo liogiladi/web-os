@@ -103,7 +103,17 @@ export default class Task extends HTMLElement {
         };
 
         taskIcon.onclick = () => {
-            if (!("focused" in this.container.dataset)) {
+            if (Taskbar.tasks.data.get(this.name).count === 1) {
+                /** @type {Window} */
+                const window = document.querySelector(this.name);
+                if (window.minimized) {
+                    window.style.transition = "unset";
+                    window.unminimize();
+                } else {
+                    window.minimize();
+                }
+                Taskbar.instance.blur();
+            } else if (!("focused" in this.container.dataset)) {
                 this.container.dataset.focused = true;
             }
         };
