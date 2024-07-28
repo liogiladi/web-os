@@ -72,6 +72,10 @@ br::selection {
 	color: red;
 }
 
+.hg-comment {
+	color: rgb(15, 163, 15);
+}
+
 .jscoder-content footer {
 	position: absolute;
 	top: calc(100% - 2.188rem);
