@@ -379,6 +379,8 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchStart(e) {
+        console.log(e.target);
+
         if (e.touches.length === 1) {
             this.#previousTouch = e.targetTouches[0];
         }
@@ -415,8 +417,6 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchEnd(e) {
-        if (!this.#previousTouch) return;
-
         const currentTransformMatrix = new DOMMatrix(
             getComputedStyle(e.target).transform
         );
@@ -432,10 +432,10 @@ export default class Taskbar extends HTMLElement {
         ) {
             this.#handleWindowNavigateTouchCancel.call(this, e);
             return;
+        } else {
+            e.target.ontouchmove = null;
+            e.target.ontouchend = null;
         }
-
-        e.target.ontouchmove = null;
-        e.target.ontouchend = null;
 
         if (direction === 0) {
             this.#goToWindow.call(this, e);
