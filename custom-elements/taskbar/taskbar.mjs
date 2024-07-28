@@ -42,9 +42,13 @@ export default class Taskbar extends HTMLElement {
 
     height;
 
+    /** @type {"home" | "window"} */
+    currentMobileState;
+
     constructor() {
         super();
         Taskbar.instance = this;
+        this.currentMobileState = "home";
     }
 
     async connectedCallback() {
@@ -371,6 +375,12 @@ export default class Taskbar extends HTMLElement {
         } else {
             windowsWrapper.style.overflowX = "hidden";
         }
+
+        if(this.currentMobileState === "home") {
+            windowsWrapper.style.pointerEvents = "none";
+        } else {
+            windowsWrapper.style.pointerEvents = "all";
+        }
     }
 
     /** @type {Touch} */
@@ -381,8 +391,6 @@ export default class Taskbar extends HTMLElement {
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchStart(e) {
-        console.log(e.target);
-
         if (e.touches.length === 1) {
             this.#previousTouch = e.targetTouches[0];
         }
@@ -461,6 +469,8 @@ export default class Taskbar extends HTMLElement {
 
             if (windowsWrapper.children.length === 0) {
                 this.#closeNavigation.call(this);
+                windowsWrapper.style.pointerEvents = "none";
+                this.currentMobileState = "home";
             }
         }, 300);
     }
@@ -506,6 +516,8 @@ export default class Taskbar extends HTMLElement {
             .querySelector("[data-viewed-window]")
             ?.removeAttribute("data-viewed-window");
         e.target.dataset.viewedWindow = "";
+
+        this.currentMobileState = "window";
     }
 
     #goHome() {
@@ -519,6 +531,8 @@ export default class Taskbar extends HTMLElement {
         document
             .querySelector("[data-viewed-window]")
             ?.removeAttribute("data-viewed-window");
+
+        this.currentMobileState = "home";
     }
 
     #closeAllWindows() {
@@ -550,6 +564,7 @@ export default class Taskbar extends HTMLElement {
         setTimeout(() => {
             windowsWrapper.innerHTML = "";
             windowsWrapper.dataset.multipleWindows = false;
+            this.currentMobileState = "home";
             this.#closeNavigation.call(this);
         }, windowsCount * 200);
     }

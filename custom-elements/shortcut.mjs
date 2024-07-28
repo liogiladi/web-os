@@ -194,6 +194,7 @@ export default class Shortcut extends HTMLElement {
 
             Taskbar.instance.container.dataset.settingsOpen = false;
             Taskbar.instance.container.dataset.navOpen = false;
+            Taskbar.instance.currentMobileState = "window";
         } else {
             Taskbar.tasks.add({
                 name: this.wcTagName,
