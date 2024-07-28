@@ -217,6 +217,11 @@ function highlightText(text) {
                 currentWord = "";
                 currentStringOpener = null;
                 i += 3;
+            } else if (char == "<" && text.substring(i, i + 5) == "<div>") {
+                words.push(currentWord, "<br>");
+                currentWord = "";
+                currentStringOpener = null;
+                i += 4;
             } else if (i === text.length - 1) {
                 currentWord += char;
                 words.push(currentWord);
@@ -297,6 +302,10 @@ function highlightText(text) {
             words.push(currentWord, "<br>");
             currentWord = "";
             i += 3;
+        } else if (char == "<" && text.substring(i, i + 5) == "<div>") {
+            words.push(currentWord, "<br>");
+            currentWord = "";
+            i += 4;
         } else if (
             /\(|\)|\[|\]|\{|\}|\*|\+|-|,|!|\.|\/|%|>|>=|=|<|<=/.test(char)
         ) {
