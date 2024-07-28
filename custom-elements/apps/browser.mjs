@@ -4,17 +4,6 @@ import readFileContents from "../../utils/readFileContents.js";
 const isDev = window.location.hostname === "127.0.0.1";
 const srcUrlScheme = isDev ? "http" : "https";
 
-async function checkURL(url) {
-    try {
-        const response = await fetch(url);
-        if (!response.ok) return false;
-
-        return true;
-    } catch {
-        return false;
-    }
-}
-
 const MAX_HISTORY_CHANGE = 15;
 
 export default class Browser extends Window {
@@ -136,7 +125,6 @@ export default class Browser extends Window {
     }
 
     /**
-     * @param {HTMLInputElement} searchBar
      * @returns {HTMLIFrameElement}
      */
     #createIframe() {
@@ -154,6 +142,7 @@ export default class Browser extends Window {
     }
 
     /**
+     * Goes to previous page in browser's history
      * @param {Event} e
      */
     #back(e) {
@@ -172,6 +161,7 @@ export default class Browser extends Window {
     }
 
     /**
+     * Goes to next page in browser's history
      * @param {Event} e
      */
     #forward(e) {
@@ -189,6 +179,9 @@ export default class Browser extends Window {
         history.forward();
     }
 
+    /**
+     * Updates search bar url upon pages' interactions
+     */
     #updateSearchBarURL() {
         const url = new URL(this.#iframe.contentWindow.location.href);
         const params = url.searchParams;
@@ -228,5 +221,21 @@ export default class Browser extends Window {
         } else {
             this.#forwardOrBack = false;
         }
+    }
+}
+
+/**
+ * 
+ * @param {string} url 
+ * @returns {boolean} if the given url exists
+ */
+async function checkURL(url) {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return false;
+
+        return true;
+    } catch {
+        return false;
     }
 }

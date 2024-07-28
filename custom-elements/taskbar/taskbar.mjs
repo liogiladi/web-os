@@ -10,10 +10,10 @@ import AlertDialog from "../alertDialog.mjs";
  * @prop {number} count
  */
 
-const notificationsIconsSrcs = [
+const NOTIFICATIONS_ICONS_SRCS = Object.freeze([
     "/media/svgs/audio-icon.svg",
     "/media/svgs/wifi-icon.svg",
-];
+]);
 
 export default class Taskbar extends HTMLElement {
     /** @type {ShadowRoot} */
@@ -40,6 +40,7 @@ export default class Taskbar extends HTMLElement {
     /** @type {number} */
     #timeIntervalId;
 
+    /** @type {number} */
     height;
 
     /** @type {"home" | "window"} */
@@ -82,7 +83,7 @@ export default class Taskbar extends HTMLElement {
 
         notifications.append(timeInfo);
 
-        for (const src of notificationsIconsSrcs) {
+        for (const src of NOTIFICATIONS_ICONS_SRCS) {
             const notification = document.createElement("img");
             notification.src = src;
             notification.className = "notification";
@@ -245,6 +246,7 @@ export default class Taskbar extends HTMLElement {
     }
 
     /**
+     * Enables or disables audio for entire site
      * @param {MouseEvent} e
      */
     #toggleAudio(e) {
@@ -254,6 +256,9 @@ export default class Taskbar extends HTMLElement {
         e.target.setAttribute("muted", !audioDisabled);
     }
 
+    /**
+     * Locks and redirects the user to login screen
+     */
     #lockUser() {
         const transitionLayer = document.querySelector("#transition-layer");
         transitionLayer.style.opacity = 1;
@@ -273,6 +278,9 @@ export default class Taskbar extends HTMLElement {
         }, 1600);
     }
 
+    /**
+     * Redirects user to PC screen
+     */
     #powerOff() {
         AlertDialog.showModal(
             "Warning!",
@@ -300,11 +308,13 @@ export default class Taskbar extends HTMLElement {
         );
     }
 
+    /**
+     * @returns {number}
+     */
     static getHeight() {
         if (!this.instance.height) {
             this.instance.height =
                 this.instance.taskbarContent.getBoundingClientRect().height;
-            return this.instance.height;
         }
 
         return this.instance.height;
@@ -314,6 +324,10 @@ export default class Taskbar extends HTMLElement {
 
     #emptyMessage = "No open activites";
 
+    /**
+     * Navigation of currently open windows.
+     * Pressing on the navigate button can either open or close it
+     */
     #navigate() {
         if (JSON.parse(this.container.dataset.navOpen || "false")) {
             this.#closeNavigation.call(this);
@@ -376,14 +390,17 @@ export default class Taskbar extends HTMLElement {
             windowsWrapper.style.overflowX = "hidden";
         }
 
-        if(this.currentMobileState === "home") {
+        if (this.currentMobileState === "home") {
             windowsWrapper.style.pointerEvents = "none";
         } else {
             windowsWrapper.style.pointerEvents = "all";
         }
     }
 
-    /** @type {Touch} */
+    /**
+     * Storing touch events' info for calculating touch positions' differences
+     * @type {Touch}
+     */
     #previousTouch;
 
     /**
@@ -397,7 +414,7 @@ export default class Taskbar extends HTMLElement {
     }
 
     /**
-     *
+     * Swiping the window causes it to move alongside touch position
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchMove(e) {
@@ -423,7 +440,9 @@ export default class Taskbar extends HTMLElement {
     }
 
     /**
-     *
+     * If vertical swipe is completed, then close window.
+     * If swipe is horizontal, then cancel it.
+     * If the touch is a tap, then open the window.
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchEnd(e) {
@@ -476,7 +495,6 @@ export default class Taskbar extends HTMLElement {
     }
 
     /**
-     *
      * @param {TouchEvent} e
      */
     #handleWindowNavigateTouchCancel(e) {
@@ -485,6 +503,7 @@ export default class Taskbar extends HTMLElement {
     }
 
     /**
+     * Opens the selected window from navigation
      * @param {MouseEvent} e
      */
     #goToWindow(e) {
@@ -520,6 +539,9 @@ export default class Taskbar extends HTMLElement {
         this.currentMobileState = "window";
     }
 
+    /**
+     * Minimize all windows and show home screen
+     */
     #goHome() {
         this.container.dataset.navOpen = false;
 

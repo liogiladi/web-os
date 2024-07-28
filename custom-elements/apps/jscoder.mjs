@@ -2,7 +2,7 @@ import Window from "../window.mjs";
 import readFileContents from "/utils/readFileContents.js";
 import playAudioSnapshot from "../../utils/playAudioSnapshot.js";
 
-const purpleKeywords = [
+const PURPLE_KEYWORDS = Object.freeze([
     "export",
     "import",
     "from",
@@ -22,9 +22,9 @@ const purpleKeywords = [
     "throw",
     "try",
     "catch",
-];
+]);
 
-const blueKeywords = [
+const BLUE_KEYWORDS = Object.freeze([
     "class",
     "async",
     "constructor",
@@ -42,19 +42,8 @@ const blueKeywords = [
     "NaN",
     "null",
     "undefined",
-];
-
-String.prototype.replaceAt = function (startIndex, endIndex, replacement) {
-    return (
-        this.substring(0, startIndex) +
-        replacement +
-        this.substring(endIndex + 1)
-    );
-};
-
-String.prototype.insertAt = function (index, str) {
-    return this.substring(0, index) + str + this.substring(index);
-};
+    "arguments"
+]);
 
 export default class JSCoder extends Window {
     constructor() {
@@ -73,21 +62,18 @@ export default class JSCoder extends Window {
         style.innerHTML = await readFileContents(
             "/custom-elements/apps/jscoder.css"
         );
-        //this.appendChild(style);
 
         const editor = document.createElement("code");
         editor.className = "editor";
         editor.contentEditable = "true";
-        //this.appendChild(editor);
 
         const editorView = document.createElement("code");
         editorView.className = "editorView";
-        //this.appendChild(editorView);
 
         const runButton = document.createElement("button");
         runButton.className = "run-button";
         runButton.textContent = "▶";
-		runButton.title = "run script";
+        runButton.title = "run script";
 
         const output = document.createElement("span");
         output.className = "output";
@@ -95,8 +81,6 @@ export default class JSCoder extends Window {
         const footer = document.createElement("footer");
         footer.appendChild(output);
         footer.appendChild(runButton);
-
-        //this.appendChild(footer);
 
         this.append(style, editor, editorView, footer);
 
@@ -135,9 +119,7 @@ export default class JSCoder extends Window {
 				`;
 
                 const result = new Function(
-                    [preConditions, editor.innerText, returnStatement].join(
-                        " "
-                    )
+                    [preConditions, editor.innerText, returnStatement].join(" ")
                 )();
                 output.innerText = result;
                 output.dataset.error = "false";
@@ -167,7 +149,7 @@ export default class JSCoder extends Window {
 
 /**
  * @param {string} text from innerHTML
- * @returns {string} highlited innerHtml
+ * @returns {string} highlighted innerHtml
  */
 function highlightText(text) {
     let words = [];
@@ -177,36 +159,36 @@ function highlightText(text) {
     for (let i = 0; i < text.length; i++) {
         const char = text[i];
 
-		// Block comments
-		if(char === "/" && text[i + 1] === "*") {
-			if(currentWord) {
-				words.push(currentWord);
-			}
+        // Block comments
+        if (char === "/" && text[i + 1] === "*") {
+            if (currentWord) {
+                words.push(currentWord);
+            }
 
-			currentStringOpener = "/*";
+            currentStringOpener = "/*";
             currentWord = "/";
             continue;
-		}else if (currentStringOpener === "/*") {
-			if(char == "*" && text[i+1] === "/") {
-				words.push(currentWord + "*/");
+        } else if (currentStringOpener === "/*") {
+            if (char == "*" && text[i + 1] === "/") {
+                words.push(currentWord + "*/");
                 currentWord = "";
                 currentStringOpener = null;
                 i += 1;
-			} else if (i === text.length - 1) {
+            } else if (i === text.length - 1) {
                 currentWord += char;
                 words.push(currentWord);
             } else {
                 currentWord += char;
             }
 
-			continue
-		}
+            continue;
+        }
 
         // Inline comments
         if (char === "/" && text[i + 1] === "/") {
-			if(currentWord) {
-				words.push(currentWord);
-			}
+            if (currentWord) {
+                words.push(currentWord);
+            }
 
             currentStringOpener = "//";
             currentWord = "/";
@@ -331,14 +313,14 @@ function highlightText(text) {
         } else currentWord += char;
     }
 
-	console.log(words);
+    console.log(words);
 
     words = words.map((word, i) => {
         let className = null;
 
         if (!isNaN(Number(word))) className = "num";
-        else if (purpleKeywords.includes(word)) className = "p";
-        else if (blueKeywords.includes(word)) className = "b";
+        else if (PURPLE_KEYWORDS.includes(word)) className = "p";
+        else if (BLUE_KEYWORDS.includes(word)) className = "b";
         else if (words[i + 1] === "(") className = "f";
 
         if (
@@ -354,7 +336,8 @@ function highlightText(text) {
             )
         )
             className = "error";
-        else if (word.startsWith("//") || word.startsWith("/*")) className = "comment";
+        else if (word.startsWith("//") || word.startsWith("/*"))
+            className = "comment";
         else if (
             /\s|;|!|\^|&|\(|\)|\[|\]|\{|\}|\*|\+|-|\.|\/|%|<|,|>|>=|=|<|<=/.test(
                 word
@@ -368,6 +351,11 @@ function highlightText(text) {
     return words.join("");
 }
 
+/**
+ * @param {string} word 
+ * @param {string} className 
+ * @returns highlighted outerHTML for word
+ */
 function getHighlightedResult(word, className) {
     return className ? `<span class="hg-${className}">${word}</span>` : word;
 }

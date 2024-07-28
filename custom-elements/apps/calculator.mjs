@@ -55,6 +55,7 @@ const CONSTANTS = Object.freeze({
 });
 
 export default class Calculator extends Window {
+    /** @type {string} */
     #answer;
 
     /** @type {HTMLElement} */

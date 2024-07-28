@@ -113,7 +113,7 @@ export default class Task extends HTMLElement {
                 } else {
                     window.minimize();
                 }
-                
+
                 Taskbar.instance.blur();
             } else if (!("focused" in this.container.dataset)) {
                 this.container.dataset.focused = true;
@@ -141,6 +141,7 @@ export default class Task extends HTMLElement {
     }
 
     /**
+     * Creates a task preview for a given window
      * @param {Window} window
      */
     createPreview(window) {
@@ -221,7 +222,6 @@ export default class Task extends HTMLElement {
     }
 
     /**
-     *
      * @param {Window} window
      */
     previewWindow(window) {
@@ -232,6 +232,9 @@ export default class Task extends HTMLElement {
         if (window.minimized) window.unminimize(true);
     }
 
+    /**
+     * @param {Window} window
+     */
     unpreviewWindow(window) {
         const main = document.querySelector("main");
         main.removeAttribute("data-preview-window");
@@ -261,10 +264,10 @@ export default class Task extends HTMLElement {
         };
     }
 
+    /**
+     * @param {string} id window's id to close
+     */
     closeWindow(id) {
-        /**
-         * @param {Event} e
-         */
         return () => {
             this.hovers = true;
             Taskbar.shadowRoot.getElementById(`window-preview-${id}`).remove();

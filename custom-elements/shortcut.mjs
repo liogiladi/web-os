@@ -16,6 +16,8 @@ export default class Shortcut extends HTMLElement {
         "uniqueIconSrc",
         ...requiredAttributes,
     ];
+
+    /** @type {import("../utils/queue.js").Queue} */
     static orderedFolderIds = new Queue();
 
     /** @type {HTMLSpanElement} */

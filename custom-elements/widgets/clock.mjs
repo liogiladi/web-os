@@ -1,5 +1,4 @@
 import readFileContents from "../../utils/readFileContents.js";
-import makeDraggable from "../../utils/makeDraggable.js";
 
 export default class Clock extends HTMLElement {
     /** @type {HTMLElement} */
@@ -68,19 +67,6 @@ export default class Clock extends HTMLElement {
         setInterval(() => {
             this.#updateClock();
         }, 1000);
-
-        /* TODO: Decide if to keep this or not (maybe in an edit mode).
-        makeDraggable(this, container, {
-            bubbleThroughController: true,
-            customStyles: {
-                width: "10rem",
-                height: "10rem",
-                position: "fixed",
-                right: "0",
-                top: "0",
-                transform: "translate(-1.5rem, 1.5rem)",
-            },
-        }); */
     }
 
     #updateClock() {

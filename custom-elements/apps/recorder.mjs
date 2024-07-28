@@ -129,7 +129,7 @@ export default class Recorder extends Window {
 
         this.#saveOutputButton = document.createElement("button");
         this.#saveOutputButton.innerHTML = "Save";
-        this.#saveOutputButton.onclick = this.#saveMediaToDesktop.bind(this);
+        this.#saveOutputButton.onclick = this.#saveMedia.bind(this);
 
         const discardButton = document.createElement("button");
         discardButton.innerHTML = "Discard";
@@ -340,7 +340,7 @@ export default class Recorder extends Window {
         }
     }
 
-    #saveMediaToDesktop() {
+    #saveMedia() {
         switch (this.#mode) {
             case MODES.pic: {
                 const src = this.#outputCanvas.toDataURL("image/jpeg");
@@ -397,6 +397,8 @@ export default class Recorder extends Window {
     }
 
     /**
+     * Visualizes waveforms according to audio source/stream.
+     *
      * Credit to https://github.com/mdn/dom-examples/blob/main/media/web-dictaphone/scripts/app.js
      */
     #visualize() {

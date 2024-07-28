@@ -5,10 +5,10 @@ import readFileContents from "/utils/readFileContents.js";
 import reorderedDraggableElements from "/utils/reorderdDraggableElements.js";
 import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
 
-const sizeTransition =
+const SIZE_TRANSITION =
     "width 0.3s, height 0.3s, transform 0.3s, border-radius 0.3s";
 
-const resizers = [
+const RESIZERS = Object.freeze([
     "nw-resize",
     "ne-resize",
     "se-resize",
@@ -17,7 +17,7 @@ const resizers = [
     "w-resize",
     "e-resize",
     "s-resize",
-];
+]);
 
 export default class Window extends HTMLElement {
     static observedAttributes = ["header-title", "icon-src"];
@@ -103,9 +103,9 @@ export default class Window extends HTMLElement {
 
         buttons.append(closeButton, sizeButton, minimizeButton);
 
-        /* ------------ resizers ------------- */
+        /* ------------ Resizers ------------- */
         const resizerElements = [];
-        for (const resizer of resizers) {
+        for (const resizer of RESIZERS) {
             const resizerElement = document.createElement("div");
             resizerElement.className = "dragger";
             resizerElement.classList.add(resizer);
@@ -130,7 +130,7 @@ export default class Window extends HTMLElement {
             resizerElements.push(resizerElement);
         }
 
-        /* ------------ title ------------- */
+        /* ------------ Title ------------- */
         const span = document.createElement("span");
         span.textContent = this.headerTitle;
 
@@ -141,7 +141,7 @@ export default class Window extends HTMLElement {
         title.className = "title";
         title.append(icon, span);
 
-        /* ------------ header ------------- */
+        /* ------------ Header ------------- */
         const header = document.createElement("header");
         header.append(title, buttons);
         header.ondblclick = (event) => {
@@ -149,7 +149,7 @@ export default class Window extends HTMLElement {
             this.toggleFullscreen();
         };
 
-        /* ------------ content ------------- */
+        /* ------------ Content ------------- */
         const content = document.createElement("div");
         content.className = "content";
         this._content = content;
@@ -175,7 +175,7 @@ export default class Window extends HTMLElement {
 
         this.observer.observe(this, { childList: true });
 
-        /* ------------ template ------------- */
+        /* ------------ Template ------------- */
         const template = document.createElement("template");
         template.className = "window";
 
@@ -184,10 +184,7 @@ export default class Window extends HTMLElement {
 
         template.append(style, header, content, ...resizerElements);
 
-        /* ------------ attach elements ------------- */
-        //const shadowRoot = this.shadowRoot || this.attachShadow({ mode: "open" });
-        //shadowRoot.append(template);
-
+        /* ------------ Attach elements ------------- */
         if (this.childNodes.length === 0) this.appendChild(template);
 
         if (!this.temporary && !globalThis.isMobile) {
@@ -250,7 +247,7 @@ export default class Window extends HTMLElement {
                 transform: this.style.transform,
             };
 
-            this.style.transition = sizeTransition;
+            this.style.transition = SIZE_TRANSITION;
         } else {
             setTimeout(() => {
                 this.style.transition = null;
@@ -281,8 +278,7 @@ export default class Window extends HTMLElement {
     }
 
     /**
-     *
-     * @param {boolean} temporary
+     * @param {boolean} temporary for previewing the window from taskbar
      */
     minimize(temporary) {
         if (!temporary) {
@@ -312,7 +308,7 @@ export default class Window extends HTMLElement {
     }
 
     /**
-     * @param {boolean} temporary
+     * @param {boolean} temporary for previewing the window from taskbar
      */
     unminimize(temporary) {
         if (!temporary) this.minimized = false;

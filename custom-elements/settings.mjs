@@ -78,7 +78,8 @@ export default class Settings extends HTMLElement {
 
         this.initialized = true;
 
-        // Theme
+        // ----------- Theme settings -----------
+
         const themeSettings = document.createElement("section");
         themeSettings.className = "settings";
         themeSettings.id = "theme-settings";
@@ -112,7 +113,8 @@ export default class Settings extends HTMLElement {
 
         themeSettings.append(themes);
 
-        // Account
+        // ----------- Account settings -----------
+
         const accountInfo = localStorage.getItem("account-info");
 
         const accountSettings = document.createElement("section");
@@ -123,14 +125,14 @@ export default class Settings extends HTMLElement {
         accountTitle.innerHTML = "Account";
 
         const form = document.createElement("form");
-        form.onsubmit = this.#handleAccountInfoSubmit.bind(this);
+        form.onsubmit = this.#submitAccountInfo.bind(this);
 
-        //Profile
+        // Profile
         const profilePictureInput = document.createElement("input");
         Object.assign(profilePictureInput, {
             type: "file",
             name: "profilePicture",
-            onchange: this.#handleProfilePictureChange.bind(this),
+            onchange: this.#changeProfilePicture.bind(this),
             hidden: true,
             accept: "image/*",
         });
@@ -196,7 +198,8 @@ export default class Settings extends HTMLElement {
         // Account info
         this.updateDefaultUserInfo();
 
-        // scale
+        // ----------- Scale settings -----------
+
         const scaleSettings = document.createElement("section");
         scaleSettings.className = "settings";
         scaleSettings.id = "scale-settings";
@@ -246,6 +249,10 @@ export default class Settings extends HTMLElement {
         );
     }
 
+    /**
+     * Scale the font size of the OS
+     * @param {number} value 
+     */
     #changeScale(value) {
         const scale = `${value * (16 / 50)}px`;
         localStorage.setItem("scale", scale);
@@ -268,9 +275,8 @@ export default class Settings extends HTMLElement {
 
     /**
      * @param {Event} e
-     * @returns
      */
-    #handleProfilePictureChange(e) {
+    #changeProfilePicture(e) {
         const file = e.target.files[0];
         if (!file) return alert("error durring file selection!");
 
@@ -282,7 +288,7 @@ export default class Settings extends HTMLElement {
      *
      * @param {Event} e
      */
-    async #handleAccountInfoSubmit(e) {
+    async #submitAccountInfo(e) {
         e.preventDefault();
         this.#passInput.blur();
 
@@ -323,6 +329,9 @@ export default class Settings extends HTMLElement {
         }, 300);
     }
 
+    /**
+     * Updates default user's info setting, according to current data, on each settings load
+     */
     updateDefaultUserInfo() {
         const userInfo = JSON.parse(
             localStorage.getItem("user-info") || "false"

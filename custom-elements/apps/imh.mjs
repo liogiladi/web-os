@@ -2,7 +2,10 @@ import Window from "../window.mjs";
 import readFileContents from "../../utils/readFileContents.js";
 
 export default class IMH extends Window {
+    /** @type {LeafletMap} */
     #map;
+
+    /** @type {HTMLElement} */
     #mapContainer;
 
     constructor() {
