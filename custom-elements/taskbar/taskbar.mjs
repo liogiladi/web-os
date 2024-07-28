@@ -325,14 +325,15 @@ export default class Taskbar extends HTMLElement {
             windowsWrapper.style.pointerEvents = "all";
         }
 
-        windowsWrapper.childNodes.forEach((node) => {
-            node.onclick = this.#goToWindow.bind(this);
-            node.ontouchstart = this.#handleWindowNavigateTouchStart.bind(this);
-            node.ontouchcancel =
+        for (const window of windowsWrapper.children) {
+            window.onclick = this.#goToWindow.bind(this);
+            window.ontouchstart =
+                this.#handleWindowNavigateTouchStart.bind(this);
+            window.ontouchcancel =
                 this.#handleWindowNavigateTouchCancel.bind(this);
-            node.ontouchmove = this.#handleWindowNavigateTouchMove.bind(this);
-            node.ontouchend = this.#handleWindowNavigateTouchEnd.bind(this);
-        });
+            window.ontouchmove = this.#handleWindowNavigateTouchMove.bind(this);
+            window.ontouchend = this.#handleWindowNavigateTouchEnd.bind(this);
+        }
 
         this.container.dataset.navOpen = true;
         windowsWrapper.dataset.navOpen = true;
@@ -354,12 +355,13 @@ export default class Taskbar extends HTMLElement {
     #closeNavigation() {
         const windowsWrapper = document.querySelector("#windows");
 
-        windowsWrapper.childNodes.forEach((node) => {
-            node.ontouchstart = null;
-            node.ontouchcancel = null;
-            node.ontouchmove = null;
-            node.ontouchend = null;
-        });
+        for (const window of windowsWrapper.children) {
+            window.onclick = null;
+            window.ontouchstart = null;
+            window.ontouchcancel = null;
+            window.ontouchmove = null;
+            window.ontouchend = null;
+        }
 
         this.container.dataset.navOpen = false;
         windowsWrapper.dataset.navOpen = false;
@@ -482,6 +484,14 @@ export default class Taskbar extends HTMLElement {
         this.container.dataset.navOpen = false;
 
         const windowsWrapper = document.querySelector("#windows");
+
+        for (const window of windowsWrapper.children) {
+            window.onclick = null;
+            window.ontouchstart = null;
+            window.ontouchcancel = null;
+            window.ontouchmove = null;
+            window.ontouchend = null;
+        }
 
         // Prevent click on window blocker from passing to its contents
         setTimeout(() => {
