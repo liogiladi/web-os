@@ -1,0 +1,29 @@
+@font-face {
+    font-family: "JetBrains";
+    src: url("/fonts/JetBrains.ttf");
+    font-weight: 100 900;
+}
+
+@font-face {
+    font-family: "Boot";
+    src: url(/fonts/Boot.ttf);
+}
+
+* {
+    font-family: "JetBrains";
+}
+
+:root {
+    font-size: var(--scale);
+}
+
+html,
+body,
+main {
+    width: 100vw;
+    height: 100vh;
+    padding: 0;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
