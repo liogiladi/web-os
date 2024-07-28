@@ -107,6 +107,7 @@ desktop-settings {
 
 #account-settings #profile-img-wrapper {
     position: relative;
+    display: flex;
     width: min(65%, 17.375rem);
     aspect-ratio: 1/1;
     border-radius: 50%;
