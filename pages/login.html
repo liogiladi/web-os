@@ -196,6 +196,7 @@
 
         async function onSubmit(e) {
             e.preventDefault();
+            document.querySelector("input[type=password]").blur();
 
             const data = new FormData(form);
 
@@ -213,8 +214,6 @@
 
                 return await continueToDesktop();
             }
-
-            document.querySelector("input[type=password]").blur();
 
             if (phase === "required") {
                 phase = "optional";
