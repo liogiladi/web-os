@@ -2,6 +2,8 @@ import Window from "../window.mjs";
 import readFileContents from "../../utils/readFileContents.js";
 
 const isDev = window.location.hostname === "127.0.0.1";
+const srcUrlScheme = isDev ? "http" : "https";
+
 async function checkURL(url) {
     try {
         const response = await fetch(url);
@@ -99,24 +101,24 @@ export default class Browser extends Window {
 
         if (this.#searchBar.value.startsWith("http://")) {
             if (this.#searchBar.value === "http://www.browser.com") {
-                src = `https://${window.location.hostname}${
+                src = `${srcUrlScheme}://${window.location.hostname}${
                     isDev ? ":3000" : ""
                 }/pages/desktop/browser/index.html`;
             } else if (
                 this.#searchBar.value.startsWith("http://www.browser.com/search?q")
             ) {
-                src = `https://${window.location.hostname}${
+                src = `${srcUrlScheme}://${window.location.hostname}${
                     isDev ? ":3000" : ""
                 }/pages/desktop/browser/search.html?q=${this.#searchBar.value.split(/\?q=(.*)/s)[1]}`;
             } else if (this.#searchBar.value.startsWith("http://www.site.com/")) {
                 errorCode = "403";
             }
         } else if (this.#searchBar.value.includes("/")) {
-            src = `https://${window.location.hostname}${
+            src = `${srcUrlScheme}://${window.location.hostname}${
                 isDev ? ":3000" : ""
             }/pages/desktop/browser/error.html?url=${this.#searchBar.value}`;
         } else {
-            src = `https://${window.location.hostname}${
+            src = `${srcUrlScheme}://${window.location.hostname}${
                 isDev ? ":3000" : ""
             }/pages/desktop/browser/search.html?q=${this.#searchBar.value}`;
         }
@@ -124,7 +126,7 @@ export default class Browser extends Window {
         const urlExists = await checkURL(src);
 
         if (!urlExists) {
-            src = `https://${window.location.hostname}${
+            src = `${srcUrlScheme}://${window.location.hostname}${
                 isDev ? ":3000" : ""
             }/pages/desktop/browser/error.html?url=${this.#searchBar.value}&code=${errorCode}`;
         }
@@ -141,7 +143,7 @@ export default class Browser extends Window {
         iframe.id = this.id;
         iframe.setAttribute("is", "x-frame-bypass");
 
-        iframe.src = `https://${window.location.hostname}${
+        iframe.src = `${srcUrlScheme}://${window.location.hostname}${
             isDev ? ":3000" : ""
         }/pages/desktop/browser/index.html`;
 
@@ -201,7 +203,7 @@ export default class Browser extends Window {
             this.#searchBar.value = errorURLQuery;
         } else if (
             url.href ===
-            `https://${window.location.hostname}${
+            `${srcUrlScheme}://${window.location.hostname}${
                 isDev ? ":3000" : ""
             }/pages/desktop/browser/index.html`
         ) {
