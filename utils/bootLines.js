@@ -6,7 +6,7 @@
  */
 
 /** @type {BootLine[]} */
-const bootLines = [
+const BOOT_LINES = Object.freeze([
     {
         status: "Started",
         description: "Open OS backdoor To Services",
@@ -103,11 +103,11 @@ const bootLines = [
         status: "Finished",
         description: "Desolution Binaries",
     },
-];
+]);
 
-export default bootLines;
+export default BOOT_LINES;
 
-export const binaries = [
+export const BINARIES = Object.freeze([
     "11010111",
     "10011110",
     "11010110",
@@ -560,4 +560,4 @@ export const binaries = [
     "11010111",
     "10011101",
     "00111111",
-];
+]);

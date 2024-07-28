@@ -1,3 +1,6 @@
+/**
+ * @typedef {Queue} Queue
+ */
 export default class Queue {
 	constructor() {
 		this.start = null;

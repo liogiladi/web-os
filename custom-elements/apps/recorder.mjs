@@ -1,7 +1,8 @@
 import readFileContents from "../../utils/readFileContents.js";
-import { FileStorage } from "../../utils/fileStorage.js";
 import Window from "../window.mjs";
-import { createPictureShortcut } from "../../utils/createFromFileStorage.js";
+import PictureStorage, {
+    createPictureShortcut,
+} from "../../utils/pictureStorage.js";
 import playAudioSnapshot from "../../utils/playAudioSnapshot.js";
 import downloadFromHref from "../../utils/downloadFromHref.js";
 
@@ -204,13 +205,12 @@ export default class Recorder extends Window {
 
         if (MODES[mode] === MODES.mic) {
             this.#visualize();
-        } 
-        
+        }
+
         if (MODES[mode] === MODES.pic) {
             this.#startStopButton.innerHTML = "capture";
         } else {
             this.#startStopButton.innerHTML = "record";
-            
         }
 
         playAudioSnapshot("/media/audio/recorder/recorder-mode-select.wav");
@@ -351,7 +351,7 @@ export default class Recorder extends Window {
                         `picture-${new Date().toISOString()}.jpeg`
                     );
                 } else {
-                    const pictureInfo = FileStorage.addPicture(src);
+                    const pictureInfo = PictureStorage.addPicture(src);
                     createPictureShortcut(pictureInfo);
                 }
 

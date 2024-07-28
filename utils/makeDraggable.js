@@ -1,16 +1,20 @@
 import Taskbar from "../custom-elements/taskbar/taskbar.mjs";
 
+/**
+ * for calculating mouse positions differences
+ * @type {MouseEvent | null}
+ */
 var _previousMouseEvent = null;
 
 /**
- * @typedef {Object} Options
+ * @typedef {Object} DragOptions
  * @prop {boolean} bubbleThroughController
  * @prop {CSSStyleDeclaration} customStyles
  * @prop {((event: MouseEvent) => boolean) | null} preventDrag
  */
 
 /**
- * @type {Options}
+ * @type {DragOptions}
  */
 const initialOptions = {
     bubbleThroughController: false,
@@ -19,9 +23,10 @@ const initialOptions = {
 };
 
 /**
- * @param {HTMLElement} element
- * @param {HTMLElement} controller
- * @param {{ bubbleThroughController: boolean, customStyles: object, preventDrag?: (event: MouseEvent) => boolean}} options
+ * Make element draggable by mouse.
+ * @param {HTMLElement} element to drag
+ * @param {HTMLElement} controller to drag with
+ * @param {DragOptions} options
  */
 export default function makeDraggable(
     element,
@@ -30,7 +35,6 @@ export default function makeDraggable(
 ) {
     element.style.transform = "translate(0,0)";
     element.style.display = "block";
-    //element.style.userSelect = "none";
     element.style.width = "fit-content";
     element.style.height = "fit-content";
 
@@ -49,6 +53,9 @@ export default function makeDraggable(
     };
 }
 
+/**
+ * @param {MouseEvent} event 
+ */
 function drag(event) {
     if (_previousMouseEvent) {
         const deltaX = event.pageX - _previousMouseEvent.pageX;
@@ -100,6 +107,7 @@ function drag(event) {
 
         this.style.transform = `translate(${newTranslation.x}px,${newTranslation.y}px)`;
     } else {
+        // Grab cursor
         document.body.classList.add("cursor-override");
         document.body.style.cursor = "grabbing";
     }

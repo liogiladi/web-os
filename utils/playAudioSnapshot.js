@@ -1,4 +1,5 @@
 /**
+ * Plays an audio snapshot unless disabled by user 
  * @param {string} src
  */
 export default function playAudioSnapshot(src) {

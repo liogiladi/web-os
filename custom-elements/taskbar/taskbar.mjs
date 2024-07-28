@@ -34,7 +34,7 @@ export default class Taskbar extends HTMLElement {
     /** @type {HTMLElement} */
     tasksWrapper;
 
-    /** @type {TasksData}  */
+    /** @type {import("../../utils/tasksData.js").TasksData}  */
     static tasks = new TasksData();
 
     /** @type {number} */

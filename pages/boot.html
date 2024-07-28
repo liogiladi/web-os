@@ -11,7 +11,7 @@
         <h1 data-start="true">_</h1>
     </body>
     <script type="module">
-        import bootLines, { binaries } from "/utils/bootLines.js";
+        import BOOT_LINES, { BINARIES } from "/utils/bootLines.js";
         import wait from "/utils/wait.js";
 
         const h1 = document.querySelector("h1");
@@ -51,12 +51,12 @@
             // Log all lines
             audio.loop = true;
 
-            for (let i = 0; i < bootLines.length; i++) {
+            for (let i = 0; i < BOOT_LINES.length; i++) {
                 await audio.play();
 
                 const line = document.createElement("span");
 
-                const lineInfo = bootLines[i];
+                const lineInfo = BOOT_LINES[i];
                 const isOK = lineInfo.result ? lineInfo.result === "OK" : true;
 
                 line.innerHTML = `
@@ -79,10 +79,10 @@
             binariesWrapper.id = "binaries";
             document.body.append(binariesWrapper);
 
-            for (let i = 0; i < binaries.length; i++) {
+            for (let i = 0; i < BINARIES.length; i++) {
                 const binary = document.createElement("span");
                 binary.className = "binary";
-                binary.innerHTML = binaries[i];
+                binary.innerHTML = BINARIES[i];
                 binariesWrapper.append(binary);
 
                 window.scrollTo({

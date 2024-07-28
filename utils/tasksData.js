@@ -1,9 +1,16 @@
 /**
- * @typedef {import("../custom-elements/taskbar.mjs").TaskInfo} TaskInfo
+ * @typedef {import("../custom-elements/taskbar/taskbar.mjs").TaskInfo} TaskInfo
  */
 
 import Taskbar from "../custom-elements/taskbar/taskbar.mjs";
 
+/**
+ * @typedef {TasksData} TasksData
+ */
+
+/**
+ * @type {TasksData}
+ */
 export default class TasksData {
     /** @type {Map<string, TaskInfo>} */
     data;

@@ -15,8 +15,7 @@
     </head>
     <script type="module" src="/custom-elements/define.mjs"></script>
     <script type="module">
-        import { FileStorage } from "/utils/fileStorage.js";
-        import { createPictureShortcut } from "/utils/createFromFileStorage.js";
+        import PictureStorage, { createPictureShortcut } from "/utils/pictureStorage.js";
         import Taskbar from "/custom-elements/taskbar/taskbar.mjs";
         import Settings, {
             THEMES_FILTERS,
@@ -39,10 +38,10 @@
         const scale = localStorage.getItem("scale") || "13px";
         document.documentElement.style.setProperty("--scale", scale);
 
-        FileStorage.init();
+        PictureStorage.init();
 
         // init shortcuts
-        for (const [id, info] of FileStorage.getPictures()) {
+        for (const [id, info] of PictureStorage.getPictures()) {
             createPictureShortcut(info);
         }
 
