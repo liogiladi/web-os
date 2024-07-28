@@ -275,6 +275,7 @@ export default class Settings extends HTMLElement {
      */
     async #handleAccountInfoSubmit(e) {
         e.preventDefault();
+        this.#passInput.blur();
 
         const currentUserInfo = JSON.parse(
             localStorage.getItem("user-info") || "false"
