@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Booting...</title>
-        <link rel="icon" href="/media/favicon.png" type="image/png">
+        <link rel="icon" href="/media/favicon.png" type="image/png" />
         <link rel="stylesheet" href="./boot.css" />
     </head>
     <body>
@@ -12,6 +12,7 @@
     </body>
     <script type="module">
         import bootLines, { binaries } from "/utils/bootLines.js";
+        import wait from "/utils/wait.js";
 
         const h1 = document.querySelector("h1");
 
@@ -29,7 +30,11 @@
             }
         }, 600);
 
-        setTimeout(() => {
+        runSequence();
+
+        async function runSequence() {
+            await wait(2000);
+
             h1.dataset.start = false;
             h1.innerHTML = "Welcome to WebOs ^_^";
 
@@ -41,80 +46,60 @@
 
             let i = 0;
 
-            setTimeout(async () => {
-                // Log all lines
-                audio.loop = true;
-                try {
-                    await audio.play();
-                } catch (error) {
-                    // User has not interacted with page first
-                }
-                
-                let intervalId = setInterval(() => {
-                    if (i >= bootLines.length) {
-                        clearInterval(intervalId);
+            await wait(1000);
 
-                        // Log binaries
-                        const binariesWrapper = document.createElement("div");
-                        binariesWrapper.id = "binaries";
-                        document.body.append(binariesWrapper);
+            // Log all lines
+            audio.loop = true;
 
-                        i = 0;
-                        intervalId = setInterval(async () => {
-                            if (i >= binaries.length) {
-                                clearInterval(intervalId);
+            for (let i = 0; i < bootLines.length; i++) {
+                await audio.play();
 
-                                setTimeout(() => {
-                                    document.body.replaceChildren([]);
+                const line = document.createElement("span");
 
-                                    setTimeout(() => {
-                                        // Redirect To Login Page
-                                        window.location.replace("login.html");
-                                    }, 300);
+                const lineInfo = bootLines[i];
+                const isOK = lineInfo.result ? lineInfo.result === "OK" : true;
 
-                                    return;
-                                }, 800);
-
-                                audio.pause();
-
-                                return;
-                            }
-
-                            const binary = document.createElement("span");
-                            binary.className = "binary";
-                            binary.innerHTML = binaries[i];
-                            binariesWrapper.append(binary);
-
-                            window.scrollTo({
-                                top: document.body.scrollHeight,
-                            });
-                            i++;
-                        }, 6);
-
-                        return;
-                    }
-
-                    const line = document.createElement("span");
-
-                    const lineInfo = bootLines[i];
-                    const isOK = lineInfo.result
-                        ? lineInfo.result === "OK"
-                        : true;
-
-                    line.innerHTML = `
+                line.innerHTML = `
                     <span>[${isOK ? "&nbsp;&nbsp;" : ""}<span class='result ${
-                        !isOK ? "failed" : ""
-                    }'>${lineInfo.result || "OK"}</span>${
-                        isOK ? "&nbsp;&nbsp;" : ""
-                    }]</span>
+                    !isOK ? "failed" : ""
+                }'>${lineInfo.result || "OK"}</span>${
+                    isOK ? "&nbsp;&nbsp;" : ""
+                }]</span>
                     <span class='status'>${lineInfo.status}</span>
                     <span>${lineInfo.description}</span>
                 `;
 
-                    document.body.append(line, document.createElement("br"));
-                    i++;
-                }, 30);
-            }, 1000);
-        }, 2000);
+                document.body.append(line, document.createElement("br"));
+
+                await wait(30);
+            }
+
+            // Log binaries
+            const binariesWrapper = document.createElement("div");
+            binariesWrapper.id = "binaries";
+            document.body.append(binariesWrapper);
+
+            for (let i = 0; i < binaries.length; i++) {
+                const binary = document.createElement("span");
+                binary.className = "binary";
+                binary.innerHTML = binaries[i];
+                binariesWrapper.append(binary);
+
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                });
+
+                await wait(6);
+            }
+            
+            audio.pause();
+
+            document.body.replaceChildren([]);
+
+            await wait(300);
+
+            // Redirect To Login Page
+            window.location.replace("login.html");
+        }
     </script>
 </html>

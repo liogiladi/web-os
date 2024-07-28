@@ -95,6 +95,7 @@
         import hash from "/utils/hash.js";
         import isMobile from "/utils/isMobile.js";
         import AlertDialog from "/custom-elements/alertDialog.mjs";
+        import wait from "/utils/wait.js";
 
         const audio = new Audio("../media/audio/startup.mp3");
         const audioDisabled = localStorage.getItem("disable-audio");
@@ -145,37 +146,35 @@
             .addEventListener("change", handleProfileChange);
 
         // Sequences
-        setTimeout(
-            () => {
-                logo.style.scale = "0.2";
-                logo.style.top = "10vh";
+        runSequence();
 
-                setTimeout(() => {
-                    if (localStorage.getItem("user-info")) {
-                        const userProfile =
-                            document.querySelector("#user-profile");
-                        userProfile.removeAttribute("hidden");
-                        userProfile.src =
-                            userInfo.profilePic ||
-                            "/media/default-profile-pic.png";
+        async function runSequence() {
+            await wait(fromLogout ? 100 : 2400);
 
-                        const usernameInput =
-                            document.querySelector("[name=username]");
-                        usernameInput.disabled = true;
-                        usernameInput.value = userInfo.username;
+            logo.style.scale = "0.2";
+            logo.style.top = "10vh";
 
-                        const submitButton =
-                            document.querySelector("input[type=submit]");
-                        submitButton.value = "Sign in";
+            await wait(1000);
 
-                        form.removeAttribute("hidden");
+            if (localStorage.getItem("user-info")) {
+                const userProfile = document.querySelector("#user-profile");
+                userProfile.removeAttribute("hidden");
+                userProfile.src =
+                    userInfo.profilePic || "/media/default-profile-pic.png";
 
-                        resetMessage.style.opacity = 1;
-                    } else form.removeAttribute("hidden");
-                }, 1000);
-            },
-            fromLogout ? 100 : 2400
-        );
+                const usernameInput = document.querySelector("[name=username]");
+                usernameInput.disabled = true;
+                usernameInput.value = userInfo.username;
+
+                const submitButton =
+                    document.querySelector("input[type=submit]");
+                submitButton.value = "Sign in";
+
+                form.removeAttribute("hidden");
+
+                resetMessage.style.opacity = 1;
+            } else form.removeAttribute("hidden");
+        }
 
         // Form
         function handleProfileChange(event) {
@@ -210,7 +209,7 @@
 
                 resetMessage.style.opacity = 0;
 
-                return continueToDesktop();
+                return await continueToDesktop();
             }
 
             if (phase === "required") {
@@ -235,36 +234,36 @@
 
                 localStorage.setItem("user-info", JSON.stringify(userInfo));
 
-                continueToDesktop();
+                await continueToDesktop();
             }
         }
 
-        function continueToDesktop() {
+        async function continueToDesktop() {
             form.hidden = true;
 
-            setTimeout(() => {
-                const h1 = document.querySelector("h1");
-                h1.innerHTML += ` ${userInfo.username}`;
-                h1.style.opacity = 1;
+            await wait(1000);
 
-                setTimeout(() => {
-                    h1.style.opacity = 0;
-                    logo.style.transition = "0.7s 1.2s ease-out";
-                    logo.style.top = "50%";
-                    logo.style.scale = "1";
+            const h1 = document.querySelector("h1");
+            h1.innerHTML += ` ${userInfo.username}`;
+            h1.style.opacity = 1;
 
-                    setTimeout(() => {
-                        // Redirect To Desktop
-                        localStorage.setItem("from-boot", "true");
-                        localStorage.setItem("logged", "true");
-                        localStorage.setItem(
-                            "logo-width-from-login",
-                            getComputedStyle(logo).width
-                        );
-                        window.location.replace("desktop/index.html");
-                    }, 2000);
-                }, 2000);
-            }, 1000);
+            await wait(2000);
+
+            h1.style.opacity = 0;
+            logo.style.transition = "0.7s 1.2s ease-out";
+            logo.style.top = "50%";
+            logo.style.scale = "1";
+
+            await wait(2000);
+
+            // Redirect To Desktop
+            localStorage.setItem("from-boot", "true");
+            localStorage.setItem("logged", "true");
+            localStorage.setItem(
+                "logo-width-from-login",
+                getComputedStyle(logo).width
+            );
+            window.location.replace("desktop/index.html");
         }
 
         // Reset
