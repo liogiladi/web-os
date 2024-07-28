@@ -59,3 +59,7 @@ body[data-type=personal] footer {
 body[data-type=personal] > header h2 {
     color: rgb(90, 8, 127);
 }
+
+.bold {
+    font-weight: bolder;
+}

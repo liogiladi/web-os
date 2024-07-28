@@ -106,7 +106,7 @@ const personal = {
  * @param {string} searchQuery
  */
 function generatePersonalParagraph(searchQuery) {
-    let paragraph = searchQuery + " " + (random(0, 1) ? "is" : "are") + " ";
+    let paragraph = `<span class='bold'>${searchQuery}</span>` + " " + (random(0, 1) ? "is" : "are") + " ";
 
     const adjectiveIndex = random(0, 2);
 
@@ -185,7 +185,7 @@ function generateResearchParagraph(searchQuery) {
         "#VERB",
         getRandomItem(researchInfo.discoveryVerbs)
     );
-    paragraph = paragraph.replace("#SEARCH_QUERY", searchQuery);
+    paragraph = paragraph.replace("#SEARCH_QUERY", `<span class='bold'>${searchQuery}</span>`);
     paragraph = paragraph.replace(
         "#PRE_DESCRIBERS",
         getRandomItem(researchInfo.preDescribers)

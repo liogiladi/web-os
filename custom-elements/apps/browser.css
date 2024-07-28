@@ -9,6 +9,7 @@
 
 .browser .top-bar {
     display: flex;
+    align-items: center;
     gap: 0.3rem;
 }
 
@@ -33,6 +34,7 @@
 .browser form {
     width: 100%;
     height: calc(100% - 0.8rem);
+    margin: 0;
 }
 
 .browser form input {
