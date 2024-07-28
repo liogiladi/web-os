@@ -132,6 +132,7 @@ export default class Browser extends Window {
         }
 
         this.#iframe.src = src;
+        this.#searchBar.blur(); 
     }
 
     /**

@@ -160,7 +160,8 @@
                 const userProfile = document.querySelector("#user-profile");
                 userProfile.removeAttribute("hidden");
                 userProfile.src =
-                    userInfo.profilePic || "/media/images/default-profile-pic.png";
+                    userInfo.profilePic ||
+                    "/media/images/default-profile-pic.png";
 
                 const usernameInput = document.querySelector("[name=username]");
                 usernameInput.disabled = true;
@@ -195,6 +196,7 @@
 
         async function onSubmit(e) {
             e.preventDefault();
+
             const data = new FormData(form);
 
             if (userInfo) {
@@ -222,6 +224,8 @@
                 profilePic.classList.add("enter-animation");
 
                 submitButton.value = "Finish";
+
+                e.target.blur();
             } else {
                 // Save data
                 userInfo = {
