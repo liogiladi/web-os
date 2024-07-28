@@ -113,7 +113,7 @@ export default class Settings extends HTMLElement {
         themeSettings.append(themes);
 
         // Account
-        const accountInfo = localStorage.getItem("accountInfo");
+        const accountInfo = localStorage.getItem("account-info");
 
         const accountSettings = document.createElement("section");
         accountSettings.className = "settings";

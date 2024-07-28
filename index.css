@@ -1,5 +1,3 @@
-
-
 body {
     background-color: black;
     container-type: size;
@@ -19,16 +17,6 @@ main::after {
     height: 100vh;
     background-color: black;
     animation: fade-out 1s 0.2s forwards;
-}
-
-@keyframes fade-out {
-    from {
-        opacity: 1;
-    }
-    to {
-        opacity: 0;
-        pointer-events: none;
-    }
 }
 
 #video-wrapper {
@@ -61,4 +49,14 @@ video {
     border: 0;
     background: none;
     cursor: pointer;
+}
+
+@keyframes fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        pointer-events: none;
+    }
 }

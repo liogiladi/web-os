@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Booting...</title>
         <link rel="icon" href="/media/images/favicon.png" type="image/png" />
-        <link rel="stylesheet" href="/global.css">
+        <link rel="stylesheet" href="/global.css" />
         <link rel="stylesheet" href="./boot.css" />
     </head>
     <body>
@@ -53,7 +53,11 @@
             audio.loop = true;
 
             for (let i = 0; i < BOOT_LINES.length; i++) {
-                await audio.play();
+                try {
+                    await audio.play();
+                } catch (error) {
+                    // User has not interacted with page first
+                }
 
                 const line = document.createElement("span");
 
@@ -86,13 +90,13 @@
                 binary.innerHTML = BINARIES[i];
                 binariesWrapper.append(binary);
 
-                window.scrollTo({
+                document.body.scrollTo({
                     top: document.body.scrollHeight,
                 });
 
-                await wait(6);
+                await wait(3);
             }
-            
+
             audio.pause();
 
             document.body.replaceChildren([]);

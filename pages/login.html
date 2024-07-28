@@ -14,7 +14,7 @@
 
         document.documentElement.style.setProperty("--scale", scale);
 
-        var fromLogout = localStorage.getItem("lockUser");
+        var fromLogout = localStorage.getItem("lock-user");
         document.documentElement.style.setProperty(
             "--initial-opacity",
             fromLogout ? 1 : 0
@@ -108,7 +108,7 @@
         const logo = document.querySelector("#os-logo");
 
         if (fromLogout) {
-            localStorage.removeItem("lockUser");
+            localStorage.removeItem("lock-user");
 
             const transitionWidth = localStorage.getItem(
                 "logo-width-from-login"

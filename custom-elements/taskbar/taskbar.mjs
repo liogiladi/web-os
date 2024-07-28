@@ -258,7 +258,7 @@ export default class Taskbar extends HTMLElement {
         const transitionLayer = document.querySelector("#transition-layer");
         transitionLayer.style.opacity = 1;
         transitionLayer.style.pointerEvents = "all";
-        localStorage.setItem("lockUser", "true");
+        localStorage.setItem("lock-user", "true");
         localStorage.setItem(
             "logo-width-from-login",
             getComputedStyle(document.querySelector("#transition-layer img"))
