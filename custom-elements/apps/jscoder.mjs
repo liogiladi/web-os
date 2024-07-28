@@ -312,7 +312,7 @@ function highlightText(text) {
             currentWord = "";
             i += 4;
         } else if (char == "<" && text.substring(i, i + 6) == "</div>") {
-            words.push(currentWord, "<br>");
+            words.push(currentWord);
             currentWord = "";
             i += 5;
         } else if (
