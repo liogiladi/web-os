@@ -222,6 +222,11 @@ function highlightText(text) {
                 currentWord = "";
                 currentStringOpener = null;
                 i += 4;
+            } else if (char == "<" && text.substring(i, i + 6) == "</div>") {
+                words.push(currentWord, "<br>");
+                currentWord = "";
+                currentStringOpener = null;
+                i += 5;
             } else if (i === text.length - 1) {
                 currentWord += char;
                 words.push(currentWord);
