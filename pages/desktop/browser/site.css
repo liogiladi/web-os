@@ -1,11 +1,11 @@
 body {
-	margin: 0 auto;
-	overflow: hidden;
     display: grid;
     grid-template-rows: auto 1fr;
+	box-sizing: border-box;
 	width: 100vw;
 	height: 100vh;
-	box-sizing: border-box;
+	margin: 0 auto;
+	overflow: hidden;
 }
 
 body > header {
@@ -18,14 +18,14 @@ body > header {
 
 body > header h1 {
     margin: 0;
-    font-size: clamp(2rem, 10vw, 4rem);
     color: white;
+    font-size: clamp(2rem, 10vw, 4rem);
 }
 
 body > header h2 {
     margin: 0;
-    font-size: clamp(1rem, 7vw, 2rem);
     color: rgb(20, 18, 170);
+    font-size: clamp(1rem, 7vw, 2rem);
 }
 
 main {
@@ -34,16 +34,15 @@ main {
 }
 
 footer {
-    text-align: center;
-    color: white;
     padding: 0.625rem 1.25rem;
+    color: white;
+    text-align: center;
     font-size: clamp(1rem, 4vw, 2rem);
 }
 
 body[data-type=research] header,
 body[data-type=research] footer {
     background: linear-gradient(to right, #00aeff, #0066ff);
-
 }
 
 body[data-type=research] header h2 {

@@ -32,13 +32,13 @@ dialog[is=desktop-alert-dialog] .dialog-buttons {
 dialog[is=desktop-alert-dialog] .dialog-buttons button {
     width: 7rem;
     padding-block: 0.7rem;
-    font-size: 1.2rem;
-    background: none;
     border: 0;
-    color: rgb(97, 97, 97);
     border-radius: 0.3rem;
-    cursor: pointer;
+    color: rgb(97, 97, 97);
+    background: none;
+    font-size: 1.2rem;
     transition: background-color 0.1s, scale 0.1s;
+    cursor: pointer;
 }
 
 dialog[is=desktop-alert-dialog] .dialog-buttons button:focus {

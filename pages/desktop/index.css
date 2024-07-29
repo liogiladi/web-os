@@ -33,10 +33,10 @@ body::before {
 
 main {
     position: relative;
+    box-sizing: border-box;
     width: 100vw;
     height: 100%;
     padding: 1rem;
-    box-sizing: border-box;
 }
 
 main[data-preview-window] #windows > *:not([data-window-to-preview]) {
@@ -45,13 +45,13 @@ main[data-preview-window] #windows > *:not([data-window-to-preview]) {
 
 .center-logo {
     position: fixed;
-    left: 50%;
     top: 50%;
+    left: 50%;
     width: clamp(11.063rem, 20%, 15.5rem);
     transform: translate(-50%, -50%);
+    filter: var(--theme-filter) drop-shadow(0 0.25rem 15px #00000001);
     transition: transform 0.2s;
     cursor: pointer;
-    filter: var(--theme-filter) drop-shadow(0 0.25rem 15px #00000001);
 }
 
 body:not(.cursor-override) #os-logo:hover {
@@ -66,22 +66,22 @@ body:not(.cursor-override) #os-logo:active {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 100%;
     gap: 1.25rem;
     width: fit-content;
+    height: 100%;
 }
 
 /* --------------- Mobile --------------- */
 
 body[data-mobile] #shortcuts {
-    box-sizing: border-box;
     position: absolute;
-    left: 0;
     bottom: 0;
+    left: 0;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap-reverse;
+    box-sizing: border-box;
     height: 50%;
     width: 100%;
     padding: 1rem;
@@ -92,20 +92,20 @@ body[data-mobile] #shortcuts desktop-shortcut {
 }
 
 body[data-mobile] #windows {
-    z-index: 10000;
     position: absolute;
-    left: 0;
+    z-index: 10000;
     top: 0;
+    left: 0;
     display: flex;
     flex-direction: row-reverse;
+    gap: 2rem;
     width: 100%;
     height: 100%;
-    gap: 2rem;
     opacity: 0;
     transition: 0.3s ease-in-out;
-    pointer-events: none;
     overflow-y: hidden;
     overflow-x: hidden;
+    pointer-events: none;
 }
 
 body[data-mobile] #windows:has([data-viewed-window]) {
@@ -120,9 +120,9 @@ body[data-mobile] #windows > * {
 }
 
 body[data-mobile] #windows[data-nav-open="true"] {
+    opacity: 1;
     pointer-events: all;
     scroll-snap-type: x mandatory;
-    opacity: 1;
 }
 
 body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar {
@@ -139,9 +139,9 @@ body[data-mobile] #windows[data-nav-open="true"]::-webkit-scrollbar-thumb {
 }
 
 body[data-mobile] #windows[data-nav-open="true"] > * {
+    transform: translateY(0);
     scale: 0.8;
     scroll-snap-align: center;
-    transform: translateY(0);
 }
 
 body[data-mobile] #windows[data-nav-open="true"][data-multiple-windows=true] > * {
@@ -152,20 +152,20 @@ body[data-mobile] #windows[data-nav-open="true"][data-multiple-windows=true] > *
 body[data-mobile] #windows[data-nav-open="true"] > *::before {
     content: "";
     position: absolute;
-    left: 0;
+    z-index: 1000;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    z-index: 1000;
 }
 
 body[data-mobile] #windows #empty-windows-message {
     position: absolute;
-    width: fit-content;
-    left: 50%;
     top: 50%;
-    translate: -50% -50%;
+    left: 50%;
+    width: fit-content;
     font-size: clamp(1rem, 7vw, 2rem);
     text-wrap: nowrap;
     color: #ffffff40;
+    translate: -50% -50%;
 }

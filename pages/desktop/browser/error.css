@@ -7,9 +7,9 @@ main {
 	position: relative;
     display: grid;
     place-items: center;
+	box-sizing: border-box;
 	width: 100vw;
 	height: 100vh;
-	box-sizing: border-box;
     background-color: white;
 }	
 
@@ -21,11 +21,11 @@ main section {
 
 main section h1 {
     margin: 0;
+    color: transparent;
     text-align: center;
     font-size: clamp(2rem, 20vw, 9rem);
     background: linear-gradient(#ff6200, #ff0000);
     background-clip: text;
-    color: transparent;
 }
 
 main section p {

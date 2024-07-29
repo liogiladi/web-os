@@ -1,15 +1,15 @@
 * {
+    margin: 0;
+    padding: 0;
     font-size: 1.1rem;
     font-family: "Boot";
     font-weight: 200;
-    margin: 0;
-    padding: 0;
 }
 
 body {
     box-sizing: border-box;
-    color: white;
     padding: 1rem;
+    color: white;
     overflow: hidden;
 }
 
@@ -17,9 +17,9 @@ body::before {
     content: "";
     position: fixed;
     z-index: -1;
-    width: 100%;
     top: 0;
     left: 0;
+    width: 100%;
     height: 100%;
     background: linear-gradient(black, #101010);
 }
@@ -43,8 +43,8 @@ h1[data-start="true"] {
 #binaries {
     display: flex;
     flex-wrap: wrap;
-    color: yellow;
     width: 100%;
+    color: yellow;
 }
 
 .status {

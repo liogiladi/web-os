@@ -1,13 +1,12 @@
 body {
-	margin: 0 auto;
-	overflow: hidden;
-
     display: grid;
     grid-template-rows: auto 1fr;
+	box-sizing: border-box;
 	width: 100vw;
 	height: 100vh;
-	box-sizing: border-box;
+	margin: 0 auto;
     background-color: white;
+	overflow: hidden;
 }
 
 body > header {
@@ -21,10 +20,10 @@ body > header {
 
 body > header h1 {
     margin: 0;
+    color: transparent;
     font-size: clamp(2rem, 10vw, 4rem);
     background: linear-gradient(#ff6200, #ffee00);
     background-clip: text;
-    color: transparent;
 }
 
 #search-bar {
@@ -42,8 +41,8 @@ body > header h1 {
 
 #search-bar button {
     position: absolute;
-    right: 0.7rem;
     top: 50%;
+    right: 0.7rem;
     font-weight: 900;
     background: linear-gradient(to right, #ff6200, #ffee00);
     transform: translateY(-50%);
@@ -84,7 +83,6 @@ article > header > h3 {
     margin: 0;
     font-size: 0.9rem;
     font-weight: 300;
-   
 }
 
 article a {
