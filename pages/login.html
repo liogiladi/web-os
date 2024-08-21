@@ -1,334 +1,337 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Logging in...</title>
-        <link rel="icon" href="/media/images/favicon.png" type="image/png" />
-        <link rel="stylesheet" href="/global.css" />
-        <link rel="stylesheet" href="./login.css" />
-    </head>
-    <script type="module" src="/custom-elements/define.mjs"></script>
-    <script>
-        const scale = localStorage.getItem("scale") || "13px";
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Logging in...</title>
+		<link rel="icon" href="/media/images/favicon.png" type="image/png" />
+		<link rel="stylesheet" href="/global.css" />
+		<link rel="stylesheet" href="./login.css" />
+	</head>
+	<script type="module" src="/custom-elements/define.mjs"></script>
+	<script>
+		const scale = localStorage.getItem("scale") || "13px";
 
-        document.documentElement.style.setProperty("--scale", scale);
+		document.documentElement.style.setProperty("--scale", scale);
 
-        var fromLogout = localStorage.getItem("lock-user");
-        document.documentElement.style.setProperty(
-            "--initial-opacity",
-            fromLogout ? 1 : 0
-        );
-    </script>
-    <body>
-        <dialog is="desktop-alert-dialog"></dialog>
-        <main>
-            <svg
-                id="os-logo"
-                draggable="false"
-                width="303"
-                height="299"
-                viewBox="0 0 303 299"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-                <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M64.8701 67.8545C40.9314 43.9158 6.10352e-05 60.8702 6.10352e-05 94.7246V285.085C6.10352e-05 285.158 0.0291392 285.228 0.0808987 285.28V285.28C0.188684 285.387 0.36344 285.387 0.471227 285.28L114.513 171.238C129.353 156.398 129.353 132.337 114.513 117.497L64.8701 67.8545Z"
-                    fill="white"
-                />
-                <path
-                    fill-rule="evenodd"
-                    clip-rule="evenodd"
-                    d="M236.742 238.618C258.791 260.667 243.175 298.367 211.993 298.367H14.3904C14.3172 298.367 14.247 298.338 14.1952 298.286V298.286C14.0874 298.178 14.0874 298.004 14.1952 297.896L84.5538 227.537L130.359 181.733C144.027 168.064 166.188 168.064 179.856 181.733L236.742 238.618Z"
-                    fill="white"
-                />
-                <path
-                    d="M253.426 15.7595C267.846 17.1862 279.353 28.4113 281.138 42.7907L300.376 197.802C303.986 226.889 268.947 244.277 247.966 223.811L73.2865 53.4186C52.3054 32.9525 68.818 -2.5078 97.9854 0.378345L253.426 15.7595Z"
-                    fill="white"
-                />
-            </svg>
-            <h1 class="center">Welcome</h1>
-            <form hidden class="center">
-                <img id="user-profile" src="" alt="user picture" hidden />
-                <fieldset>
-                    <input
-                        type="text"
-                        name="username"
-                        placeholder="Enter username"
-                        required
-                        pattern="^(?:[a-zA-Z\d\s]*)[a-zA-Z]+(?:[a-zA-Z\d\s]*)$"
-                        minlength="4"
-                        maxlength="12"
-                        oninvalid="this.setCustomValidity('Username should consist of:\n* 4-12 letters\n* English letters\n- (optional) 0-9\n- (optional) spaces')"
-                        oninput="this.setCustomValidity('');"
-                    />
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Enter password"
-                        required
-                    />
-                </fieldset>
-                <label id="profile-pic" for="profile" class="center">
-                    <img
-                        src="/media/images/default-profile-pic.png"
-                        alt="profile picture"
-                    />
+		var fromLogout = localStorage.getItem("lock-user");
+		document.documentElement.style.setProperty(
+			"--initial-opacity",
+			fromLogout ? 1 : 0
+		);
+	</script>
+	<body>
+		<dialog is="desktop-alert-dialog"></dialog>
+		<main>
+			<svg
+				id="os-logo"
+				draggable="false"
+				width="303"
+				height="299"
+				viewBox="0 0 303 299"
+				fill="none"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M64.8701 67.8545C40.9314 43.9158 6.10352e-05 60.8702 6.10352e-05 94.7246V285.085C6.10352e-05 285.158 0.0291392 285.228 0.0808987 285.28V285.28C0.188684 285.387 0.36344 285.387 0.471227 285.28L114.513 171.238C129.353 156.398 129.353 132.337 114.513 117.497L64.8701 67.8545Z"
+					fill="white"
+				/>
+				<path
+					fill-rule="evenodd"
+					clip-rule="evenodd"
+					d="M236.742 238.618C258.791 260.667 243.175 298.367 211.993 298.367H14.3904C14.3172 298.367 14.247 298.338 14.1952 298.286V298.286C14.0874 298.178 14.0874 298.004 14.1952 297.896L84.5538 227.537L130.359 181.733C144.027 168.064 166.188 168.064 179.856 181.733L236.742 238.618Z"
+					fill="white"
+				/>
+				<path
+					d="M253.426 15.7595C267.846 17.1862 279.353 28.4113 281.138 42.7907L300.376 197.802C303.986 226.889 268.947 244.277 247.966 223.811L73.2865 53.4186C52.3054 32.9525 68.818 -2.5078 97.9854 0.378345L253.426 15.7595Z"
+					fill="white"
+				/>
+			</svg>
+			<h1 class="center">Welcome</h1>
+			<form hidden class="center">
+				<img id="user-profile" src="" alt="user picture" hidden />
+				<fieldset>
+					<input
+						type="text"
+						name="username"
+						placeholder="Enter username"
+						required
+						pattern="^(?:[a-zA-Z\d\s]*)[a-zA-Z]+(?:[a-zA-Z\d\s]*)$"
+						minlength="4"
+						maxlength="12"
+						oninvalid="this.setCustomValidity('Username should consist of:\n* 4-12 letters\n* English letters\n- (optional) 0-9\n- (optional) spaces')"
+						oninput="this.setCustomValidity('');"
+					/>
+					<input
+						type="password"
+						name="password"
+						placeholder="Enter password"
+						required
+					/>
+				</fieldset>
+				<label id="profile-pic" for="profile" class="center">
+					<img
+						src="/media/images/default-profile-pic.png"
+						alt="profile picture"
+					/>
 
-                    <input
-                        type="file"
-                        name="profilePicture"
-                        id="profile"
-                        accept="image/*"
-                        hidden
-                    />
-                </label>
-                <input type="submit" value="Next" />
-            </form>
-            <progress id="reset-bar" max="100" value="0"></progress>
-            <span id="reset-message">Hold Esc to RESET</span>
-        </main>
-    </body>
+					<input
+						type="file"
+						name="profilePicture"
+						id="profile"
+						accept="image/*"
+						hidden
+					/>
+				</label>
+				<input type="submit" value="Next" />
+			</form>
+			<progress id="reset-bar" max="100" value="0"></progress>
+			<span id="reset-message">Hold Esc to RESET</span>
+		</main>
+	</body>
 
-    <script type="module">
-        import convertFileToBase64 from "/utils/convertFileToBase64.js";
-        import hash from "/utils/hash.js";
-        import isMobile from "/utils/isMobile.js";
-        import AlertDialog from "/custom-elements/alertDialog.mjs";
-        import wait from "/utils/wait.js";
+	<script type="module">
+		import convertFileToBase64 from "/utils/convertFileToBase64.js";
+		import hash from "/utils/hash.js";
+		import isMobile from "/utils/isMobile.js";
+		import AlertDialog from "/custom-elements/alertDialog.mjs";
+		import wait from "/utils/wait.js";
 
-        const audio = new Audio("../media/audio/startup.mp3");
-        const audioDisabled = localStorage.getItem("disable-audio");
+		const audio = new Audio("../media/audio/startup.mp3");
+		const audioDisabled = localStorage.getItem("disable-audio");
 
-        if (!audioDisabled) {
-            audio.volume = 0.7;
-        }
+		if (!audioDisabled) {
+			audio.volume = 0.7;
+		}
 
-        const logo = document.querySelector("#os-logo");
+		const logo = document.querySelector("#os-logo");
 
-        if (fromLogout) {
-            localStorage.removeItem("lock-user");
+		if (fromLogout) {
+			localStorage.removeItem("lock-user");
 
-            const transitionWidth = localStorage.getItem(
-                "logo-width-from-login"
-            );
+			const transitionWidth = localStorage.getItem(
+				"logo-width-from-login"
+			);
 
-            if (transitionWidth) {
-                localStorage.removeItem("logo-width-from-login");
-                logo.style.width = transitionWidth;
-            }
+			if (transitionWidth) {
+				localStorage.removeItem("logo-width-from-login");
+				logo.style.width = transitionWidth;
+			}
 
-            logo.style.opacity = 1;
-        } else {
-            logo.style.opacity = 1;
-            logo.dataset.animate = "true";
+			logo.style.opacity = 1;
+		} else {
+			logo.style.opacity = 1;
+			logo.dataset.animate = "true";
 
-            if (!audioDisabled) {
-                setTimeout(() => {
-                    Promise.resolve(audio.play());
-                }, 1000);
-            }
-        }
+			if (!audioDisabled) {
+				setTimeout(() => {
+					Promise.resolve(audio.play());
+				}, 1000);
+			}
+		}
 
-        localStorage.setItem("logged", "");
+		localStorage.setItem("logged", "");
 
-        const userInfo = JSON.parse(
-            localStorage.getItem("user-info") || "false"
-        );
+		const userInfo = JSON.parse(
+			localStorage.getItem("user-info") || "false"
+		);
 
-        const submitButton = document.querySelector("input[type=submit]");
+		const submitButton = document.querySelector("input[type=submit]");
 
-        const form = document.querySelector("form");
-        form.addEventListener("submit", onSubmit);
+		const form = document.querySelector("form");
+		form.addEventListener("submit", onSubmit);
 
-        const passwordInput = document.querySelector("input[type=password]");
+		const passwordInput = document.querySelector("input[type=password]");
 
-        document
-            .querySelector("#profile")
-            .addEventListener("change", handleProfileChange);
+		document
+			.querySelector("#profile")
+			.addEventListener("change", handleProfileChange);
 
-        // Sequences
-        runSequence();
+		// Sequences
+		runSequence();
 
-        async function runSequence() {
-            await wait(fromLogout ? 100 : 2400);
+		async function runSequence() {
+			await wait(fromLogout ? 100 : 2400);
 
-            logo.style.scale = "0.2";
-            logo.style.top = "10vh";
+			logo.style.scale = "0.2";
+			logo.style.top = "10vh";
 
-            await wait(1000);
+			await wait(1000);
 
-            if (localStorage.getItem("user-info")) {
-                const userProfile = document.querySelector("#user-profile");
-                userProfile.removeAttribute("hidden");
-                userProfile.src =
-                    userInfo.profilePic ||
-                    "/media/images/default-profile-pic.png";
+			if (localStorage.getItem("user-info")) {
+				const userProfile = document.querySelector("#user-profile");
+				userProfile.removeAttribute("hidden");
+				userProfile.src =
+					userInfo.profilePic ||
+					"/media/images/default-profile-pic.png";
 
-                const usernameInput = document.querySelector("[name=username]");
-                usernameInput.disabled = true;
-                usernameInput.value = userInfo.username;
+				const usernameInput = document.querySelector("[name=username]");
+				usernameInput.disabled = true;
+				usernameInput.value = userInfo.username;
 
-                const submitButton =
-                    document.querySelector("input[type=submit]");
-                submitButton.value = "Sign in";
+				const submitButton =
+					document.querySelector("input[type=submit]");
+				submitButton.value = "Sign in";
 
-                form.removeAttribute("hidden");
+				form.removeAttribute("hidden");
 
-                resetMessage.style.opacity = 1;
-            } else form.removeAttribute("hidden");
-        }
+				resetMessage.style.opacity = 1;
+			} else form.removeAttribute("hidden");
+		}
 
-        // Form
-        function handleProfileChange(event) {
-            const file = event.target.files[0];
-            if (!file) return alert("error durring file selection!");
+		// Form
+		function handleProfileChange(event) {
+			const file = event.target.files[0];
+			if (!file) return alert("error durring file selection!");
 
-            const img = document.querySelector("#profile-pic img");
+			const img = document.querySelector("#profile-pic img");
 
-            if (img.src.includes("blob")) {
-                URL.revokeObjectURL(img.src);
-            }
+			if (img.src.includes("blob")) {
+				URL.revokeObjectURL(img.src);
+			}
 
-            const url = URL.createObjectURL(file);
-            img.src = url;
-        }
+			const url = URL.createObjectURL(file);
+			img.src = url;
+		}
 
-        let phase = "required";
+		let phase = "required";
 
-        async function onSubmit(e) {
-            e.preventDefault();
-            document.querySelector("input[type=password]").blur();
-            logo.onclick = null;
+		async function onSubmit(e) {
+			e.preventDefault();
+			document.querySelector("input[type=password]").blur();
+			logo.onclick = null;
 
-            const data = new FormData(form);
+			const data = new FormData(form);
 
-            if (userInfo) {
-                if (hash(data.get("password")) !== userInfo.passwordHash) {
-                    passwordInput.classList.add("error-animation");
+			if (userInfo) {
+				if (hash(data.get("password")) !== userInfo.passwordHash) {
+					passwordInput.classList.add("error-animation");
 
-                    setTimeout(() => {
-                        passwordInput.classList.remove("error-animation");
-                    }, 600);
-                    return;
-                }
+					setTimeout(() => {
+						passwordInput.classList.remove("error-animation");
+					}, 600);
+					return;
+				}
 
-                resetMessage.style.opacity = 0;
+				resetMessage.style.opacity = 0;
 
-                return await continueToDesktop();
-            }
+				return await continueToDesktop();
+			}
 
-            if (phase === "required") {
-                phase = "optional";
+			if (phase === "required") {
+				phase = "optional";
 
-                const fieldset = document.querySelector("fieldset");
-                fieldset.classList.add("exit-animation");
+				const fieldset = document.querySelector("fieldset");
+				fieldset.classList.add("exit-animation");
 
-                const profilePic = document.querySelector("#profile-pic");
-                profilePic.classList.add("enter-animation");
+				const profilePic = document.querySelector("#profile-pic");
+				profilePic.classList.add("enter-animation");
 
-                submitButton.value = "Finish";
-            } else {
-                // Save data
-                localStorage.setItem(
-                    "user-info",
-                    JSON.stringify({
-                        username: data.get("username"),
-                        passwordHash: hash(data.get("password")),
-                        profilePic: await convertFileToBase64(
-                            data.get("profilePicture")
-                        ),
-                    })
-                );
+				submitButton.value = "Finish";
+			} else {
+				// Save data
+				localStorage.setItem(
+					"user-info",
+					JSON.stringify({
+						username: data.get("username"),
+						passwordHash: hash(data.get("password")),
+						profilePic: await convertFileToBase64(
+							data.get("profilePicture")
+						),
+					})
+				);
 
-                await continueToDesktop();
-            }
-        }
+				await continueToDesktop();
+			}
+		}
 
-        async function continueToDesktop() {
-            form.hidden = true;
+		async function continueToDesktop() {
+			form.hidden = true;
 
-            await wait(1000);
+			await wait(1000);
 
-            const h1 = document.querySelector("h1");
-            h1.innerHTML += ` ${userInfo.username}`;
-            h1.style.opacity = 1;
+			const h1 = document.querySelector("h1");
+			h1.innerHTML += ` ${
+				JSON.parse(localStorage.getItem("user-info") || "false")
+					.username || userInfo.username
+			}`;
+			h1.style.opacity = 1;
 
-            await wait(2000);
+			await wait(2000);
 
-            h1.style.opacity = 0;
-            logo.style.transition = "0.7s 1.2s ease-out";
-            logo.style.top = "50%";
-            logo.style.scale = "1";
+			h1.style.opacity = 0;
+			logo.style.transition = "0.7s 1.2s ease-out";
+			logo.style.top = "50%";
+			logo.style.scale = "1";
 
-            await wait(2000);
+			await wait(2000);
 
-            // Redirect To Desktop
-            localStorage.setItem("from-boot", "true");
-            localStorage.setItem("logged", "true");
-            localStorage.setItem(
-                "logo-width-from-login",
-                getComputedStyle(logo).width
-            );
-            window.location.replace("desktop/index.html");
-        }
+			// Redirect To Desktop
+			localStorage.setItem("from-boot", "true");
+			localStorage.setItem("logged", "true");
+			localStorage.setItem(
+				"logo-width-from-login",
+				getComputedStyle(logo).width
+			);
+			window.location.replace("desktop/index.html");
+		}
 
-        // Reset
-        const resetBar = document.querySelector("#reset-bar");
-        const resetMessage = document.querySelector("#reset-message");
+		// Reset
+		const resetBar = document.querySelector("#reset-bar");
+		const resetMessage = document.querySelector("#reset-message");
 
-        // User should be able to reset only if he's already regitered
-        if (!userInfo) {
-            resetBar.remove();
-            resetMessage.remove();
-        } else {
-            // Adjust reset to mobile
-            if (isMobile()) {
-                resetMessage.innerHTML = "Tap Logo to RESET";
-                logo.onclick = () => {
-                    AlertDialog.showModal(
-                        "Warning!",
-                        "Reseting the machine will permanently erase all data.\n\nContinue?",
-                        {
-                            positive: "Yes",
-                            negative: "No",
-                        },
-                        reset
-                    );
-                };
-            } else {
-                window.onkeydown = windResetBar;
-                window.onkeyup = cancelResetBar;
-            }
-        }
+		// User should be able to reset only if he's already regitered
+		if (!userInfo) {
+			resetBar.remove();
+			resetMessage.remove();
+		} else {
+			// Adjust reset to mobile
+			if (isMobile()) {
+				resetMessage.innerHTML = "Tap Logo to RESET";
+				logo.onclick = () => {
+					AlertDialog.showModal(
+						"Warning!",
+						"Reseting the machine will permanently erase all data.\n\nContinue?",
+						{
+							positive: "Yes",
+							negative: "No",
+						},
+						reset
+					);
+				};
+			} else {
+				window.onkeydown = windResetBar;
+				window.onkeyup = cancelResetBar;
+			}
+		}
 
-        function windResetBar() {
-            if (resetBar.value >= 100) {
-                reset();
-            }
+		function windResetBar() {
+			if (resetBar.value >= 100) {
+				reset();
+			}
 
-            resetBar.value += 1.5;
-        }
+			resetBar.value += 1.5;
+		}
 
-        function reset() {
-            resetBar.remove();
-            form.remove();
-            logo.remove();
-            resetMessage.remove();
+		function reset() {
+			resetBar.remove();
+			form.remove();
+			logo.remove();
+			resetMessage.remove();
 
-            localStorage.clear();
+			localStorage.clear();
 
-            setTimeout(() => {
-                window.location.replace("boot.html");
-            }, 1500);
-        }
+			setTimeout(() => {
+				window.location.replace("boot.html");
+			}, 1500);
+		}
 
-        function cancelResetBar() {
-            if (resetBar.value < 100) {
-                resetBar.value = 0;
-            }
-        }
-    </script>
+		function cancelResetBar() {
+			if (resetBar.value < 100) {
+				resetBar.value = 0;
+			}
+		}
+	</script>
 </html>
