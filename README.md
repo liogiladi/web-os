@@ -3,7 +3,16 @@
 [![Portfolio][portfolio-shield]][portfolio-url]
 
 <!-- PROJECT LOGO -->
-  <h1 align="center">Web OS</h1>
+<br />
+<div align="center">
+    <picture>
+        <source media="(prefers-color-scheme: light)" srcset="https://github.com/liogiladi/web-os/blob/a7f67cd09365cc8fc8096f049d6d4f88ae353137/media/svgs/logo-basic-black.svg">
+        <source media="(prefers-color-scheme: dark)" srcset="https://github.com/liogiladi/web-os/blob/a7f67cd09365cc8fc8096f049d6d4f88ae353137/media/svgs/logo-basic.svg">
+        <img width="100px"/>
+    </picture>
+
+  <h3 align="center">WebOS</h3>
+</div>
 
 <!-- ABOUT THE PROJECT -->
 
