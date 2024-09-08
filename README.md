@@ -28,7 +28,9 @@ Emulates a local operating system on a small scale.
 [![JavaScript][JavaScript]][JavaScript-url]
 [![CSS3][CSS3]][CSS3-url]
 
-<!-- USAGE EXAMPLES -->
+
+## Usage
+To start just press the power button :)
 
 ## Features
 
